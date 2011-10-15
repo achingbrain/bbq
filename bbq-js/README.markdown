@@ -1,0 +1,39 @@
+# bbq-js
+
+This module contains the JavaScript library and is most probably what you came here for.
+
+## Internationalisation
+
+bbq has full i18n support.  Through some Spring [MessageSource](http://static.springsource.org/spring/docs/3.1.x/javadoc-api/org/springframework/context/MessageSource.html) magic, the language sent to the browser defaults to the browser locale (i.e. the locale of the [ServletRequest](http://download.oracle.com/javaee/6/api/javax/servlet/ServletRequest.html#getLocale())).
+
+### Language files
+
+For every JavaScript class file
+
+	MySuperFunClass.js
+
+Store language files next to them:
+
+	MySuperFunClass.js
+	MySuperFunClass.en_GB.lang.xml
+	MySuperFunClass.en_US.lang.xml
+	MySuperFunClass.en.lang.xml
+
+The language code is contained in the file name.  If a specific localisation is available (e.g. en_GB), bbq will use it, if not it will fall back to the general case (e.g. en) and finally to the default language defined in your bbq-maven-plugin setup.
+
+Language files are Java xml properties files - xml because it gives you UTF8 support whereas .properties files are only ASCII, and ASCII tastes bad.
+
+A sample file looks like this:
+
+	<?xml version="1.0" encoding="utf-8"?>
+	<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+	<properties>
+		<entry key="mysuperfunclass.foo">Foo</entry>
+		<entry key="mysuperfunclass.bar">Bar</entry>
+	</properties>
+
+In your class, reference the translations like this:
+
+	Language.get("mysuperfunclass.foo");
+
+### Formatting strings
