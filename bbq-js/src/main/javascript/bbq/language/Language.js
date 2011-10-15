@@ -90,10 +90,26 @@ Language = {
 	 * @param {Object} keys
 	 */
 	getFormatted: function(language, keys) {
+		var outputDomNode = false;
+
+		for(var key in keys) {
+			if(!Object.isString(keys[key])) {
+				outputDomNode = true;
+			}
+		}
+
+		if(outputDomNode) {
+			return Language._getFormattedNode(language, keys);
+		} else {
+			return Language._getFormattedString(language, keys);
+		}
+	},
+
+	_getFormattedString: function(language, keys) {
 		var string = Language.get(language);
 
 		try {
-			for(var key in keys) {
+			for (var key in keys) {
 				string = string.replace(new RegExp("\{" + key + "\}", "gi"), keys[key]);
 			}
 		} catch(e) {
@@ -101,6 +117,31 @@ Language = {
 		}
 
 		return string;
+	},
+
+	_getFormattedNode: function(language, keys) {
+		var output = document.createDocumentFragment();
+		var string = Language.get(language);
+
+		try {
+			for (var key in keys) {
+				var index = string.indexOf("{" + key + "}");
+
+				output.appendChild(document.createTextNode(string.substring(0, index)));
+
+				if(Object.isString(keys[key])) {
+					output.appendChild(document.createTextNode(keys[key]));
+				} else {
+					output.appendChild(keys[key]);
+				}
+
+				string = string.substring(index + ("{" + key + "}").length);
+			}
+		} catch(e) {
+			Log.error("Error formatting language string", e);
+		}
+
+		return output;
 	},
 
 	isLoaded: function() {
