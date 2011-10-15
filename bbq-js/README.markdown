@@ -4,7 +4,7 @@ This module contains the JavaScript library and is most probably what you came h
 
 ## Internationalisation
 
-bbq has full i18n support.  Through some Spring [MessageSource](http://static.springsource.org/spring/docs/3.1.x/javadoc-api/org/springframework/context/MessageSource.html) magic, the language sent to the browser defaults to the browser locale (i.e. the locale of the [ServletRequest](http://download.oracle.com/javaee/6/api/javax/servlet/ServletRequest.html#getLocale())).
+bbq has full i18n support.  Through some Spring [MessageSource](http://static.springsource.org/spring/docs/3.1.x/javadoc-api/org/springframework/context/MessageSource.html) magic, the language sent to the browser defaults to the browser locale (i.e. the locale of the [ServletRequest](http://download.oracle.com/javaee/6/api/javax/servlet/ServletRequest.html#getLocale\(\))).
 
 ### Language files
 
@@ -37,3 +37,27 @@ In your class, reference the translations like this:
 	Language.get("mysuperfunclass.foo");
 
 ### Formatting strings
+
+Strings can contain placeholders which are substituted at runtime.  Placeholders are delimited with curly braces.  For example, if you have the following language file:
+
+	<?xml version="1.0" encoding="utf-8"?>
+	<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+	<properties>
+		<entry key="mysuperfunclass.foo">Foo {bar}</entry>
+	</properties>
+
+To perform the substitution, you can do:
+
+	Language.getFormatted("mysuperfunclass.foo", {bar: "baz"});
+
+This will output:
+
+	Foo baz
+
+Substitutions can be DOM nodes or GUIWidgets too:
+
+	Language.getFormatted("mysuperfunclass.foo", {bar: DOMUtil.createElement("p", "hello")});
+
+This will output:
+
+	Foo <p>hello</p>

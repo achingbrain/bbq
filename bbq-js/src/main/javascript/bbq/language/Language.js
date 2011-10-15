@@ -130,8 +130,13 @@ Language = {
 				output.appendChild(document.createTextNode(string.substring(0, index)));
 
 				if(Object.isString(keys[key])) {
+					// String
 					output.appendChild(document.createTextNode(keys[key]));
+				} else if(keys[key].render) {
+					// GUIWidget
+					keys[key].appendTo(output);
 				} else {
+					// DOM node
 					output.appendChild(keys[key]);
 				}
 
