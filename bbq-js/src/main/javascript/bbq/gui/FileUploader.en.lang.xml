@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="bbq.gui.FileUploader.title">Asset upload</entry>
+	<entry key="bbq.gui.FileUploader.maxsize">Maximum individual file size: {fileSize}</entry>
+	<entry key="bbq.gui.FileUploader.choosefile">Choose file</entry>
+	<entry key="bbq.gui.FileUploader.upload">Upload</entry>
+	<entry key="bbq.gui.FileUploader.addasset">Add another asset</entry>
+	<entry key="bbq.gui.FileUploader.uploading">Uploading file</entry>
+	<entry key="bbq.gui.FileUploader.singleassetcount">{count} asset</entry>
+	<entry key="bbq.gui.FileUploader.multipleassetcount">{count} assets</entry>
+</properties>

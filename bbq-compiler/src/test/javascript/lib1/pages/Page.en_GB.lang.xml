@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="lib1.pages.Page.catalogue">catalogue</entry>
+	<entry key="lib1.pages.Page.colour">colour</entry>
+</properties>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<groupId>org.bbqjs</groupId>
+	<artifactId>bbq</artifactId>
+	<version>1.1.4-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<url>http://www.bbqjs.org</url>
+	<name>bbq</name>
+
+	<modules>
+		<module>bbq-js</module>
+		<module>bbq-compiler</module>
+		<module>bbq-spring-integration</module>
+		<module>bbq-spring-security-integration</module>
+		<module>bbq-test</module>
+		<module>bbq-maven-plugin</module>
+	</modules>
+	
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<properties>
+		<!-- Build settings -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.6</java.version>
+		
+		<!-- Plugin versions -->
+		<maven.plugin.release.version>2.1</maven.plugin.release.version>
+		<maven.plugin.cobertura.version>2.5.1</maven.plugin.cobertura.version>
+		<maven.plugin.findbugs.version>2.3.2</maven.plugin.findbugs.version>
+		<maven.plugin.surefire.version>2.5</maven.plugin.surefire.version>
+		<maven.plugin.build.number.version>1.0</maven.plugin.build.number.version>
+		<maven.plugin.compiler.version>2.3.2</maven.plugin.compiler.version>
+		<maven.plugin.resources.version>2.4.3</maven.plugin.resources.version>
+		<maven.plugin.jetty.version>6.1.26</maven.plugin.jetty.version>
+		
+		<!-- Dependency versions -->
+		<maven.version>3.0.3</maven.version>
+		<rhino.version>1.7R2</rhino.version>
+		<bouncycastle.version>1.46</bouncycastle.version>
+		<commons.io.version>1.4</commons.io.version>
+		<log4j.version>1.2.14</log4j.version>
+		<mockito.version>1.8.4</mockito.version>
+		<slf4j.version>1.6.1</slf4j.version>
+		<servlet.api.version>2.5</servlet.api.version>
+		<junit.version>4.8.2</junit.version>
+		<commons.lang.version>2.3</commons.lang.version>
+		<spring.version>3.0.5.RELEASE</spring.version>
+		<spring.security.version>3.0.5.RELEASE</spring.security.version>
+		<json.lib.version>2.4</json.lib.version>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>${maven.plugin.release.version}</version>
+				<configuration>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>${maven.plugin.cobertura.version}</version>
+				<configuration>
+					<check/>
+					<formats>
+						<format>xml</format>
+					</formats>
+				</configuration>
+				<executions>
+					<execution>
+						<id>site</id>
+						<phase>site</phase>
+						<goals>
+							<goal>cobertura</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<version>${maven.plugin.findbugs.version}</version>
+				<executions>
+					<execution>
+						<id>site</id>
+						<phase>site</phase>
+						<goals>
+							<goal>findbugs</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${maven.plugin.surefire.version}</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>default</id>
+			<name>libs-releases</name>
+			<url>http://repo1.maven.org/maven2/</url>
+		</repository>
+		<repository>
+			<id>achingbrain-releases</id>
+			<url>http://achingbrain.github.com/maven-repo/releases</url>
+		</repository>
+		<repository>
+			<id>achingbrain-snapshots</id>
+			<url>http://achingbrain.github.com/maven-repo/snapshots</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>default</id>
+			<name>libs-releases</name>
+			<url>http://repo1.maven.org/maven2/</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>achingbrain-releases</id>
+			<url>http://achingbrain.github.com/maven-repo/releases</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>achingbrain-snapshots</id>
+			<url>http://achingbrain.github.com/maven-repo/snapshots</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+	
+	<distributionManagement>
+		<repository>
+			<id>bbq-releases</id>
+			<url>file:///Users/alex/Sites/maven-repo/releases</url>
+		</repository>
+		<snapshotRepository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>bbq-snapshots</id>
+			<url>file:///Users/alex/Sites/maven-repo/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+	
+</project>

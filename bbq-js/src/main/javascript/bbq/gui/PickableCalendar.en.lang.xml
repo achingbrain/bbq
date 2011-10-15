@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="bbq.gui.PickableCalendar.previousmonth">Previous month</entry>
+	<entry key="bbq.gui.PickableCalendar.nextmonth">Next month</entry>
+	<entry key="bbq.gui.PickableCalendar.months0">January</entry>
+	<entry key="bbq.gui.PickableCalendar.months1">Februrary</entry>
+	<entry key="bbq.gui.PickableCalendar.months2">March</entry>
+	<entry key="bbq.gui.PickableCalendar.months3">April</entry>
+	<entry key="bbq.gui.PickableCalendar.months4">May</entry>
+	<entry key="bbq.gui.PickableCalendar.months5">June</entry>
+	<entry key="bbq.gui.PickableCalendar.months6">July</entry>
+	<entry key="bbq.gui.PickableCalendar.months7">August</entry>
+	<entry key="bbq.gui.PickableCalendar.months8">September</entry>
+	<entry key="bbq.gui.PickableCalendar.months9">October</entry>
+	<entry key="bbq.gui.PickableCalendar.months10">November</entry>
+	<entry key="bbq.gui.PickableCalendar.months11">December</entry>
+	<entry key="bbq.gui.PickableCalendar.days0">Sunday</entry>
+	<entry key="bbq.gui.PickableCalendar.days1">Monday</entry>
+	<entry key="bbq.gui.PickableCalendar.days2">Tuesday</entry>
+	<entry key="bbq.gui.PickableCalendar.days3">Wednesday</entry>
+	<entry key="bbq.gui.PickableCalendar.days4">Thursday</entry>
+	<entry key="bbq.gui.PickableCalendar.days5">Friday</entry>
+	<entry key="bbq.gui.PickableCalendar.days6">Saturday</entry>
+</properties>

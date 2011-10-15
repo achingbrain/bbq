@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="bbq.gui.updateables.UpdateableDateField.opendatepicker">Open Date Picker</entry>
+	<entry key="bbq.gui.updateables.UpdateableDateField.months0">January</entry>
+	<entry key="bbq.gui.updateables.UpdateableDateField.months1">Februrary</entry>
+	<entry key="bbq.gui.updateables.UpdateableDateField.months2">March</entry>
+	<entry key="bbq.gui.updateables.UpdateableDateField.months3">April</entry>
+	<entry key="bbq.gui.updateables.UpdateableDateField.months4">May</entry>
+	<entry key="bbq.gui.updateables.UpdateableDateField.months5">June</entry>
+	<entry key="bbq.gui.updateables.UpdateableDateField.months6">July</entry>
+	<entry key="bbq.gui.updateables.UpdateableDateField.months7">August</entry>
+	<entry key="bbq.gui.updateables.UpdateableDateField.months8">September</entry>
+	<entry key="bbq.gui.updateables.UpdateableDateField.months9">October</entry>
+	<entry key="bbq.gui.updateables.UpdateableDateField.months10">November</entry>
+	<entry key="bbq.gui.updateables.UpdateableDateField.months11">December</entry>
+</properties>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="bbq.gui.updateables.UpdateableAddress.category0">Work</entry>
+	<entry key="bbq.gui.updateables.UpdateableAddress.category1">Home</entry>
+	<entry key="bbq.gui.updateables.UpdateableAddress.category2">Other</entry>
+	<entry key="bbq.gui.updateables.UpdateableAddress.addresstype0">House</entry>
+	<entry key="bbq.gui.updateables.UpdateableAddress.addresstype1">Street</entry>
+	<entry key="bbq.gui.updateables.UpdateableAddress.addresstype2">Town</entry>
+	<entry key="bbq.gui.updateables.UpdateableAddress.addresstype3">City</entry>
+	<entry key="bbq.gui.updateables.UpdateableAddress.addresstype4">Post code</entry>
+	<entry key="bbq.gui.updateables.UpdateableAddress.addresstype5">Country</entry>
+</properties>

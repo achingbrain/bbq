@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="bbq.date.DateFormatter.long.days0">Sunday</entry>
+	<entry key="bbq.date.DateFormatter.long.days1">Monday</entry>
+	<entry key="bbq.date.DateFormatter.long.days2">Tuesday</entry>
+	<entry key="bbq.date.DateFormatter.long.days3">Wednesday</entry>
+	<entry key="bbq.date.DateFormatter.long.days4">Thursday</entry>
+	<entry key="bbq.date.DateFormatter.long.days5">Friday</entry>
+	<entry key="bbq.date.DateFormatter.long.days6">Saturday</entry>
+	<entry key="bbq.date.DateFormatter.long.months0">January</entry>
+	<entry key="bbq.date.DateFormatter.long.months1">Februrary</entry>
+	<entry key="bbq.date.DateFormatter.long.months2">March</entry>
+	<entry key="bbq.date.DateFormatter.long.months3">April</entry>
+	<entry key="bbq.date.DateFormatter.long.months4">May</entry>
+	<entry key="bbq.date.DateFormatter.long.months5">June</entry>
+	<entry key="bbq.date.DateFormatter.long.months6">July</entry>
+	<entry key="bbq.date.DateFormatter.long.months7">August</entry>
+	<entry key="bbq.date.DateFormatter.long.months8">September</entry>
+	<entry key="bbq.date.DateFormatter.long.months9">October</entry>
+	<entry key="bbq.date.DateFormatter.long.months10">November</entry>
+	<entry key="bbq.date.DateFormatter.long.months11">December</entry>
+	<entry key="bbq.date.DateFormatter.short.days0">Sun</entry>
+	<entry key="bbq.date.DateFormatter.short.days1">Mon</entry>
+	<entry key="bbq.date.DateFormatter.short.days2">Tues</entry>
+	<entry key="bbq.date.DateFormatter.short.days3">Wed</entry>
+	<entry key="bbq.date.DateFormatter.short.days4">Thurs</entry>
+	<entry key="bbq.date.DateFormatter.short.days5">Fri</entry>
+	<entry key="bbq.date.DateFormatter.short.days6">Sat</entry>
+	<entry key="bbq.date.DateFormatter.short.months0">Jan</entry>
+	<entry key="bbq.date.DateFormatter.short.months1">Feb</entry>
+	<entry key="bbq.date.DateFormatter.short.months2">Mar</entry>
+	<entry key="bbq.date.DateFormatter.short.months3">Apr</entry>
+	<entry key="bbq.date.DateFormatter.short.months4">May</entry>
+	<entry key="bbq.date.DateFormatter.short.months5">Jun</entry>
+	<entry key="bbq.date.DateFormatter.short.months6">Jul</entry>
+	<entry key="bbq.date.DateFormatter.short.months7">Aug</entry>
+	<entry key="bbq.date.DateFormatter.short.months8">Sept</entry>
+	<entry key="bbq.date.DateFormatter.short.months9">Oct</entry>
+	<entry key="bbq.date.DateFormatter.short.months10">Nov</entry>
+	<entry key="bbq.date.DateFormatter.short.months11">Dec</entry>
+</properties>
