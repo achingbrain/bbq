@@ -1,4 +1,5 @@
 include(bbq.ajax.JSONRequest);
+include(bbq.gui.GUIWidget);
 
 /**
  * @class Language
@@ -132,7 +133,7 @@ Language = {
 				if(Object.isString(keys[key])) {
 					// String
 					output.appendChild(document.createTextNode(keys[key]));
-				} else if(keys[key].render) {
+				} else if(keys[key] instanceof bbq.gui.GUIWidget) {
 					// GUIWidget
 					keys[key].appendTo(output);
 				} else {
