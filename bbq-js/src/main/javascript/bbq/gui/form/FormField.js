@@ -36,6 +36,10 @@ bbq.gui.form.FormField = new Class.create(bbq.gui.GUIWidget, {
 			if(this.options.onChange) {
 				this.registerListener("onChange", this.options.onChange);
 			}
+
+			if(this.options.valueTransformer) {
+				this.setValueTransformer(this.options.valueTransformer);
+			}
 		} catch(e) {
 			Log.error("Error constructing FormField", e);
 		}
@@ -52,6 +56,10 @@ bbq.gui.form.FormField = new Class.create(bbq.gui.GUIWidget, {
 	},
 
 	_setRawValue: function(value) {
+		if(this._transformer && this._transformer.deTransform) {
+			value = this._transformer.deTransform(value);
+		}
+
 		this.getRootNode().value = value;
 	},
 
