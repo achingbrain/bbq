@@ -41,7 +41,6 @@ public class ErrorController implements HandlerExceptionResolver {
 		try {
 			ModelAndView modelAndView = getModelAndView();
 
-			LOG.error("Exception encountered", exception);
 			String message = getErrorMessage(exception);
 			int code = getErrorCode(exception);
 
@@ -83,8 +82,16 @@ public class ErrorController implements HandlerExceptionResolver {
 		Integer code = errorCodes.get(exception.getClass());
 
 		if(code != null) {
+			// looks like we knew about this kind of exception so only put
+			// the stack trace in the debug log
+			LOG.debug("Exception encountered", exception);
+
 			return code;
 		}
+
+		// didn't have a mapping for this exception, might be serious so
+		// vomit a stack trace into the log
+		LOG.error("Exception encountered", exception);
 
 		return EPIC_FAIL_CODE;
 	}
