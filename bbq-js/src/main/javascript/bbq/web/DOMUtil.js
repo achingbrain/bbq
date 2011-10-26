@@ -327,10 +327,16 @@ DOMUtil = {
 	getStyle: function(element, styleToGet) {
 		try {
 			if(element.owner) {
-				// get root node of guiwidget
+				// get root node of GUIWidget
 				element = element.owner().getRootNode();
 			}
-			
+
+			if(element.currentStyle) {
+				return element.currentStyle[styleToGet];
+			} else if (window.getComputedStyle) {
+				return document.defaultView.getComputedStyle(element, null).getPropertyValue(styleToGet);
+			}
+
 			if(element && element.style) {
 				return element.style[styleToGet];
 			}

@@ -2,12 +2,22 @@ include(bbq.lang.Watchable);
 include(bbq.util.BBQUtil);
 
 /**
- * @class bbq.entities.BBQEntity
+ * Base class for domain objects.  Supports being partially loaded - that is, properties can be asked for from
+ * this object in advance of them being loaded.  If an unloaded property is requested, a full object load
+ * will be trigged.
+ *
+ * Extending classes should implement:
+ *
+ * 1.  The _retrieveURL property.  This should be a URL that will answer to a JSON request of the
+ *      form {id: value} where value is returned from getId() being called on this object
+ *
+ * 2.  The _getDefaultObject method.  This should return an object with keys for every property this
+ *      object expects to have filled after a call to _retrieveURL.
+ *
+ * @class bbq.domain.BBQEntity
  * @extends bbq.lang.Watchable
  */
-bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
-		
-	id: null,
+bbq.domain.BBQEntity = new Class.create(bbq.lang.Watchable, {
 	options: null,
 	_data: null,
 	_dataLoaded: null,
@@ -44,7 +54,7 @@ bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
 	 */
 	_getDefaultObject: function() {
 		return {
-			id: false
+			
 		}
 	},
 	
@@ -58,19 +68,17 @@ bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
 	 */
 	processData: function(data) {
 		if(data && data instanceof Object) {
-			this.id = data.id;
-			
 			var defaultObject = this._getDefaultObject();
-			
+
 			for(var key in data) {
 				// skip fields not defined on this object - this way we do not end up with erroneous getters and setters
 				if(typeof(defaultObject[key]) == "undefined") {
 					Log.warn("skipping " + key + " on object loading data from " + this._retrieveURL);
 					continue;
 				}
-				
+
 				var camel = BBQUtil.capitalize(key);
-				
+
 				if(this["set" + camel] instanceof Function) {
 					this["set" + camel](data[key]);
 				} else {
@@ -80,40 +88,40 @@ bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
 				
 					this["set" + camel](data[key]);
 				}
-				
+
 				this._loadedFields.set(key, true);
 			}
-			
+
 			this._partialLoad = false;
-			
+
 			// start delete me later
 			var missingProperties = [];
-			
+
 			// ensure we have loaded all of our properties
 			for(var key in defaultObject) {
 				if(typeof(data[key]) == "undefined") {
 					missingProperties.push(key);
 				}
 			}
-			
+
 			if(missingProperties.length > 0) {
 				Log.warn(this._retrieveURL + " missing properties " + missingProperties.join(", "));
 			}
 			// end delete me later
-			
+
 			// ensure we have loaded all of our properties
 			for(var key in defaultObject) {
 				if(Object.isUndefined(data[key])) {
 					this._dataLoaded = false;
 					this._partialLoad = true;
-					
+
 					// missing at least one property, get out of loop
 					break;
 				}
 			}
-			
+
 			var keys = Object.keys(data);
-			
+
 			if(keys.length == 1 &&  keys[0] == "id") {
 				this.loadData();
 			} else if(!this._partialLoad) {			
@@ -121,11 +129,11 @@ bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
 			}
 		}
 	},
-	
+
 	dataLoaded: function() {
 		return this._dataLoaded === true;
 	},
-	
+
 	/**
 	 * Makes an entity load it's data.
 	 * 
@@ -137,18 +145,18 @@ bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
 		if(this._loadingData) {
 			return;
 		}
-		
+
 		this._loadingData = true;
-		
+
 		if(!this._retrieveURL) {
 			Log.error("Objects must specify where to load data from", this);
-			
+
 			return;
 		}
-		
+
 		this._dataLoaded = false;
 		this._partialLoad = false;
-	
+
 		new bbq.ajax.JSONRequest({
 			url: this._retrieveURL, 
 			args: {id: this.getId()}, 
@@ -156,16 +164,16 @@ bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
 			method: "post"
 		});
 	},
-	
+
 	/**
 	 * @return void
 	 */
 	_loadedData: function(serverResponse, json) {
 		try {
 			this._loadingData = false;
-			
+
 			this.processData(json);
-			
+
 			if(this.dataLoaded()) {
 				this.notifyListeners("onDataLoaded");
 			}
@@ -173,13 +181,13 @@ bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
 			Log.error("Error encountered while processing data", e);
 		}
 	},
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
-	registerListener: function(type, callback) {
-		var callbackKey = bbq.lang.Watchable.prototype.registerListener.apply(this, arguments);
-		
+	registerListener: function($super, type, callback) {
+		var callbackKey = $super(type, callback);
+
 		if(type == "onDataLoaded") {
 			if(this.dataLoaded()) {
 				// if the callback is onDataLoaded and we've already loaded our data, call the callback immediately
@@ -189,10 +197,10 @@ bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
 				this.loadData();
 			}
 		}
-		
+
 		return callbackKey;
 	},
-	
+
 	/**
 	 * @private
 	 * @param	{String}	key
@@ -202,7 +210,7 @@ bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
 		//Log.info("returning " + this._data[key] + " for key " + key);
 		return typeof(this._data[key]) != "undefined" ? this._data[key] : null;
 	},
-	
+
 	/**
 	 * @private
 	 * @param	{String}	key
@@ -210,31 +218,26 @@ bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
 	 */
 	_set: function(key, value) {
 		this._data[key] = value;
-		
+
 		// update property displays for this property
 		// set a timeout so that all the properties on this object have been updated by the time the first propertyDisplay update occurs
 		setTimeout(this._updatePropertyDisplays.bind(this, key), 500);
-		
+
 		return this._data[key];
 	},
-	
-	/**
-	 * Returns the unique identifier of this object, a GUID
-	 * 
-	 * @return	{String} 
-	 */
-	getID: function() {
-		return this.id;
-	},
-	
-	equals: function(entity) {
-		if(BBQUtil.isGUID(entity)) {
-			return this.getId() == entity;
+
+	equals: function(other) {
+		if(this == other) {
+			return true;
 		}
-		
-		return entity && entity.getId && this.getID() == entity.getId();
+
+		if(this.getId && other.getId) {
+			return this.getId() == other.getId();
+		}
+
+		return false;
 	},
-	
+
 	/**
 	 * @param	String		property		A property on this object
 	 */
@@ -243,7 +246,7 @@ bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
 			if(property.indexOf(".") != -1) {
 				property = "" + property.split(".", 1);
 			}
-			
+
 			if(this["get" + BBQUtil.capitalize(property)] instanceof Function) {
 				return this["get" + BBQUtil.capitalize(property)]();
 			}
@@ -253,7 +256,7 @@ bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
 			Log.dir(this);
 		}
 	},
-	
+
 	/**
 	 * Returns a DOM element (by default a SPAN) that contains a textual representation of the requested property of this element.
 	 * 
@@ -275,12 +278,12 @@ bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
 	 * Supports the following options:
 	 * 
 	 * options: {
-	 * 		property: String			// The name of the property that is to be displayed
-	 * 		formatter: Function		// Optional.  A function that takes the property value as an argument and returns a String or a Node
+	 * 		property: String				// The name of the property that is to be displayed
+	 * 		formatter: Function			// Optional.  A function that takes the property value as an argument and returns a String or a Node
 	 * 		nodeName: String			// Optional.  Will be used in place of SPAN
 	 * 		className: String			// Optional.  Will be applied to the node
-	 * 		createNode: Function	// Optional.  Should return a DOM node.  Omit this to use a SPAN.  If passed you should also pass a function for updateNode
-	 * 		updateNode: Function // Optional.  Expect two arguments - a node and the property value.  Return nothing.  If passed you should also pass a function for createNode
+	 * 		createNode: Function		// Optional.  Should return a DOM node.  Omit this to use a SPAN.  If passed you should also pass a function for updateNode
+	 * 		updateNode: Function		// Optional.  Expect two arguments - a node and the property value.  Return nothing.  If passed you should also pass a function for createNode
 	 * }
 	 * 
 	 * @param	Object			options
@@ -291,26 +294,25 @@ bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
 				// pass request on to child object
 				var parts = options.property.split(".");
 				var myProperty = parts.shift();
-				
 				var object = this.getProperty(myProperty)
-				
+
 				options.property = parts.join(".");
-				
+
 				if(object) {
 					// object is valid, pass the request on
 					return object.getPropertyDisplay(options);
 				} else {
 					// an attempt to call a function on a child object that has not been set.  return a placeholder
 					var node = options.createNode instanceof Function ? options.createNode() : DOMUtil.createElement("span");
-					
+
 					if(options.formatter) {
 						var value = options.formatter(null);
-						
+
 						if(value) {
 							DOMUtil.append(value, node);
 						}
 					}
-					
+
 					return node;
 				}
 			}
@@ -321,7 +323,7 @@ bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
 				property: options.property,
 				updateNode: options.updateNode
 			};
-			
+
 			if(this["get" + BBQUtil.capitalize(options.property)] instanceof Function) {
 				// we've loaded our data already, update current property displays
 				this._updatePropertyDisplay(propertyDisplay);
@@ -330,25 +332,25 @@ bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
 				this.registerOneTimeListener("onDataLoaded", function() {
 					this._updatePropertyDisplay(propertyDisplay);
 				}.bind(this));
-				
+
 				// if this object is partially loaded and requested property has not been loaded yet, trigger loading of this objects data
 				if(this._partialLoad && !this._loadedFields.get(options.property)) {
 					Log.info("Partially loaded object triggering loadData");
 					this.loadData();
 				}
 			}
-			
+
 			// create array for the requested property
 			if(!this._propertyDisplays.get(options.property)) {
 				this._propertyDisplays.set(options.property, []);
 			}
-			
+
 			// add it to our list of property diplays
 			this._propertyDisplays.get(options.property).push(propertyDisplay);
-			
+
 			// clean up previously created property displays that are no longer in the DOM
 			this._cleanUpPropertyDisplays();
-			
+
 			// return the node for addition to the DOM
 			return propertyDisplay.node;
 		} catch(e) {
@@ -356,7 +358,7 @@ bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
 			Log.dir(options);
 		}
 	},
-	
+
 	/**
 	 * Loops through all existing property displays and updates them.
 	 * 
@@ -369,7 +371,7 @@ bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
 			}.bind(this));
 		}
 	},
-	
+
 	/**
 	 * Updates stored property displays to contain the current value as known by this object
 	 * 
@@ -377,27 +379,27 @@ bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
 	 */
 	_updatePropertyDisplay: function(propertyDisplay) {
 		DOMUtil.emptyNode(propertyDisplay.node);
-		
+
 		var value = this.getProperty(propertyDisplay.property);
-		
+
 		if(propertyDisplay.formatter instanceof Function) {
 			value = propertyDisplay.formatter(value);
 		}
-		
+
 		if(propertyDisplay.updateNode instanceof Function) {
 			propertyDisplay.updateNode(propertyDisplay.node, value);
 		} else {
 			if(!value) {
 				value = " ";
 			}
-			
+
 			// default action is to treat node as if it is a SPAN
 			if(Object.isString(value)) {
 				var theText = value.split("\n");
-				
+
 				for(var i = 0; i < theText.length; i++) {
 					propertyDisplay.node.appendChild(document.createTextNode(theText[i]));
-					
+
 					if(theText.length > 1 && i != (theText.length - 1)) {
 						propertyDisplay.node.appendChild(document.createElement("br"));
 					}
@@ -407,7 +409,7 @@ bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
 			}
 		}
 	},
-	
+
 	/**
 	 * Loops through all stored property displays, removing any references to nodes that have been removed from the DOM
 	 * 
@@ -417,7 +419,7 @@ bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
 		if(this._propertyDisplayCleanupInterval) {
 			clearInterval(this._propertyDisplayCleanupInterval);
 		}
-		
+
 		// set an interval to allow whatever rendering action that is currently underway to complete
 		// use interval instead of timeout so that we only do this once
 		this._propertyDisplayCleanupInterval = setInterval(function() {
@@ -430,9 +432,8 @@ bbq.entities.BBQEntity = new Class.create(bbq.lang.Watchable, {
 					}
 				}
 			}.bind(this));
-			
+
 			clearInterval(this._propertyDisplayCleanupInterval);
 		}.bind(this), 1000);
 	}
 });
-
