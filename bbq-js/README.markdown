@@ -4,66 +4,6 @@ This module contains the JavaScript library and is most probably what you came h
 
 Documentation will appear on this page in dribs and drabs.  Eventually it'll probably get moved to a wiki somewhere...
 
-## Internationalisation
-
-bbq has full i18n support.  Through some Spring [MessageSource](http://static.springsource.org/spring/docs/3.1.x/javadoc-api/org/springframework/context/MessageSource.html) magic, the language sent to the browser defaults to the browser locale (i.e. the locale of the [ServletRequest](http://download.oracle.com/javaee/6/api/javax/servlet/ServletRequest.html#getLocale\(\))).
-
-### Language files
-
-For every JavaScript class file
-
-	MySuperFunClass.js
-
-Store language files next to them:
-
-	MySuperFunClass.js
-	MySuperFunClass.en_GB.lang.xml
-	MySuperFunClass.en_US.lang.xml
-	MySuperFunClass.en.lang.xml
-
-The language code is contained in the file name.  If a specific localisation is available (e.g. en_GB), bbq will use it, if not it will fall back to the general case (e.g. en) and finally to the default language defined in your [bbq-maven-plugin](https://github.com/achingbrain/bbq/tree/master/bbq-maven-plugin) setup.
-
-Language files are Java xml properties files - xml because it gives you UTF8 support whereas .properties files are only ASCII, and ASCII tastes bad.
-
-A sample file looks like this:
-
-	<?xml version="1.0" encoding="utf-8"?>
-	<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
-	<properties>
-		<entry key="mysuperfunclass.foo">Foo</entry>
-		<entry key="mysuperfunclass.bar">Bar</entry>
-	</properties>
-
-In your class, reference the translations like this:
-
-	Language.get("mysuperfunclass.foo");
-
-### Formatting strings
-
-Strings can contain placeholders which are substituted at runtime.  Placeholders are delimited with curly braces.  For example, if you have the following language file:
-
-	<?xml version="1.0" encoding="utf-8"?>
-	<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
-	<properties>
-		<entry key="mysuperfunclass.foo">Foo {bar}</entry>
-	</properties>
-
-To perform the substitution, you can do:
-
-	Language.getFormatted("mysuperfunclass.foo", {bar: "baz"});
-
-This will output:
-
-	Foo baz
-
-Substitutions can be DOM nodes or GUIWidgets too:
-
-	Language.getFormatted("mysuperfunclass.foo", {bar: DOMUtil.createElement("p", "hello")});
-
-This will output:
-
-	Foo <p>hello</p>
-
 ## Date formatting
 
 bbq borrows it's date formatting from [Steven Levithan's rather excellent blog](http://blog.stevenlevithan.com/archives/date-time-format).
@@ -291,3 +231,127 @@ Alternatively you can pass in a named mask:
 DateFormatter#format takes a third argument which is an object which has the appropriate functions which are called by DateFormatter.
 
 See the source code of DateFormatter._stringFormatter or bbq.gui.form.DateFieldFormatter for an example.
+
+## Drag and drop
+
+Drag and drop on the web even with HTML5 is [a bit of a mess](http://www.quirksmode.org/blog/archives/2009/09/the_html5_drag.html).  To make your GUIWidget draggable, include the DragAndDropManager
+
+	include(bigboard.gui.DragAndDrop);
+
+Then, in your GUIWidget's constructor, register your widget with the manager:
+
+	DragAndDropManager.makeDraggable(this);
+
+You'll need something to drop it on, we refer to this as a drop target.  In another GUIWidget, make it a drop target:
+
+	DragAndDropManager.makeDroppable(this);
+
+A drop target should implement a method:
+
+	getDropTypes();
+
+This method returns an array of objects that it's interested in receiving notifications about when they are dropped on it.
+
+Finally, the drop target defines one more method:
+
+	draggableDropped(draggable);
+
+This gets called when a draggable of the appropriate type is dropped onto the drop target.
+
+So:
+
+	com.foo.MyDraggable = new Class.create(bbq.gui.GUIWidget, {
+		initialize: function() {
+			DragAndDropManager.makeDraggable(this);
+		},
+		
+		draggableStarted: function() {
+			// dragging this widget started
+		},
+		
+		draggableStoped: function() {
+			// dragging this widget stopped
+		},
+	}
+	
+	com.foo.MyDropTarget = new Class.create(bbq.gui.GUIWidget, {
+		initialize: function() {
+			DragAndDropManager.makeDropTarget(this);
+		},
+		
+		dropTargetWillAccept: function(draggable) {
+			return draggable instanceof com.foo.MyDraggable;
+		},
+		
+		dropTargetEnter: function(draggable) {
+			// the passed object was dragged into this one
+		},
+		
+		dropTargetLeave: function(draggable) {
+			// the passed object was dragged out of this one
+		},
+		
+		dropTargetDropped: function(draggable) {
+			// the passed object was dropped on this one
+		}
+	}
+
+## Internationalisation
+
+bbq has full i18n support.  Through some Spring [MessageSource](http://static.springsource.org/spring/docs/3.1.x/javadoc-api/org/springframework/context/MessageSource.html) magic, the language sent to the browser defaults to the browser locale (i.e. the locale of the [ServletRequest](http://download.oracle.com/javaee/6/api/javax/servlet/ServletRequest.html#getLocale\(\))).
+
+### Language files
+
+For every JavaScript class file
+
+	MySuperFunClass.js
+
+Store language files next to them:
+
+	MySuperFunClass.js
+	MySuperFunClass.en_GB.lang.xml
+	MySuperFunClass.en_US.lang.xml
+	MySuperFunClass.en.lang.xml
+
+The language code is contained in the file name.  If a specific localisation is available (e.g. en_GB), bbq will use it, if not it will fall back to the general case (e.g. en) and finally to the default language defined in your [bbq-maven-plugin](https://github.com/achingbrain/bbq/tree/master/bbq-maven-plugin) setup.
+
+Language files are Java xml properties files - xml because it gives you UTF8 support whereas .properties files are only ASCII, and ASCII tastes bad.
+
+A sample file looks like this:
+
+	<?xml version="1.0" encoding="utf-8"?>
+	<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+	<properties>
+		<entry key="mysuperfunclass.foo">Foo</entry>
+		<entry key="mysuperfunclass.bar">Bar</entry>
+	</properties>
+
+In your class, reference the translations like this:
+
+	Language.get("mysuperfunclass.foo");
+
+### Formatting strings
+
+Strings can contain placeholders which are substituted at runtime.  Placeholders are delimited with curly braces.  For example, if you have the following language file:
+
+	<?xml version="1.0" encoding="utf-8"?>
+	<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+	<properties>
+		<entry key="mysuperfunclass.foo">Foo {bar}</entry>
+	</properties>
+
+To perform the substitution, you can do:
+
+	Language.getFormatted("mysuperfunclass.foo", {bar: "baz"});
+
+This will output:
+
+	Foo baz
+
+Substitutions can be DOM nodes or GUIWidgets too:
+
+	Language.getFormatted("mysuperfunclass.foo", {bar: DOMUtil.createElement("p", "hello")});
+
+This will output:
+
+	Foo <p>hello</p>

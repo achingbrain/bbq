@@ -19,6 +19,7 @@ import org.bbqjs.tests.JavaScriptTestRunner;
 import org.bbqjs.tests.TestResult;
 import org.bbqjs.tests.TestResult.TYPE;
 import org.codehaus.plexus.classworlds.realm.ClassRealm;
+import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
 
 /**
@@ -99,10 +100,42 @@ public class TestJavaScriptMojo extends TestClasspathAwareMojo {
 			throw new MojoExecutionException("Test directory " + testDirectory + " is not a directory.  Please check your plugin configuration.");
 		}
 
-		try {
-			parseInputFiles(testDirectory);
-		} catch(Exception e) {
-			throw new MojoExecutionException("Exception thrown while executing tests", e);
+		String specifiedTest = System.getProperty("bbq.test");
+
+		if(StringUtils.isNotBlank(specifiedTest)) {
+			// has the user specified a test or tests to run
+
+			for(String test : specifiedTest.split(",")) {
+				test = test.trim();
+
+				if(test.endsWith(".js")) {
+					// strip off the test file extension if supplied
+					test = test.substring(0, test.length() - 3);
+				}
+
+				test = test.replaceAll("\\.", File.separator);
+
+				File testFile = new File(testDirectory.getAbsolutePath() + File.separator + test + ".js");
+
+				if(!testFile.exists()) {
+					getLog().warn("Could not find test at " + testFile.getAbsolutePath() + " to run");
+
+					continue;
+				}
+
+				try {
+					runTest(testFile);
+				} catch (Exception e) {
+					throw new MojoExecutionException("Exception thrown while executing tests", e);
+				}
+			}
+		} else {
+			// no specified test, run everything
+			try {
+				parseInputFiles(testDirectory);
+			} catch (Exception e) {
+				throw new MojoExecutionException("Exception thrown while executing tests", e);
+			}
 		}
 
 		boolean failures = false;
@@ -124,7 +157,7 @@ public class TestJavaScriptMojo extends TestClasspathAwareMojo {
 			log.error(failingTests);
 			log.error("");
 
-			throw new MojoExecutionException("There were test failures.");
+			throw new MojoExecutionException("There were test failures.  To re-run individual tests, specify the tests to run using the -Dbbq.test property.  e.g. mvn test -Dbbq.test=my.wonderful.ClassTest");
 		}
 	}
 
@@ -142,22 +175,26 @@ public class TestJavaScriptMojo extends TestClasspathAwareMojo {
 					continue;
 				}
 
-				// replace test directory
-				String filePackage = file.getAbsolutePath().replace(testDirectory.getAbsolutePath() + File.separator, "");
-
-				// replace filename
-				filePackage = filePackage.substring(0, filePackage.length() - file.getName().length());
-
-				// found unit test, run it
-				JavaScriptTestRunner testRunner = new JavaScriptTestRunner();
-				testRunner.setIncludes(includes);
-				testRunner.setTestFile(file.toURI().toURL());
-				testRunner.setTestPackage(filePackage);
-				testRunner.setSourceRoots(sourceRoots);
-
-				results.add(testRunner.runTest());
+				runTest(file);
 			}
 		}
+	}
+
+	protected void runTest(File testFile) throws Exception {
+		// replace test directory
+		String filePackage = testFile.getAbsolutePath().replace(testDirectory.getAbsolutePath() + File.separator, "");
+
+		// replace filename
+		filePackage = filePackage.substring(0, filePackage.length() - testFile.getName().length());
+
+		// found unit test, run it
+		JavaScriptTestRunner testRunner = new JavaScriptTestRunner();
+		testRunner.setIncludes(includes);
+		testRunner.setTestFile(testFile.toURI().toURL());
+		testRunner.setTestPackage(filePackage);
+		testRunner.setSourceRoots(sourceRoots);
+
+		results.add(testRunner.runTest());
 	}
 
 	public void setTestDirectory(File testDirectory) {
