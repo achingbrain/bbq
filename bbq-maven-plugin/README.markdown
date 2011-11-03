@@ -216,6 +216,19 @@ The includes directive specifies arbitrary javascript files that will be loaded 
 
 More information is available in the [bbq-test readme](https://github.com/achingbrain/bbq/tree/master/bbq-test/README.markdown).
 
+### Running individual tests
+
+By default every available JavaScript test is run in the test phase.  If you wish to specify the tests to be run, you can do so as follows:
+
+	mvn test -Dbbq.test=my.super.fun.ClassTest
+
+This will only run the specified test.  If you wish to run multiple tests, separate them with commas:
+
+	mvn test -Dbbq.test=my.super.fun.ClassTest,my.other.ClassTest
+
+If you accidentally include the .js extension it will be removed.
+
+
 ## Copying images
 
 	<execution>
@@ -227,17 +240,3 @@ More information is available in the [bbq-test readme](https://github.com/aching
 			<outputDirectory>${project.build.directory}/${project.build.finalName}/images</outputDirectory>
 		</configuration>
 	</execution>
-
-# Unit tests
-
-## Running individual tests
-
-By default every available JavaScript test is run in the test phase.  If you wish to specify the tests to be run, you can do so as follows:
-
-	mvn test -Dbbq.test=my.super.fun.ClassTest
-
-This will only run the specified test.  If you wish to run multiple tests, separate them with commas:
-
-	mvn test -Dbbq.test=my.super.fun.ClassTest,my.other.ClassTest
-
-If you accidentally include the .js extension it will be removed.
