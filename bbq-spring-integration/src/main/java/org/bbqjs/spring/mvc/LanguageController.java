@@ -11,6 +11,7 @@ import org.springframework.web.context.ServletContextAware;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -74,6 +75,10 @@ public class LanguageController implements ServletContextAware {
 
 	public void setLanguageFilesLocation(String languageFilesLocation) {
 		this.languageFilesLocation = languageFilesLocation;
+
+		if(!this.languageFilesLocation.endsWith(File.pathSeparator)) {
+			this.languageFilesLocation += File.pathSeparator;
+		}
 	}
 
 	public static class LanguageRequest implements Serializable {
