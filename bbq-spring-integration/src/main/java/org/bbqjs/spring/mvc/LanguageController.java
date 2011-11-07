@@ -76,8 +76,8 @@ public class LanguageController implements ServletContextAware {
 	public void setLanguageFilesLocation(String languageFilesLocation) {
 		this.languageFilesLocation = languageFilesLocation;
 
-		if(!this.languageFilesLocation.endsWith(File.pathSeparator)) {
-			this.languageFilesLocation += File.pathSeparator;
+		if(!this.languageFilesLocation.endsWith(File.separator)) {
+			this.languageFilesLocation += File.separator;
 		}
 	}
 
