@@ -25,6 +25,7 @@ public class LanguageController implements ServletContextAware {
 	private List<Locale>supportedLocales;
 	private Locale defaultLocale;
 	private ServletContext servletContext;
+	private String languageFilesLocation = "/WEB-INF/language/";
 
 	public List<Locale> getSupportedLocales() {
 		return supportedLocales;
@@ -52,7 +53,7 @@ public class LanguageController implements ServletContextAware {
 	}
 	
 	protected Map<Object, Object> getLanguageFile(Object byName, Locale forLocale) throws IOException {
-		InputStream stream = servletContext.getResourceAsStream("/WEB-INF/language/" + byName + "_" + forLocale.getLanguage() + "_" + forLocale.getCountry() + ".xml");
+		InputStream stream = servletContext.getResourceAsStream(languageFilesLocation + byName + "_" + forLocale.getLanguage() + "_" + forLocale.getCountry() + ".xml");
 
 		if(stream == null) {
 			return new HashMap<Object, Object>();
@@ -69,6 +70,10 @@ public class LanguageController implements ServletContextAware {
 	@Override
 	public void setServletContext(ServletContext servletContext) {
 		this.servletContext = servletContext;
+	}
+
+	public void setLanguageFilesLocation(String languageFilesLocation) {
+		this.languageFilesLocation = languageFilesLocation;
 	}
 
 	public static class LanguageRequest implements Serializable {
