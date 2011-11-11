@@ -1,15 +1,12 @@
 package org.bbqjs.spring.debug;
 
 import org.bbqjs.compiler.language.LanguageCompiler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -22,14 +19,13 @@ import java.util.*;
  */
 @Controller
 public class LanguageController {
-	private static final Logger LOG = LoggerFactory.getLogger(LanguageController.class);
 	private List<Locale> supportedLocales;
 	private Locale defaultLocale;
 	private String[] sourceRoots;
 	private String pagePackage;
 
-	@RequestMapping(value = "/backend/getLanguage", method = RequestMethod.POST)
-	public @ResponseBody Map<Object, Object> getLanguagePost(@RequestBody LanguageRequest request, HttpServletResponse response, Locale locale) throws IOException {
+	@RequestMapping(value = "/language/get", method = RequestMethod.POST)
+	public @ResponseBody Map<Object, Object> getLanguage(@RequestBody LanguageRequest request, Locale locale) throws IOException {
 		if (!supportedLocales.contains(locale)) {
 			locale = defaultLocale;
 		}

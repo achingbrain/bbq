@@ -54,6 +54,7 @@ bbq.gui.button.ButtonHolder = Class.create(bbq.gui.GUIWidget, {
 
 		this._buttons.push(button);
 
+		button.registerListener("onMouseDown", this._buttonMouseDown.bind(this, button));
 		button.registerListener("onClick", this._buttonClicked.bind(this, button));
 
 		return button;
@@ -116,17 +117,22 @@ bbq.gui.button.ButtonHolder = Class.create(bbq.gui.GUIWidget, {
 	 * @private
 	 */
 	_buttonClicked: function(button) {
-		if(this._selectedIndex > -1) {
-			var lastSelected = this._buttons[this._selectedIndex];
-
-			if(lastSelected) {
-				lastSelected.clearDown();
+		this._buttons.each(function(b) {
+			if(b != button) {
+				b.clearDown();
 			}
-		}
+		});
 
 		this.setSelectedIndex(this._buttons.indexOf(button));
 
 		FocusWatcher.setKeypressCallbackObject(this);
+	},
+
+	/**
+	 * @private
+	 */
+	_buttonMouseDown: function(button) {
+
 	},
 
 	/**

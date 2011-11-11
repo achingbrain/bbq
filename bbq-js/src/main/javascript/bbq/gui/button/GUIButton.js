@@ -13,6 +13,7 @@ include(bbq.util.BBQUtil);
 bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, {
 	_disabled: false,
 	_down: false,
+	_mouseDownOverButton: false,
 
 	/**
 	 * Constructor!
@@ -61,23 +62,23 @@ bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, {
 		}
 
 		if (this.options.onMouseOut) {
-			this.registerListener("onClick", this.options.onMouseOut);
+			this.registerListener("onMouseOut", this.options.onMouseOut);
 		}
 
 		if (this.options.onMouseOver) {
-			this.registerListener("onClick", this.options.onMouseOver);
+			this.registerListener("onMouseOver", this.options.onMouseOver);
 		}
 
 		if (this.options.onMouseDown) {
-			this.registerListener("onClick", this.options.onMouseDown);
+			this.registerListener("onMouseDown", this.options.onMouseDown);
 		}
 
 		if (this.options.onMouseUp) {
-			this.registerListener("onClick", this.options.onMouseUp);
+			this.registerListener("onMouseUp", this.options.onMouseUp);
 		}
 
 		if (this.options.onButtonDown) {
-			this.registerListener("onClick", this.options.onButtonDown);
+			this.registerListener("onButtonDown", this.options.onButtonDown);
 		}
 	},
 
@@ -112,7 +113,7 @@ bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, {
 			BBQUtil.clearFocus(event);
 		}
 
-		if(this._disabled) {
+		if(this._disabled || this._down) {
 			return false;
 		}
 
@@ -141,6 +142,11 @@ bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, {
 
 		this.removeClass("buttonOver");
 		this.notifyListeners("onMouseOut");
+
+		// mouse button was clicked, but user dragged out of button before releasing
+		if(this._mouseDownOverButton) {
+			this.removeClass("buttonDown");
+		}
 	},
 
 	/**
@@ -161,11 +167,16 @@ bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, {
 	 * @param {Event} event
 	 */
 	mouseDown: function(event) {
-		if(this._disabled) {
+		if(this._disabled || this._down) {
 			return false;
 		}
 
-		this.addClass("buttonDown");
+		if(!this.options.rememberDownState) {
+			this.addClass("buttonDown");
+		}
+
+		this._mouseDownOverButton = true;
+
 		this.notifyListeners("onMouseDown");
 	},
 
@@ -174,9 +185,11 @@ bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, {
 	 * @param {Event} event
 	 */
 	mouseUp: function(event) {
-		if(this._disabled) {
+		if(this._disabled || this._down) {
 			return false;
 		}
+
+		this._mouseDownOverButton = false;
 
 		this.removeClass("buttonDown");
 		this.notifyListeners("onMouseUp");
@@ -187,6 +200,10 @@ bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, {
 	 * @param {boolean} down
 	 */
 	setDown: function(down) {
+		if(this._down == down) {
+			return;
+		}
+
 		this._down = down;
 		this[(this._down ? "add" : "remove") + "Class"]("buttonDown");
 		this.notifyListener("onButton" + (this._down ? "Down" : "Up"));
@@ -196,6 +213,7 @@ bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, {
 	 * Clears button down state
 	 */
 	clearDown: function() {
+		this._down = false;
 		this.removeClass("buttonDown");
 	},
 
