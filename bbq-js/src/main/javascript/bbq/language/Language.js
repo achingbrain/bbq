@@ -21,7 +21,7 @@ Language = {
 		Language.options = options ? options : {};
 		
 		new bbq.ajax.JSONRequest({
-			url: "/backend/getLanguage", 
+			url: "/language/get",
 			onSuccess: Language._gotLanguage.bind(Language), 
 			args: (options && options.section ? {section: options.section} : null)});
 	},
