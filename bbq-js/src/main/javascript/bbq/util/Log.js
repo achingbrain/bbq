@@ -12,10 +12,10 @@ var Log = {
 			message = Log._padNumber(date.getHours()) + ":" + Log._padNumber(date.getMinutes()) + ":" + Log._padNumber(date.getSeconds()) + " - " + message;
 		}
 		
-		if(console) {
-			if(console[type]) {
+		if(window.console) {
+			if(window.console[type]) {
 				console[type](message);
-			} else if(console.log) {
+			} else if(window.console.log) {
 				console.log(message);
 			}
 		}
