@@ -19,12 +19,10 @@ bbq.gui.form.DropDown = new Class.create(bbq.gui.form.FormField, {
 			this.addClass("DropDown");
 
 			if(Object.isArray(this.options.options)) {
-				this.options.options.each(function(option, index) {
-					this.appendChild(DOMUtil.createElement("option", option.key, {value: index}));
-				}.bind(this));
+				this.setOptions(this.options.options);
 			}
 
-			if (!Object.isUndefined(this.options.value)) {
+			if(!Object.isUndefined(this.options.value)) {
 				this.setValue(this.options.value);
 			}
 		} catch(e) {
@@ -51,6 +49,31 @@ bbq.gui.form.DropDown = new Class.create(bbq.gui.form.FormField, {
 					optionElements[index].selected = true;
 				}
 			}
+		}.bind(this));
+	},
+
+	setOptions: function(options) {
+		// preserve currently selected index
+		var selectedIndex = 0;
+
+		$A(this.getRootNode().getElementsByTagName("option")).each(function(option, index) {
+			if (option.selected) {
+				selectedIndex = index;
+
+				throw $break;
+			}
+		});
+
+		this.empty();
+
+		options.each(function(option, index) {
+			var node = DOMUtil.createElement("option", option.key, {value: index});
+
+			if (index == selectedIndex) {
+				node.selected = true;
+			}
+
+			this.appendChild(node);
 		}.bind(this));
 	}
 });

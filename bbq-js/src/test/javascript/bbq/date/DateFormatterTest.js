@@ -49,7 +49,6 @@ test = new Test.Unit.Runner({
 
 			var date = new Date("2011/10/12 12:00:00");
 
-
 			this.assertEqual("2011/10/12", date.format("yyyy/m/d"));
 			this.assertEqual("Wednesday, October 12th, 2011, 12:00:00 PM", date.format("dddd, mmmm dS, yyyy, h:MM:ss TT"));
 			this.assertEqual("2011-10-12T12:00:00", date.format("isoDateTime"));
@@ -57,6 +56,15 @@ test = new Test.Unit.Runner({
 			this.assertEqual("Wed Oct 12 2011 12:00:00", date.format());
 			this.assertEqual("12:00:00 PM GMT+0100", date.format("longTime"));
 			this.assertEqual("11:00:00 AM UTC", date.format("UTC:h:MM:ss TT Z"));
+			this.assertEqual("12", date.format("d"));
+
+			date = new Date("2011/10/31 12:00:00");
+
+			this.assertEqual("31", date.format("d"));
+
+			date = new Date("2011/10/1 12:00:00");
+
+			this.assertEqual("1", date.format("d"));
 		}
 	}
 });

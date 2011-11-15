@@ -59,6 +59,7 @@ bbq.gui.form.DateFieldFormatter = new Class.create({
 	_date: null,
 	_startYear: null,
 	_endYear: null,
+	_dayDropDown: null,
 
 	initialize: function(args) {
 		try {
@@ -87,16 +88,9 @@ bbq.gui.form.DateFieldFormatter = new Class.create({
 	},
 
 	dd: function(date, utc, fragment) {
-		var options = [];
+		var options = this._getDays();
 
-		for(var i = 0; i < (32 - new Date(this._date.getFullYear(), this._date.getMonth(), 32).getDate()); i++) {
-			options.push({
-				key: "" + i,
-				value: i
-			});
-		}
-
-		var dropDown = new bbq.gui.form.DropDown({
+		this._dayDropDown = new bbq.gui.form.DropDown({
 			options: options,
 			value: this._date.getDate(),
 			onChange: function(field) {
@@ -104,7 +98,7 @@ bbq.gui.form.DateFieldFormatter = new Class.create({
 			}.bind(this)
 		});
 
-		dropDown.appendTo(fragment);
+		this._dayDropDown.appendTo(fragment);
 	},
 
 	mm: function(date, utc, fragment) {
@@ -121,7 +115,22 @@ bbq.gui.form.DateFieldFormatter = new Class.create({
 			options: options,
 			value: this._date.getMonth(),
 			onChange: function(field) {
+				// make sure the new date is valid for the selected month
+				var newDate = new Date();
+				newDate.setDate(1);
+				newDate.setMonth(field.getValue());
+
+				var daysInMonth = newDate.getDaysInMonth();
+
+				if(this._date.getDate() > daysInMonth) {
+					// eg. had 31st, but gone to a 30 day month
+					this._date.setDate(1);
+				}
+
 				this._date.setMonth(field.getValue());
+
+				// redraw so the days in the month change
+				this._dayDropDown.setOptions(this._getDays());
 			}.bind(this)
 		});
 
@@ -147,5 +156,33 @@ bbq.gui.form.DateFieldFormatter = new Class.create({
 		});
 
 		dropDown.appendTo(fragment);
+	},
+
+	_getDays: function() {
+		var options = [];
+		var daysInMonth = 32 - new Date(this._date.getFullYear(), this._date.getMonth(), 32).getDate();
+
+		for (var i = 1; i <= daysInMonth; i++) {
+			options.push({
+				key: "" + i,
+				value: i
+			});
+		}
+
+		return options;
 	}
 });
+
+Date.prototype.getDaysInMonth = function(utc) {
+	var m = utc ? this.getUTCMonth() : this.getMonth();
+	// If feb.
+	if (m == 1)
+		return this.isLeapYear() ? 29 : 28;
+	// If Apr, Jun, Sep or Nov return 30; otherwise 31
+	return (m == 3 || m == 5 || m == 8 || m == 10) ? 30 : 31;
+};
+
+Date.prototype.isLeapYear = function(utc) {
+	var y = utc ? this.getUTCFullYear() : this.getFullYear();
+	return !(y % 4) && (y % 100) || !(y % 400) ? true : false;
+};
