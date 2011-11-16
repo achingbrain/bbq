@@ -39,6 +39,8 @@ public class ErrorController implements HandlerExceptionResolver {
 
 	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception exception) {
 		try {
+			encounteredError(exception);
+
 			ModelAndView modelAndView = getModelAndView();
 
 			String message = getErrorMessage(exception);
@@ -51,6 +53,7 @@ public class ErrorController implements HandlerExceptionResolver {
 			response.setStatus(HttpServletResponse.SC_OK);
 
 			modelAndView.addObject("error", message);
+			modelAndView.addObject("exception", exception);
 
 			return modelAndView;
 		} catch (Exception e) {
@@ -58,6 +61,14 @@ public class ErrorController implements HandlerExceptionResolver {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Override this to do logging, etc
+	 * @param exception
+	 */
+	protected void encounteredError(Exception exception) {
+
 	}
 
 	protected String getErrorMessage(Exception exception) throws UnsupportedEncodingException {
