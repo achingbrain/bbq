@@ -39,7 +39,7 @@ public class ErrorController implements HandlerExceptionResolver {
 
 	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception exception) {
 		try {
-			encounteredError(exception);
+			encounteredError(request, response, exception);
 
 			ModelAndView modelAndView = getModelAndView();
 
@@ -67,7 +67,7 @@ public class ErrorController implements HandlerExceptionResolver {
 	 * Override this to do logging, etc
 	 * @param exception
 	 */
-	protected void encounteredError(Exception exception) {
+	protected void encounteredError(HttpServletRequest request, HttpServletResponse response, Exception exception) {
 
 	}
 

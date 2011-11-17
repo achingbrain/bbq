@@ -204,8 +204,36 @@ bbq.gui.form.DateFieldFormatter = new Class.create({
 					return;
 				}
 
+				var daysInOldMonth = this._date.getDaysInMonth();
+
+				var newDate = new Date();
+				newDate.setDate(1);
+				newDate.setMonth(this._date.getMonth());
+				newDate.setFullYear(field.getValue());
+
+				var leapYearToNonLeapYear = false;
+
+				if (newDate.getMonth() == 1) {
+					// feburary, 0 indexed
+
+					// gone from leap year to non-leap year or vice versa
+					if(newDate.getDaysInMonth() != daysInOldMonth) {
+						leapYearToNonLeapYear = true;
+
+						if(this._date.getDate() >= newDate.getDaysInMonth()) {
+							// eg. had 29th, but gone to a 28 day month
+							this._date.setDate(1);
+						}
+					}
+				}
+
 				// save the value
 				this._date.setFullYear(field.getValue());
+
+				if(leapYearToNonLeapYear) {
+					// redraw so the days to show new length
+					this._dayDropDown.setOptions(this._getDays());
+				}
 
 				// if a null date has previously been selected, we need to update the other drop downs
 				this._dayDropDown.setValue(this._date.getDate());
