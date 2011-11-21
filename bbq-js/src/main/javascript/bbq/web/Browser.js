@@ -15,13 +15,13 @@ Browser = {
 	Flash: false,
 	version: 0,
 	forms: {},
-	
+
 	/** find out which broswer we are running */
 	detect: function() {
-		
+
 		if(window.opera) {
 			Browser.Opera = true;
-			
+
 			if(window.XMLHttpRequest) {
 				Browser.version = 8;
 			} else if(document.getElementById) {
@@ -41,7 +41,7 @@ Browser = {
 			}
 		} else if(document.getElementById && !document.all) {
 			Browser.Mozilla = true;
-			
+
 			if(navigator.registerProtocolHandler) {
 				Browser.version = 3;
 			} else if(window.Iterator) {
@@ -53,7 +53,7 @@ Browser = {
 			}
 		} else if(document.getElementById && document.all && window.ActiveXObject) {
 			Browser.InternetExplorer = true;
-			
+
 			if(document.querySelectorAll) {
 				Browser.version = 8;
 			} else if(window.XMLHttpRequest) {
@@ -68,7 +68,7 @@ Browser = {
 				Browser.version = 4;
 			}
 		}
-		
+
 		// does it support AJAX?
 		if(window.XMLHttpRequest) {
 			Browser.Ajax = true;
@@ -80,21 +80,27 @@ Browser = {
 				try {
 					requestObject=new ActiveXObject("Microsoft.XMLHTTP");
 					Browser.Ajax = true;
-				} catch (oc) {}
+				} catch (oc) {
+
+				}
 			}
 		}
-		
+
 		// how about the DOM?
 		if(document.getElementById) {
 			Browser.DOM = true;
 		}
-		
+
 		// and Flash?
 		if(Browser.InternetExplorer) {
-			var obj = new ActiveXObject("ShockwaveFlash.ShockwaveFlash");
-			
-			if(!obj.activeXError) {
-				Browser.Flash = true;
+			try {
+				var obj = new ActiveXObject("ShockwaveFlash.ShockwaveFlash");
+
+				if(!obj.activeXError) {
+					Browser.Flash = true;
+				}
+			} catch(e) {
+				Browser.Flash = false;
 			}
 		} else {
 			try {
