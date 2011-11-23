@@ -87,6 +87,13 @@ public class TestJavaScriptMojo extends TestClasspathAwareMojo {
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		super.execute();
 
+		// Should we skip test execution?
+		if(System.getProperty("skipTests") != null || System.getProperty("maven.test.skip") != null) {
+			getLog().info("Tests are skipped.");
+
+			return;
+		}
+
 		Logger log = new MojoLogger(getLog());
 		JavaScriptTestRunner.setLogger(log);
 
