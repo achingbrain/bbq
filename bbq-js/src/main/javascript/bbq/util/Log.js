@@ -42,7 +42,7 @@ var Log = {
 	},
 
 	dir: function(object) {
-		Log._logIt(object, "dir", false);
+		Log._logIt(object, "dir", true);
 	},
 
 	_padNumber: function(number) {
