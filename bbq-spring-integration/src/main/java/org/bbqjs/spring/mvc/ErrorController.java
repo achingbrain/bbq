@@ -36,12 +36,21 @@ public class ErrorController implements HandlerExceptionResolver {
 	private static final int MAX_HEADER_LENGTH = 3072;
 
 	private Map<Class<?>, Integer>errorCodes = Collections.EMPTY_MAP;
+	private Map<Class<?>, String> errorViews = Collections.EMPTY_MAP;
+	private String defaultErrorView = "error";
 
 	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception exception) {
 		try {
 			encounteredError(request, response, exception);
 
-			ModelAndView modelAndView = getModelAndView();
+			ModelAndView modelAndView = getModelAndView(exception);
+
+			if(modelAndView.getViewName().startsWith("redirect:")) {
+				// do not add values to redirect view as if they are too long
+				// some web containers baulk at the variable length
+
+				return modelAndView;
+			}
 
 			String message = getErrorMessage(exception);
 			int code = getErrorCode(exception);
@@ -107,8 +116,16 @@ public class ErrorController implements HandlerExceptionResolver {
 		return EPIC_FAIL_CODE;
 	}
 
-	protected ModelAndView getModelAndView() {
-		return new ModelAndView("error");
+	protected ModelAndView getModelAndView(Exception forException) {
+		ModelAndView modelAndView;
+
+		if (errorViews.containsKey(forException.getClass())) {
+			modelAndView = new ModelAndView(errorViews.get(forException.getClass()));
+		} else {
+			modelAndView = new ModelAndView(defaultErrorView);
+		}
+
+		return modelAndView;
 	}
 
 	public void setErrorCodes(Map<Class<?>, Integer> errorCodes) {
@@ -117,5 +134,13 @@ public class ErrorController implements HandlerExceptionResolver {
 		}
 
 		this.errorCodes = errorCodes;
+	}
+
+	public void setErrorViews(Map<Class<?>, String> errorViews) {
+		this.errorViews = errorViews;
+	}
+
+	public void setDefaultErrorView(String defaultErrorView) {
+		this.defaultErrorView = defaultErrorView;
 	}
 }
