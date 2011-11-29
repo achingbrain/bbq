@@ -44,6 +44,14 @@ bbq.gui.form.FormField = new Class.create(bbq.gui.GUIWidget, {
 			if(this.options.name) {
 				this.setAttribute("name", this.options.name);
 			}
+
+			this.registerListener("onFocus", function() {
+				FocusWatcher.setKeypressCallbackObject(this);
+			}.bind(this));
+
+			this.registerListener("onBlur", function() {
+				FocusWatcher.setKeypressCallbackObject(null);
+			}.bind(this));
 		} catch(e) {
 			Log.error("Error constructing FormField", e);
 		}
@@ -52,6 +60,8 @@ bbq.gui.form.FormField = new Class.create(bbq.gui.GUIWidget, {
 	setRootNode: function($super, rootNode) {
 		$super(rootNode);
 
+		this.getRootNode().onfocus = this.notifyListeners.bind(this, "onFocus");
+		this.getRootNode().onblur = this.notifyListeners.bind(this, "onBlur");
 		this.getRootNode().onchange = this.notifyListeners.bind(this, "onChange");
 	},
 
@@ -195,5 +205,13 @@ bbq.gui.form.FormField = new Class.create(bbq.gui.GUIWidget, {
 		}
 		
 		this._transformer = transformer;
+	},
+
+	loseFocus: function() {
+		this.removeClass("FormField_focused");
+	},
+
+	acceptFocus: function() {
+		this.addClass("FormField_focused");
 	}
 });

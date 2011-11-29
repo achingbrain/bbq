@@ -18,6 +18,7 @@ bbq.gui.form.TextField = new Class.create(bbq.gui.form.FormField, {
 
 			this.addClass("TextField");
 
+			this.getRootNode().type = "text";
 			this.getRootNode().onkeydown = this._keyDown.bind(this);
 			this.getRootNode().onkeyup = this._keyUp.bind(this);
 		} catch(e) {

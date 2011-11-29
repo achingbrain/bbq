@@ -49,7 +49,7 @@ FocusWatcher = {
 		FocusWatcher._focusedElement = obj;
 		FocusWatcher._call("acceptFocus");
 	},
-	
+
 	/**
 	 * Returns the currently focused element
 	 */
