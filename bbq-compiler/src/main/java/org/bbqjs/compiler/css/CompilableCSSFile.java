@@ -35,9 +35,16 @@ public class CompilableCSSFile extends AbstractCompilableFile {
 		String path = (theme == null ? "" : (theme + "/")) + className.replaceAll("\\.", "/") + "/style.css";
 
 		URL url = Utils.findFile(path, sourceRoots);
-		
+
+		if(url == null) {
+			// could not find style.css, try ClassName.css
+			String[] classNameParts = className.split("\\.");
+			path = (theme == null ? "" : (theme + "/")) + className.replaceAll("\\.", "/") + "/" + classNameParts[classNameParts.length - 1] + ".css";
+			url = Utils.findFile(path, sourceRoots);
+		}
+
 		LOG.debug("Including file " + javaScriptFile + ", css " + url);
-		
+
 		includedFiles.add(new CompilableCSSFile(javaScriptFile, url, theme, sourceRoots));
 	}
 
