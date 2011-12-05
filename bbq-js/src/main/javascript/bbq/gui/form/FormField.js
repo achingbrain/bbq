@@ -29,10 +29,6 @@ bbq.gui.form.FormField = new Class.create(bbq.gui.GUIWidget, {
 			this.setRootNode("input");
 			this.addClass("FormField");
 
-			if(!Object.isUndefined(this.options.value)) {
-				this.setValue(this.options.value);
-			}
-
 			if(this.options.onChange) {
 				this.registerListener("onChange", this.options.onChange);
 			}
@@ -63,6 +59,10 @@ bbq.gui.form.FormField = new Class.create(bbq.gui.GUIWidget, {
 		this.getRootNode().onfocus = this.notifyListeners.bind(this, "onFocus");
 		this.getRootNode().onblur = this.notifyListeners.bind(this, "onBlur");
 		this.getRootNode().onchange = this.notifyListeners.bind(this, "onChange");
+
+		if(!Object.isUndefined(this.options.value)) {
+			this._setRawValue(this.options.value);
+		}
 	},
 
 	_getRawValue: function() {

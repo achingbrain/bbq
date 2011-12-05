@@ -21,10 +21,6 @@ bbq.gui.form.DateField = new Class.create(bbq.gui.form.FormField, {
 
 			this.setRootNode("fieldgroup");
 			this.addClass("DateField");
-
-			if (!Object.isUndefined(this.options.value)) {
-				this.setValue(this.options.value);
-			}
 		} catch(e) {
 			Log.error("Error constructing DateField", e);
 		}

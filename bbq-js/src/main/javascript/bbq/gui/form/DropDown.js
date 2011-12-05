@@ -21,10 +21,6 @@ bbq.gui.form.DropDown = new Class.create(bbq.gui.form.FormField, {
 			if(Object.isArray(this.options.options)) {
 				this.setOptions(this.options.options);
 			}
-
-			if(!Object.isUndefined(this.options.value)) {
-				this.setValue(this.options.value);
-			}
 		} catch(e) {
 			Log.error("Error constructing DropDown", e);
 		}

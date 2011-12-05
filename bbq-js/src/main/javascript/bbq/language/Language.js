@@ -75,9 +75,15 @@ Language = {
 	/**
 	 * Allows for lanugage formatting so that variable value placement in strings is not dependant on the flow of the English language.
 	 * 
-	 * In the PHP language file, declare this sort of thing:
-	 * 
-	 * $langugage['generic']['mystring'] = 'This string has {marker} marker';
+	 * In the language file, declare this sort of thing:
+	 *
+	 * <code>
+	 * <?xml version="1.0" encoding="utf-8"?>
+	 * <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+	 * <properties>
+	 *      <entry key="generic.mystring">This string has {marker} marker</entry>
+	 * </properties>
+	 * </code>
 	 * 
 	 * Then in the javascript, call:
 	 * 
@@ -94,7 +100,7 @@ Language = {
 		var outputDomNode = false;
 
 		for(var key in keys) {
-			if(!Object.isString(keys[key])) {
+			if(!Object.isString(keys[key]) && !Object.isNumber(keys[key])) {
 				outputDomNode = true;
 			}
 		}

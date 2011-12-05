@@ -7,7 +7,7 @@ include(bbq.gui.form.FormField);
  *      value: String                   // initial value
  * }
  */
-bbq.gui.form.TextField = new Class.create(bbq.gui.form.FormField, {
+bbq.gui.form.TextArea = new Class.create(bbq.gui.form.FormField, {
 	_onKeyPressValue: null,
 	_onKeyPressTimeOut: null,
 
@@ -15,13 +15,14 @@ bbq.gui.form.TextField = new Class.create(bbq.gui.form.FormField, {
 		try {
 			$super(args);
 
-			this.addClass("TextField");
+			this.addClass("TextArea");
 
+			this.setRootNode("textarea");
 			this.getRootNode().type = "text";
 			this.getRootNode().onkeydown = this._keyDown.bind(this);
 			this.getRootNode().onkeyup = this._keyUp.bind(this);
 		} catch(e) {
-			Log.error("Error constructing TextField", e);
+			Log.error("Error constructing TextArea", e);
 		}
 	},
 
@@ -30,9 +31,9 @@ bbq.gui.form.TextField = new Class.create(bbq.gui.form.FormField, {
 	},
 
 	_keyUp: function() {
-		if(this._onKeyPressValue != this.getRootNode().value) {
+		if (this._onKeyPressValue != this.getRootNode().value) {
 			// if the timeout already exists, cancel it so only one is dispatched
-			if(this._onKeyPressTimeOut) {
+			if (this._onKeyPressTimeOut) {
 				clearTimeout(this._onKeyPressTimeOut);
 			}
 
