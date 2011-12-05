@@ -47,9 +47,6 @@ bbq.gui.form.RangeField = new Class.create(bbq.gui.form.FormField, {
 				// ack, fallback to custom version
 				this._native = false;
 
-				this.setRootNode("div");
-				this.setStyle("position", "relative");
-
 				// use a hidden input node to store our current value and maintain compatibility with bbq.gui.form.Form#getValues
 				this._bar = DOMUtil.createElement("div", {
 					className: "RangeField_bar",
@@ -67,6 +64,9 @@ bbq.gui.form.RangeField = new Class.create(bbq.gui.form.FormField, {
 					},
 					onmousedown: this._startDrag.bind(this)
 				});
+
+				this.setRootNode("div");
+				this.setStyle("position", "relative");
 			}
 
 			this.addClass("RangeField");
@@ -84,9 +84,15 @@ bbq.gui.form.RangeField = new Class.create(bbq.gui.form.FormField, {
 			this.appendChild(this._bar);
 			this.appendChild(this._handle);
 
-			// position handle in middle of bar
-			var dimensions = Element.getDimensions(this.getRootNode());
-			DOMUtil.setStyle(this._handle, "left", (dimensions.width/2) + "px");
+			// position handle after being added to the DOM
+			setTimeout(function() {
+				var width = Element.getDimensions(this._bar).width;
+
+				var range = this.options.max - this.options.min;
+				var left = (width/range) * (this._value - this.options.min);
+
+				DOMUtil.setStyle(this._handle, "left", left + "px");
+			}.bind(this), 100);
 		}
 	},
 
@@ -122,7 +128,7 @@ bbq.gui.form.RangeField = new Class.create(bbq.gui.form.FormField, {
 	_doDrag: function(event) {
 		var mouseX = Event.pointerX(event);
 		var elementX = Element.positionedOffset(this.getRootNode()).left;
-		var width = Element.getDimensions(this.getRootNode()).width;
+		var width = Element.getDimensions(this._bar).width;
 
 		var x = mouseX - elementX;
 
@@ -151,9 +157,8 @@ bbq.gui.form.RangeField = new Class.create(bbq.gui.form.FormField, {
 
 		for(var i = 0; i <= potentialValues; i++) {
 			var segmentStart = i * segmentWidth;
-			var segmentEnd = segmentStart + segmentWidth;
 
-			//Log.info("segmentStart " + segmentStart + " segmentEnd " + segmentEnd + " position " + position);
+			//Log.info("segmentStart " + segmentStart + " position " + position);
 
 			if(position >= (segmentStart - (segmentWidth / 2)) && position <= (segmentStart + (segmentWidth / 2))) {
 				position = segmentStart;
