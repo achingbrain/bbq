@@ -89,9 +89,20 @@ bbq.gui.form.RangeField = new Class.create(bbq.gui.form.FormField, {
 				var width = Element.getDimensions(this._bar).width;
 
 				var range = this.options.max - this.options.min;
-				var left = (width/range) * (this._value - this.options.min);
+				var position = (width/range) * (this._value - this.options.min);
 
-				DOMUtil.setStyle(this._handle, "left", left + "px");
+				if(position >= width) {
+					var handleWidth = Element.getDimensions(this._handle).width;
+					position -= handleWidth;
+				}
+
+				var percent = ((position/width) * 100);
+
+				if(percent > 100) {
+					percent = 100;
+				}
+
+				DOMUtil.setStyle(this._handle, "left", percent + "%");
 			}.bind(this), 100);
 		}
 	},
@@ -170,12 +181,17 @@ bbq.gui.form.RangeField = new Class.create(bbq.gui.form.FormField, {
 		}
 
 		if(position >= width) {
-
 			var handleWidth = Element.getDimensions(this._handle).width;
 			position -= handleWidth;
 		}
 
-		DOMUtil.setStyle(this._handle, "left", ((position/width) * 100) + "%");
+		var percent = ((position/width) * 100);
+
+		if(percent > 100) {
+			percent = 100;
+		}
+
+		DOMUtil.setStyle(this._handle, "left", percent + "%");
 
 		this.setValue(newValue);
 		this.notifyListeners("onChange");
