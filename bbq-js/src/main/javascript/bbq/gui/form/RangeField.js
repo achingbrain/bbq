@@ -58,8 +58,6 @@ bbq.gui.form.RangeField = new Class.create(bbq.gui.form.FormField, {
 				this._handle = DOMUtil.createElement("div", {
 					className: "RangeField_handle",
 					style: {
-						width: "10px",
-						height: "10px",
 						position: "absolute"
 					},
 					onmousedown: this._startDrag.bind(this)
