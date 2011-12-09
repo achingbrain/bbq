@@ -19,7 +19,7 @@ bbq.gui.form.DateField = new Class.create(bbq.gui.form.FormField, {
 		try {
 			$super(args);
 
-			this.setRootNode("fieldgroup");
+			this.setRootNode("fieldset");
 			this.addClass("DateField");
 		} catch(e) {
 			Log.error("Error constructing DateField", e);
