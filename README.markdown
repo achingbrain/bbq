@@ -28,6 +28,10 @@ Some convenience controllers and other niceties to aid working with the [Spring]
 
 Reusable classes to help when developing AJAX based form authentication against [Spring Security](http://static.springsource.org/spring-security/site/).
 
+### [bbq-maven-archetype](https://github.com/achingbrain/bbq/tree/master/bbq-maven-archetype)
+
+A Maven Archetype quickstart project
+
 ## How do I get it?
 
 Add the following repositories to your maven project:
