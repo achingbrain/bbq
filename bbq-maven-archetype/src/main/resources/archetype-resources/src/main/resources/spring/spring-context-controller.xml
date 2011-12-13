@@ -1,0 +1,157 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+				http://www.springframework.org/schema/beans		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+				http://www.springframework.org/schema/context	http://www.springframework.org/schema/context/spring-context-3.0.xsd
+				http://www.springframework.org/schema/mvc		http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+
+	<!-- Scan the package for @Controller annotated classes -->
+	<context:component-scan base-package="${package}.spring.mvc" />
+	<context:annotation-config/>
+
+	<!-- Language controller -->
+	<bean id="languageController" class="org.bbqjs.spring.debug.LanguageController">
+		<property name="defaultLocale" value="en_GB"/>
+		<property name="supportedLocales">
+			<list>
+				<value>en_GB</value>
+				<value>en_US</value>
+			</list>
+		</property>
+		<property name="pagePackage" value="${symbol_dollar}{js.page.package}"/>
+		<property name="sourceRoots">
+			<list>
+				<value>src/main/javascript</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Error page controller -->
+	<bean id="errorPageController" class="org.bbqjs.spring.mvc.PageController">
+		<property name="view" value="error" />
+	</bean>
+
+	<!-- Home page controller -->
+	<bean id="homePageController" class="org.bbqjs.spring.mvc.PageController">
+		<property name="view" value="page" />
+		<property name="model">
+			<map>
+				<entry key="pagetitle" value="${package}.page.Home.pagetitle" />
+				<entry key="stylesheet" value="Home.css" />
+				<entry key="script" value="Home.js" />
+				<entry key="javascriptClass" value="${package}.page.Home" />
+			</map>
+		</property>
+	</bean>
+
+	<!-- Resolves ModelAndView view names (passed to the ModelAndView class 
+		constructor as an argument of type String) to jsp files -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix">
+			<value>/WEB-INF/jsp/</value>
+		</property>
+		<property name="suffix">
+			<value>.jsp</value>
+		</property>
+	</bean>
+
+	<!-- Stores language translations -->
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="cacheSeconds" value="5" />
+		<property name="basenames">
+			<list>
+				<value>/WEB-INF/language/Home</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Exception handling -->
+	<bean id="exceptionHandler" class="org.bbqjs.spring.mvc.ErrorController" />
+
+	<!-- Handler Configuration ==================================================================== -->
+	
+	<!-- Custom annotation handler mapping for @Controller support. We set alwaysUseFullPath 
+		in order to circumvent the default UrlPathHelper behaviour which strips the 
+		root context from the URL when attempting to locate a handler. -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+		<property name="order" value="0" />
+		<property name="alwaysUseFullPath" value="true" />
+	</bean>
+
+	<!-- Provides support for converting an HTTP message containing a JSON pay 
+		load into a POJO and back again. Note that this support is not provided by 
+		the default Spring configuration (mvc:annotation-driven) which is why we 
+		need a custom adapter. -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="order" value="1" />
+		<property name="alwaysUseFullPath" value="true" />
+		<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Allows us to map URLs (and fragments of URLs) to Controllers directly. 
+		Works in parallel with annotation based configuration allowing us mix different 
+		handler strategies. -->
+	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="order" value="2" />
+		<property name="alwaysUseFullPath" value="true" />
+		<property name="mappings">
+			<props>
+				<prop key="/javascript/*">jsController</prop>
+				<prop key="/css/*">cssController</prop>
+				<prop key="/images/**">imageController</prop>
+				<prop key="/*">homePageController</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- Dynamically builds js files for development purposes
+		 Recieves requests via rules defined in src/test/resource/debug-web.xml
+		 Should not be used in production
+	 -->
+	<bean id="jsController" class="org.bbqjs.spring.debug.JavaScriptCompilerServlet">
+		<property name="pagePackage" value="${symbol_dollar}{js.page.package}"/>
+		<property name="path" value="/javascript"/>
+		<property name="sourceRoots">
+			<list>
+				<value>src/main/javascript</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Dynamically builds css files for development purposes
+		 Recieves requests via rules defined in src/test/resource/debug-web.xml
+		 Should not be used in production
+	 -->
+	<bean id="cssController" class="org.bbqjs.spring.debug.CSSCompilerServlet">
+		<property name="pagePackage" value="${symbol_dollar}{js.page.package}"/>
+		<property name="path" value="/css"/>
+		<property name="sourceRoots">
+			<list>
+				<value>src/main/css</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Serves image files out of the css source directory or the webapp's images folder -->
+	<bean id="imageController" class="org.bbqjs.spring.debug.ImageServingServlet">
+		<property name="path" value="/images" />
+		<property name="sourceRoots">
+			<list>
+				<value>src/main/css</value>
+				<value>src/main/webapp/images</value>
+			</list>
+		</property>
+	</bean>
+	
+</beans>

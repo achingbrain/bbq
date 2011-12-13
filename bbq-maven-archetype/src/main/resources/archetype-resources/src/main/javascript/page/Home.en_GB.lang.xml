@@ -1,0 +1,12 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="${package}.page.Home.pagetitle">My Application</entry>
+	<entry key="${package}.page.Home.greeting">Hello world!</entry>
+	<entry key="${package}.page.Home.button">Click me</entry>
+	<entry key="${package}.page.Home.serversaid">The server said: {message}</entry>
+	<entry key="${package}.page.Home.message">This text was sent to the server as JSON, then recieved by the current page</entry>
+</properties>

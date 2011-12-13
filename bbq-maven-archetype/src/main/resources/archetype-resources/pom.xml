@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>${groupId}</groupId>
+	<artifactId>${artifactId}</artifactId>
+	<packaging>war</packaging>
+	<name>${artifactId}</name>
+	<version>${version}</version>
+
+	<properties>
+		<!-- 
+			This JavaScript package should contain the main page classes
+			The default directory is src/main/javascript/${package}/page
+		 -->
+		<js.page.package>${package}.page</js.page.package>
+
+		<bbq.version>1.1.4-SNAPSHOT</bbq.version>
+		<junit.version>4.5</junit.version>
+		<spring.version>3.0.5.RELEASE</spring.version>
+		<slf4j.version>1.5.8</slf4j.version>
+		<log4j.version>1.2.14</log4j.version>
+		<jackson.version>1.6.1</jackson.version>
+
+		<maven.plugin.jetty.version>6.1.26</maven.plugin.jetty.version>
+		<maven.plugin.resources.version>2.4.3</maven.plugin.resources.version>
+		<maven.plugin.compiler.version>2.3.2</maven.plugin.compiler.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>achingbrain-releases</id>
+			<url>http://achingbrain.github.com/maven-repo/releases</url>
+		</repository>
+		<repository>
+			<id>achingbrain-snapshots</id>
+			<url>http://achingbrain.github.com/maven-repo/snapshots</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>achingbrain-releases</id>
+			<url>http://achingbrain.github.com/maven-repo/releases</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>achingbrain-snapshots</id>
+			<url>http://achingbrain.github.com/maven-repo/snapshots</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<build>
+		<finalName>${project.name}</finalName>
+
+		<resources>
+			<resource>
+				<directory>src/main/javascript</directory>
+			</resource>
+			<resource>
+				<directory>src/main/css</directory>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+			</testResource>
+		</testResources>
+
+		<plugins>
+
+			<!-- Use Jetty plugin for showing the web app -->
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>maven-jetty-plugin</artifactId>
+				<version>${maven.plugin.jetty.version}</version>
+				<configuration>
+					<scanIntervalSeconds>5</scanIntervalSeconds>
+					<webAppConfig>
+						<contextPath>/</contextPath>
+						<overrideDescriptor>src/test/resources/debug-web.xml</overrideDescriptor>
+					</webAppConfig>
+				</configuration>
+			</plugin>
+
+			<!-- Configure compiler for Java 6 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.plugin.compiler.version}</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<excludes>
+						<exclude>**/*Point*.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<!-- BBQjs plugin -->
+			<plugin>
+				<groupId>org.bbqjs</groupId>
+				<artifactId>bbq-maven-plugin</artifactId>
+				<version>${bbq.version}</version>
+				<executions>
+					<execution>
+						<id>Compile JavaScript</id>
+						<goals>
+							<goal>marinateJS</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>Compile CSS</id>
+						<goals>
+							<goal>marinateCSS</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>Compile Language</id>
+						<goals>
+							<goal>marinateLanguage</goal>
+						</goals>
+						<configuration>
+							<defaultLanguage>en_GB</defaultLanguage>
+							<supportedLanguages>
+								<supportedLanguage>en_GB</supportedLanguage>
+								<supportedLanguage>en_US</supportedLanguage>
+							</supportedLanguages>
+						</configuration>
+					</execution>
+				</executions>
+
+				<!-- This has to be declared as a dependency of the plugin as the plugin
+					 can't access the project classpath and is not included in the plugin
+					 so you can remain current -->
+				<dependencies>
+					<dependency>
+						<groupId>org.bbqjs</groupId>
+						<artifactId>bbq-js</artifactId>
+						<version>${bbq.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<dependencies>
+		<!-- BBQ JavaScript library -->
+		<dependency>
+			<groupId>org.bbqjs</groupId>
+			<artifactId>bbq-js</artifactId>
+			<version>${bbq.version}</version>
+		</dependency>
+
+		<!-- BBQ Spring Integration -->
+		<dependency>
+			<groupId>org.bbqjs</groupId>
+			<artifactId>bbq-spring-integration</artifactId>
+			<version>${bbq.version}</version>
+		</dependency>
+
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<!-- Logging dependencies -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+
+		<!-- Jackson must be on the classpath for JSON to Java conversion.  -->
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-lgpl</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-lgpl</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+
+		<!-- Test dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+</project>

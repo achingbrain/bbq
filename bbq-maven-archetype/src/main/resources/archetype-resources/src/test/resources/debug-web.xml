@@ -1,0 +1,21 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" version="2.4">
+	
+	<!-- This file is applied to the webapp by the maven-jetty-plugin -->
+	
+	<!-- Override /javascript request to dynamically generate the files -->
+	<servlet-mapping>
+		<servlet-name>spring</servlet-name>
+		<url-pattern>/javascript/*</url-pattern>
+	</servlet-mapping>
+	
+	<!-- Override /styles request to dynamically generate the files -->
+	<servlet-mapping>
+		<servlet-name>spring</servlet-name>
+		<url-pattern>/styles/*</url-pattern>
+	</servlet-mapping>
+	
+</web-app>

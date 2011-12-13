@@ -16,6 +16,7 @@
 		<module>bbq-spring-security-integration</module>
 		<module>bbq-test</module>
 		<module>bbq-maven-plugin</module>
+		<module>bbq-maven-archetype</module>
 	</modules>
 	
 	<licenses>
