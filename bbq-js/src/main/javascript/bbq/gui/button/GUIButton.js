@@ -106,7 +106,7 @@ bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, {
 	 */
 	buttonClicked: function(event) {
 		if(event) {
-			if(this.options.onclick) {
+			if(this.options.onClick) {
 				Event.stop(event);
 			}
 
