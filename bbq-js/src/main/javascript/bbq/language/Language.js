@@ -37,13 +37,19 @@ Language = {
 			Language.options.postLoad.call(Language);
 		}
 	},
-	
-	get: function(string) {
-		if(Language._language && Language._language[string]) {
-			return Language._language[string];
+
+	/**
+	 * Get a translated language string for a key
+	 * 
+	 * @param key
+	 * @return {String}
+	 */
+	get: function(key) {
+		if(Language._language && Language._language[key]) {
+			return Language._language[key];
 		}
 		
-		Log.error("Could not find language key " + string);
+		Log.error("Could not find language key " + key);
 		
 		return "unknown";
 	},
@@ -73,7 +79,7 @@ Language = {
 	},
 	
 	/**
-	 * Allows for lanugage formatting so that variable value placement in strings is not dependant on the flow of the English language.
+	 * Allows for language formatting so that variable value placement in strings is not dependant on the flow of the English language.
 	 * 
 	 * In the language file, declare this sort of thing:
 	 *
@@ -93,7 +99,7 @@ Language = {
 	 * 
 	 * "This string has a nice little marker"
 	 * 
-	 * @param {Array} language
+	 * @param {String} language
 	 * @param {Object} keys
 	 */
 	getFormatted: function(language, keys) {
