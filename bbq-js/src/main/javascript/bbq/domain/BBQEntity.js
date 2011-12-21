@@ -1,5 +1,6 @@
 include(bbq.lang.Watchable);
 include(bbq.util.BBQUtil);
+include(bbq.ajax.JSONRequest);
 
 /**
  * Base class for domain objects.  Supports being partially loaded - that is, properties can be asked for from
@@ -70,6 +71,10 @@ bbq.domain.BBQEntity = new Class.create(bbq.lang.Watchable, {
 		if(data && data instanceof Object) {
 			var defaultObject = this._getDefaultObject();
 
+			if(Object.isUndefined(defaultObject["id"])) {
+				Log.warn("Object loading data from " + this._retrieveURL + " should declare an id property in _getDefaultObject");
+			}
+
 			for(var key in data) {
 				// skip fields not defined on this object - this way we do not end up with erroneous getters and setters
 				if(typeof(defaultObject[key]) == "undefined") {
@@ -94,20 +99,20 @@ bbq.domain.BBQEntity = new Class.create(bbq.lang.Watchable, {
 
 			this._partialLoad = false;
 
-			// start delete me later
-			var missingProperties = [];
+			if(Log.debugging) {
+				var missingProperties = [];
 
-			// ensure we have loaded all of our properties
-			for(var key in defaultObject) {
-				if(typeof(data[key]) == "undefined") {
-					missingProperties.push(key);
+				// ensure we have loaded all of our properties
+				for(var key in defaultObject) {
+					if(typeof(data[key]) == "undefined") {
+						missingProperties.push(key);
+					}
+				}
+
+				if(missingProperties.length > 0) {
+					Log.warn(this._retrieveURL + " missing properties " + missingProperties.join(", "));
 				}
 			}
-
-			if(missingProperties.length > 0) {
-				Log.warn(this._retrieveURL + " missing properties " + missingProperties.join(", "));
-			}
-			// end delete me later
 
 			// ensure we have loaded all of our properties
 			for(var key in defaultObject) {
@@ -124,7 +129,7 @@ bbq.domain.BBQEntity = new Class.create(bbq.lang.Watchable, {
 
 			if(keys.length == 1 &&  keys[0] == "id") {
 				this.loadData();
-			} else if(!this._partialLoad) {			
+			} else if(!this._partialLoad) {
 				this._dataLoaded = true;
 			}
 		}

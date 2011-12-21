@@ -1292,7 +1292,7 @@ function __extend__(a,b) {
  *
  * @param {Object} message
  */
-Envjs.log = print;
+//Envjs.log = console.log;
 
 Envjs.lineSource = function(e){
     return e&&e.rhinoException?e.rhinoException.lineSource():"(line ?)";

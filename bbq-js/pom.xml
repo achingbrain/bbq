@@ -40,25 +40,42 @@
 		<plugins>
 			<plugin>
 				<groupId>org.bbqjs</groupId>
-				<artifactId>bbq-maven-plugin</artifactId>
+				<artifactId>bbq-test-maven-plugin</artifactId>
 				<version>${project.version}</version>
 				<executions>
 					<execution>
-						<id>Test JavaScript</id>
+						<phase>test</phase>
 						<goals>
-							<goal>unitTestJavaScript</goal>
+							<goal>test</goal>
 						</goals>
-						<configuration>
-							<testDirectory>${project.basedir}/src/test/javascript</testDirectory>
-							<includes>
-								<include>javascript/libs/prototype-1.7.0.0.js</include>
-								<include>javascript/libs/unittest-1.8.0.js</include>
-							</includes>
-						</configuration>
 					</execution>
 				</executions>
+				<configuration>
+					<testDirectory>${project.basedir}/src/test/javascript</testDirectory>
+					<includes>
+						<include>javascript/libs/prototype-1.7.0.0.js</include>
+						<include>javascript/libs/unittest-1.8.0.js</include>
+					</includes>
+				</configuration>
+
+				<!--<dependencies>
+					<dependency>
+						<groupId>org.bbqjs</groupId>
+						<artifactId>bbq-js-test</artifactId>
+						<version>${project.version}</version>
+					</dependency>
+				</dependencies>-->
 			</plugin>
 		</plugins>
 	</build>
-	
+
+	<dependencies>
+		<dependency>
+			<groupId>org.bbqjs</groupId>
+			<artifactId>bbq-js-test</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
 </project>

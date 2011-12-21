@@ -15,9 +15,9 @@
 		<js.page.package>${package}.page</js.page.package>
 
 		<bbq.version>1.1.4-SNAPSHOT</bbq.version>
-		<junit.version>4.5</junit.version>
-		<spring.version>3.0.5.RELEASE</spring.version>
-		<slf4j.version>1.5.8</slf4j.version>
+		<junit.version>4.8.2</junit.version>
+		<spring.version>3.0.6.RELEASE</spring.version>
+		<slf4j.version>1.6.1</slf4j.version>
 		<log4j.version>1.2.14</log4j.version>
 		<jackson.version>1.6.1</jackson.version>
 
@@ -107,28 +107,50 @@
 				</configuration>
 			</plugin>
 
-			<!-- BBQjs plugin -->
+			<!-- bbq plugins -->
+
+			<!-- Copies images out of the src/main/css folder into the output directory -->
 			<plugin>
 				<groupId>org.bbqjs</groupId>
-				<artifactId>bbq-maven-plugin</artifactId>
+				<artifactId>bbq-resources-maven-plugin</artifactId>
 				<version>${bbq.version}</version>
 				<executions>
 					<execution>
-						<id>Compile JavaScript</id>
 						<goals>
-							<goal>marinateJS</goal>
+							<goal>processResources</goal>
 						</goals>
 					</execution>
+				</executions>
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.bbqjs</groupId>
+				<artifactId>bbq-compiler-maven-plugin</artifactId>
+				<version>${bbq.version}</version>
+				<executions>
+
+					<!-- Compiles JavaScript files into one file per page -->
 					<execution>
-						<id>Compile CSS</id>
+						<id>compileJavaScript</id>
 						<goals>
-							<goal>marinateCSS</goal>
+							<goal>compileJavaScript</goal>
 						</goals>
 					</execution>
+
+					<!-- Compiles CSS files into one file per page -->
 					<execution>
-						<id>Compile Language</id>
+						<id>compileCSS</id>
 						<goals>
-							<goal>marinateLanguage</goal>
+							<goal>compileCSS</goal>
+						</goals>
+					</execution>
+
+					<!-- Compiles Language files into one file per page -->
+					<execution>
+						<id>compileLanguage</id>
+						<goals>
+							<goal>compileLanguage</goal>
 						</goals>
 						<configuration>
 							<defaultLanguage>en_GB</defaultLanguage>
@@ -139,17 +161,29 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
 
-				<!-- This has to be declared as a dependency of the plugin as the plugin
-					 can't access the project classpath and is not included in the plugin
-					 so you can remain current -->
-				<dependencies>
-					<dependency>
-						<groupId>org.bbqjs</groupId>
-						<artifactId>bbq-js</artifactId>
-						<version>${bbq.version}</version>
-					</dependency>
-				</dependencies>
+			<!-- Runs JavaScript unit tests under src/test/javascript -->
+			<plugin>
+				<groupId>org.bbqjs</groupId>
+				<artifactId>bbq-test-maven-plugin</artifactId>
+				<version>${bbq.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<!-- Here you can define any arbitrary files you want included in your unit tests -->
+					<includes>
+						<!-- You can include libraries from the file system -->
+						<include>${project.basedir}/src/main/webapp/js/libs/prototype-1.7.0.0/prototype.js</include>
+							<!-- You can include libraries from the classpath -->
+						<include>javascript/unittest-1.8.0.js</include>
+					</includes>
+				</configuration>
 			</plugin>
 
 		</plugins>
@@ -212,6 +246,12 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.bbqjs</groupId>
+			<artifactId>bbq-js-test</artifactId>
+			<version>${bbq.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

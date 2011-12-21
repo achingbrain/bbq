@@ -1,9 +1,9 @@
 /** Log utility object */
 var Log = {
-	_debugging: $$("html")[0].hasClassName("debug"),
+	debugging: $$("html")[0].hasClassName("debug"),
 
 	_logIt: function(message, type, nodate, exception) {
-		if(!Log._debugging) {
+		if(!Log.debugging) {
 			return;
 		}
 
@@ -11,9 +11,11 @@ var Log = {
 			var date = new Date();
 			message = Log._padNumber(date.getHours()) + ":" + Log._padNumber(date.getMinutes()) + ":" + Log._padNumber(date.getSeconds()) + " - " + message;
 		}
-		
+
 		if(window.console) {
 			if(window.console[type]) {
+				window.console.log("going for it " + type);
+
 				console[type](message);
 			} else if(window.console.log) {
 				console.log(message);

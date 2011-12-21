@@ -4,10 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,11 +56,19 @@ public abstract class AbstractCompiler<C extends CompilableFile> implements Comp
 		if(libraries != null) {
 			// if we've been given libraries, write them into the output stream
 			for(String library : libraries) {
-				URL url = getClass().getClassLoader().getResource(library);
+				URL url;
+				File file = new File(library);
+
+				if(file.exists()) {
+					// library is path on filesystem
+					url = file.toURI().toURL();
+				} else {
+					// library is on classpath
+					url = getClass().getClassLoader().getResource(library);
+				}
 
 				if(url == null) {
-					LOG.warn("Could not load resource for library " + library + " from classpath.");
-					continue;
+					throw new IOException("Could not load resource for library " + library + " from file system or classpath.");
 				}
 
 				InputStream inputStream = url.openStream();
