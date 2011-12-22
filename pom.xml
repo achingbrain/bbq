@@ -9,6 +9,10 @@
 	<url>http://www.bbqjs.org</url>
 	<name>bbq</name>
 
+	<prerequisites>
+		<maven>3.0.0</maven>
+	</prerequisites>
+
 	<modules>
 		<module>bbq-js</module>
 		<module>bbq-js-test</module>

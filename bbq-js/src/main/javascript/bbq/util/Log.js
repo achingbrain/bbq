@@ -14,8 +14,6 @@ var Log = {
 
 		if(window.console) {
 			if(window.console[type]) {
-				window.console.log("going for it " + type);
-
 				console[type](message);
 			} else if(window.console.log) {
 				console.log(message);
