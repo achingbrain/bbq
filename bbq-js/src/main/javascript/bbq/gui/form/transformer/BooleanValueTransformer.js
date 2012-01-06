@@ -1,4 +1,6 @@
-
+/**
+ * @class bbq.gui.form.transformer.BooleanValueTransformer
+ */
 bbq.gui.form.transformer.BooleanValueTransformer = new Class.create({
 
 	initialize: function() {

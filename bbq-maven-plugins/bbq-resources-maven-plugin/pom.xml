@@ -14,6 +14,41 @@
 	<version>1.1.4-SNAPSHOT</version>
 	<name>bbq-resources-maven-plugin</name>
 	<url>http://www.bbqjs.org</url>
+	<description>The plugin produced by this module copies CSS and other resources into the output target during the Maven build process.</description>
+
+	<scm>
+		<connection>scm:git://github.com/achingbrain/bbq.git</connection>
+		<url>https://github.com/achingbrain/bbq</url>
+	</scm>
+
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/achingbrain/bbq/issues</url>
+	</issueManagement>
+
+	<developers>
+		<developer>
+			<id>achingbrain</id>
+			<name>Alex Potsides</name>
+			<url>http://www.achingbrain.net</url>
+		</developer>
+	</developers>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>${maven.plugin.cobertura.version}</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<version>${maven.plugin.findbugs.version}</version>
+			</plugin>
+		</plugins>
+	</reporting>
 
 	<build>
 		<resources>

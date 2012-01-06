@@ -1,6 +1,10 @@
 include(bbq.gui.form.FormField);
 include(bbq.gui.form.transformer.BooleanValueTransformer);
 
+/**
+ * @class bbq.gui.form.CheckBox
+ * @extends bbq.gui.form.FormField
+ */
 bbq.gui.form.CheckBox = new Class.create(bbq.gui.form.FormField, {
 	initialize: function($super, args) {
 		try {

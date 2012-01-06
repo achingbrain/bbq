@@ -16,11 +16,14 @@ bbq.ajax.AJAXRequest = Class.create({
 
 	/**
 	 * Constructor
-	 * 
+	 *
+	 * @constructor
 	 * @param	{Object} options	The URL to send the request to
 	 * 
 	 * @example
 	 * Supports the following options:
+	 *
+	 * <code>
 	 * options {
 	 * 		url:	String						// where to send the request to
 	 * 		method: String					// post or get
@@ -30,6 +33,7 @@ bbq.ajax.AJAXRequest = Class.create({
 	 * 		onException: Function			// An exception was thrown while attemping to make the call
 	 * 		onAnything: Function			// invoked when there's no other callback to invoke
 	 * }
+	 * </code>
 	 */
 	initialize: function(options) {
 		this.options = options;

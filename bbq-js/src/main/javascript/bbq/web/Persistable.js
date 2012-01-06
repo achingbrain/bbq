@@ -2,6 +2,8 @@ include(bbq.util.BBQUtil);
 
 /**
  * Holds details about individual servers
+ *
+ * @class bbq.web.Persistable
  */
 bbq.web.Persistable = new Class.create({
 	_getArgs: function() {

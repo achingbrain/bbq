@@ -9,6 +9,9 @@ include(bbq.gui.form.FormField);
  *          value: Object
  *      ]
  * }
+ *
+ * @class bbq.gui.form.DropDown
+ * @extends bbq.gui.form.FormField
  */
 bbq.gui.form.DropDown = new Class.create(bbq.gui.form.FormField, {
 	initialize: function($super, args) {

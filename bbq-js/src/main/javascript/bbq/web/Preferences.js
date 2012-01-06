@@ -18,6 +18,8 @@ include(bbq.util.PersistenceUtil);
  * alert(foo.bar);
  * 
  * </code>
+ *
+ * @class Preferences
  */
 Preferences = {
 	/**

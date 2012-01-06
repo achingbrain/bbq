@@ -1,4 +1,8 @@
-/** Log utility object */
+/**
+ * Log utility object
+ *
+ * @class Log
+ */
 var Log = {
 	debugging: $$("html")[0].hasClassName("debug"),
 

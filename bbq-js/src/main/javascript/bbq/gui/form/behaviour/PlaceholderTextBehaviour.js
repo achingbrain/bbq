@@ -6,6 +6,8 @@ include(bbq.web.Browser);
  * options: {
  *      text: String                                     // the placeholder text
  * }
+ *
+ * @class bbq.gui.form.behaviour.PlaceholderTextBehaviour
  */
 bbq.gui.form.behaviour.PlaceholderTextBehaviour = new Class.create({
 	options: null,

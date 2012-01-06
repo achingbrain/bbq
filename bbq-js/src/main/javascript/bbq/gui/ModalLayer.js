@@ -5,6 +5,7 @@ include(bbq.gui.GUIWidget);
  * 
  * Greys out the page and shows the passed element in the middle.  The passed element should
  * extend bbq.gui.GUIWidget
+ *
  * @class bbq.gui.ModalLayer
  * @extends bbq.gui.GUIWidget
  */

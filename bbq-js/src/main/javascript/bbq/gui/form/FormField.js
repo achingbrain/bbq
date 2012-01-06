@@ -11,6 +11,9 @@ include(bbq.util.Log);
  * Dispatches the following notifications:
  *
  * onError
+ *
+ * @class bbq.gui.form.FormField
+ * @extends bbq.gui.GUIWidget
  */
 bbq.gui.form.FormField = new Class.create(bbq.gui.GUIWidget, {
 	_behaviours: null,

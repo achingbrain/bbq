@@ -6,6 +6,7 @@ include(bbq.web.DOMUtil);
  * 
  * The rootNode property is a DOM node that is attached to the DOM tree after the object is 
  * created via the appendTo method.
+ *
  * @class bbq.gui.GUIWidget
  * @extends bbq.lang.Watchable
  */

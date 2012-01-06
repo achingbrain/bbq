@@ -3,6 +3,7 @@ include(bbq.web.FocusWatcher);
 
 /**
  * Holds bbq.gui.button.GUIButtons
+ *
  * @class bbq.gui.button.ButtonHolder
  * @extends bbq.gui.GUIWidget
  */

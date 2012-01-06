@@ -5,6 +5,7 @@ include(bbq.web.SwfBridge);
 
 /**
  * Uses the SWFObject library to wrapper an embedded flash movie.
+ *
  * @class bbq.web.SwfEmbed
  * @extends bbq.gui.GUIWidget 
  */

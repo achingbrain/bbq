@@ -9,6 +9,9 @@ include(bbq.gui.form.FormField);
  *          value: Object
  *      ]
  * }
+ *
+ * @class bbq.gui.form.RadioField
+ * @extends bbq.gui.form.FormField
  */
 bbq.gui.form.RadioField = new Class.create(bbq.gui.form.FormField, {
 	initialize: function($super, args) {

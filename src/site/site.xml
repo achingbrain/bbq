@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/DECORATION/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
+
+	<skin>
+		<!--<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-fluido-skin</artifactId>
+		<version>1.0</version>-->
+		<groupId>org.bbqjs</groupId>
+		<artifactId>bbq-template-site</artifactId>
+		<version>1.1.4-SNAPSHOT</version>
+	</skin>
+
+	<custom>
+		<fluidoSkin>
+			<topBarEnabled>true</topBarEnabled>
+			<topBarIcon>
+				<name>BBQjs</name>
+				<alt>BBQjs</alt>
+				<src>/images/topbar-logo.png</src>
+				<href>/index.html</href>
+			</topBarIcon>
+			<sideBarEnabled>false</sideBarEnabled>
+			<searchEnabled>true</searchEnabled>
+			<sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+		</fluidoSkin>
+	</custom>
+
+	<body>
+		<menu name="Overview">
+			<item name="Introduction" href="index.html"/>
+			<item name="License" href="license.html"/>
+		</menu>
+
+		<menu name="Documentation">
+			<item name="Project structure" href="project-structure.html"/>
+			<item name="Design goals" href="design-goals.html"/>
+		</menu>
+
+		<menu ref="modules" />
+
+		<menu name="Infrastructure">
+			<item name="Issue tracking" href="issue-tracking.html"/>
+			<item name="Source control" href="source-repository.html"/>
+			<item name="Team" href="team-list.html"/>
+		</menu>
+
+	</body>
+</project>

@@ -6,6 +6,9 @@ include(bbq.gui.form.FormField);
  * options: {
  *      value: String                   // initial value
  * }
+ *
+ * @class bbq.gui.form.TextField
+ * @extends bbq.gui.form.FormField
  */
 bbq.gui.form.TextField = new Class.create(bbq.gui.form.FormField, {
 	_onKeyPressValue: null,

@@ -1,0 +1,27 @@
+# Design goals
+
+Wherein we set out the problem bbq sets out to solve.
+
+## Speed
+
+A bbq application typically starts with a minimal DOM defined in an HTML file.  This will typically have either a body tag or some other point defined as the root node for the interface.  The UI is then built up on the fly using JavaScript  DOM manipulation (see [DomUtils#createElement](bbq-js/jsdoc/symbols/DOMUtil.html#createElement)).
+
+Communication takes place between the front and back ends using AJAX.  The transport medium only sends data backwards and forwards - no layout code - since every JavaScript object is aware of it's DOM contents it can update itself via the [GUIWidget#render](bbq-js/jsdoc/symbols/bbq.gui.GUIWidget.html#render) method, which results in a very fluid interface.
+
+## State
+
+A typical web application maintains session state on the server side, with the occasional piece of information stored on the client using [Cookies](bbq-js/jsdoc/symbols/bbq.gui.GUIWidget.html#render)) or HTML5 SessionStorage or LocalStorage.
+
+bbq advocates storing session information on the client (including previously accessed domain objects and user preferences).  Changes to the domain objects are pushed out via Red5 (and eventually HTML5 web sockets) so you are always up to date.
+
+This makes bbq applications very light on the server meaning you can support more users per node increasing your scalability.
+
+## Quality
+
+bbq contains a full suite of JavaScript unit tests to ensure code quality is kept as high as possible via continuous integration.
+
+# Design decisions
+
+## Prototype
+
+bbq is based on [Prototype.js](http://www.prototypejs.org).  The reason is largely historical - at the time the project began, the alternative libraries available today simply didn't exist or weren't mature enough.  Since then no competing library has provided a compelling enough reason to switch.

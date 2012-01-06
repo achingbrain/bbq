@@ -1,3 +1,6 @@
+/**
+ * @class bbq.gui.form.transformer.StringTokeniserTransformer
+ */
 bbq.gui.form.transformer.StringTokeniserTransformer = new Class.create({
 	_delimiter: ",",
 	_space: " ",

@@ -14,6 +14,46 @@
 	<version>1.1.4-SNAPSHOT</version>
 	<name>bbq-js-test</name>
 	<url>http://www.bbqjs.org</url>
+	<description>This module provides classes to use in your JavaScript unit tests.</description>
+
+	<scm>
+		<connection>scm:git://github.com/achingbrain/bbq.git</connection>
+		<url>https://github.com/achingbrain/bbq</url>
+	</scm>
+
+	<reporting>
+		<plugins>
+			<!-- N.B. This plugin can reportedly also generate JSDoc but
+			for some reason creates a blank index file -->
+			<plugin>
+				<groupId>gr.abiss.mvn.plugins</groupId>
+				<artifactId>maven-jstools-plugin</artifactId>
+				<version>${maven.plugin.jstools.version}</version>
+				<configuration>
+					<jsDir>${basedir}/src/main/javascript/</jsDir>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>jslint</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+
+			<plugin>
+				<groupId>nl.windgazer</groupId>
+				<artifactId>jsdoctk-plugin</artifactId>
+				<version>${maven.plugin.jsdoc.version}</version>
+				<configuration>
+					<srcDir>${basedir}/src/main/javascript</srcDir>
+					<recurse>10</recurse>
+					<template>${project.basedir}/../bbq-template-jsdoc</template>
+					<allFunctions>true</allFunctions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
 
 	<build>
 

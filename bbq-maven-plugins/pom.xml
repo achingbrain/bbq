@@ -15,6 +15,24 @@
 	<url>http://www.bbqjs.org</url>
 	<name>bbq-maven-plugins</name>
 
+	<scm>
+		<connection>scm:git://github.com/achingbrain/bbq.git</connection>
+		<url>https://github.com/achingbrain/bbq</url>
+	</scm>
+
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/achingbrain/bbq/issues</url>
+	</issueManagement>
+
+	<developers>
+		<developer>
+			<id>achingbrain</id>
+			<name>Alex Potsides</name>
+			<url>http://www.achingbrain.net</url>
+		</developer>
+	</developers>
+
 	<modules>
 		<module>bbq-maven-plugin-core</module>
 		<module>bbq-test-maven-plugin</module>

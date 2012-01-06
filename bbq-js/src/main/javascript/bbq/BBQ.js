@@ -3,6 +3,11 @@
  */
 var currentPage;
 
+/**
+ * Creates the bbq.page.Page object for the current page.  Should be invoked in a document onLoad event.
+ * @param className
+ * @param args
+ */
 function init(className, args) {
 	if(className) {
 		var parts = className.split(".");
@@ -34,8 +39,14 @@ function include(object) {
  * @class bbq.BBQ
  */
 BBQ = {
+	/**
+	 * The current BBQ version
+	 */
 	version: 3.0,
-	
+
+	/**
+	 * Constants
+	 */
 	constants: {
 		PAGINATOROPTIONS_SORTDESC: 0,
 		PAGINATOROPTIONS_SORTASC: 1

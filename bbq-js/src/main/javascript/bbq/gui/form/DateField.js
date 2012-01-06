@@ -11,6 +11,9 @@ include(bbq.date.DateFormatter);
  *          value: Object
  *      ]
  * }
+ *
+ * @class bbq.gui.form.DateField
+ * @extends bbq.gui.form.FormField
  */
 bbq.gui.form.DateField = new Class.create(bbq.gui.form.FormField, {
 	_date: null,

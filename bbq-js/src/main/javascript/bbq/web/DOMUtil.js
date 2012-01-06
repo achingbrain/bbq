@@ -1,5 +1,6 @@
 /**
- * Utility class with static methods for manipluating the DOM  
+ * Utility class with static methods for manipulating the DOM
+ *
  * @class DOMUtil
  */
 DOMUtil = {

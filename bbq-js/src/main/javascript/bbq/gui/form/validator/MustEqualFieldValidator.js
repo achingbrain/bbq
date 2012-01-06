@@ -1,4 +1,6 @@
-
+/**
+ * @class bbq.gui.form.validator.MustEqualFieldValidator
+ */
 bbq.gui.form.validator.MustEqualFieldValidator = new Class.create({
 	_field: null,
 

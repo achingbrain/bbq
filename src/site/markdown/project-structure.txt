@@ -1,0 +1,103 @@
+# Project structure
+
+The recommended layout for your bbq project follows the Maven [Standard Directory Layout](http://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html) with additions for JavaScript and CSS source files:
+
+	+- src/
+	   +- main/
+	      +- css/
+	      +- java/
+	      +- javascript/
+	      +- resources/
+	      +- webapp/
+	   +- test/
+	      +- java/
+	      +- javascript/
+	      +- resources/
+
+It is possible to override the default locations by specifying the relevant arguments to the JavaScript, CSS and Language compiler plugins.
+
+## src
+
+This folder contains the source code to build and test the webapp.
+
+## src/main
+
+The files that make up the webapp.
+
+## src/main/css
+
+These are the css files and images that correspond to your JavaScript classes.  They should be laid out in the same  structure as the JavaScript files.
+
+	+- src/
+	   +- main/
+	      +- css/
+	         +- com/
+	            +- myapp/
+	               +- MyClass/
+	                  |
+	                  +- MyClass.css
+	                  +- icon.png
+	                  +- arrow.png
+
+At compile time the images will be copied into the target build directory.
+
+## src/main/java
+
+These are the Java files that make up your application.
+
+## src/main/javascript
+
+This folder contains the javascript that makes up the UI for your application and associated language translation files.  They should be laid out in a directory structure that reflects the package hierachy, similar to the java directory.
+
+	+- src/
+	   +- main/
+	      +- javascript/
+	         +- com/
+	            +- myapp/
+	               |
+	               +- MyClass.js
+	               +- MyClass.lang.en_GB.xml
+	               +- AnotherClass.js
+	               +- AnotherClass.lang.en_GB.xml
+
+## src/main/resources
+
+This directory holds any resources that need to be on the classpath at run time.
+
+## src/main/resources/webapp
+
+This directory holds the webapp files.  eg:
+
+	+- src/
+	   +- main/
+	      +- webapp/
+	         +- js/
+	         +- css/
+	         +- WEB-INF/
+	            |
+	            +- web.xml
+
+## src/test
+
+All test files and resources.
+
+## src/test/java
+
+Java unit test files.
+
+## src/test/javascript
+
+JavaScript unit test files, laid out in the same fashion as the src/main/javascript directory:
+
+	+- src/
+	   +- test/
+	      +- javascript/
+	         +- com/
+	            +- myapp/
+	               |
+	               +- MyClassTest.js
+	               +- AnotherClassTest.js
+
+## src/test/resources
+
+Any resources that need to be on the classpath while running unit tests.

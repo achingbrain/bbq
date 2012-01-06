@@ -3,11 +3,37 @@ include(bbq.gui.error.ServerError);
 include(bbq.lang.TreeWalker);
 
 /**
+ * Sends an asynchronous HTTP request to a server.  The passed arguments are serialized to a
+ * JSON string and the response is also expected to be a JSON string.  The request goes out
+ * as a POST request and the JSON string is sent as the request body.
+ *
+ *<code class="javascript">
+ * new bbq.ajax.JSONRequest({
+ *     url: "/some/path"            // The URL to send the request to - can be relative
+ *     args: {                            // The arguments to send - N.B. will be JSON serialized
+ *          foo: "bar"
+ *     }
+ *     onSuccess: function(serverResponse, json) {
+ *                                          // Invoked on success.
+ *                                          // The first argument is the XMLHTTPRequest object,
+ *                                          // the second is the deserialized server response
+ *     },
+ *     onFailure: function() {
+ *                                          // Invoked on failure.
+ *     }
+ * });
+ * </code>
+ *
  * @class bbq.ajax.JSONRequest is a subclass of bbq.ajax.AJAXRequest
  * @extends bbq.ajax.AJAXRequest
  */
 bbq.ajax.JSONRequest = Class.create(bbq.ajax.AJAXRequest, {
 
+	/**
+	 * @constructor
+	 * @param $super
+	 * @param options
+	 */
 	initialize: function($super, options) {
 		// override content type
 		options.contentType = "application/json";

@@ -1,7 +1,13 @@
 /**
+ * To be used in concert with bbq.ajax.MockAJAXRequest.  Instances of this
+ * class should be returned by anonymous functions added to the
+ * bbq.ajax.MockAJAXRequest object.
+ *
+ * @class bbq.ajax.MockJSONResponse
  * @param options
  *      headers: Object
  *      response: Object
+ * @see bbq.ajax.MockAJAXRequest
  */
 bbq.ajax.MockJSONResponse = Class.create({
 	_headers: null,
@@ -14,7 +20,9 @@ bbq.ajax.MockJSONResponse = Class.create({
 
 		if(options.headers) {
 			for(var key in options.headers) {
-				this._headers[key] = options.headers[key];
+				if(options.headers[key]) {
+					this._headers[key] = options.headers[key];
+				}
 			}
 		}
 

@@ -2,6 +2,8 @@ include(bbq.web.Browser);
 
 /**
  * Validates a field when blurred
+ *
+ * @class bbq.gui.form.behaviour.ValidateOnBlurBehaviour
  */
 bbq.gui.form.behaviour.ValidateOnBlurBehaviour = new Class.create({
 

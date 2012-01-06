@@ -2,6 +2,7 @@ include(bbq.util.BBQUtil);
 
 /**
  * Provides a safe way to call Javascript functions that may not exist from within a Flash movie.
+ *
  * @class SwfBridge 
  */
 SwfBridge = {

@@ -5,7 +5,6 @@ include(behaviour.gui.button.GUIButton);
 /**
  * @class bbq.gui.button.SaveCancel
  * @extends bbq.gui.button.ButtonHolder
- * 
  */
 bbq.gui.button.SaveCancel = Class.create(behaviour.gui.button.ButtonHolder, {
 	_editMode: null,

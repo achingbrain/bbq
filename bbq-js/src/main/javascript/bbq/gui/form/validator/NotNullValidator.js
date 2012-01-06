@@ -1,4 +1,6 @@
-
+/**
+ * @class bbq.gui.form.validator.NotNullValidator
+ */
 bbq.gui.form.validator.NotNullValidator = new Class.create({
 
 	initialize: function() {

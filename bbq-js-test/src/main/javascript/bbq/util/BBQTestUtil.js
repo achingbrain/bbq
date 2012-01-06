@@ -2,6 +2,10 @@ if(Log) {
 	Log.debugging = true;
 }
 
+/**
+ * Contains helper methods for running tests
+ * @class BBQTestUtil
+ */
 var BBQTestUtil = {
 
 	_Log_logIt: null,
@@ -11,6 +15,8 @@ var BBQTestUtil = {
 
 	/**
 	 * I redirect Log messages to the runner's console output
+	 *
+	 * @param runner
 	 */
 	redirectLog: function(runner) {
 
@@ -40,7 +46,10 @@ var BBQTestUtil = {
 	},
 
 	restoreLog: function() {
-		if(!Log) return;
+		if(!Log) {
+			return;
+		}
+
 		Log._logIt = this._Log_logIt;
 	},
 
@@ -52,7 +61,10 @@ var BBQTestUtil = {
 	mockLanguage: function() {
 
 		if(!Language) {
-			if(Log) Log.error('Requested Language mock but no components using Language functionality');
+			if(Log) {
+				Log.error('Requested Language mock but no components using Language functionality');
+			}
+
 			return;
 		}
 
@@ -65,8 +77,14 @@ var BBQTestUtil = {
 		Language.getFormatted = function(language, keys){return language;};
 	},
 
+	/**
+	 * Restores changes made by BBQTestUtil#mockLanguage.
+	 */
 	restoreLanguage: function() {
-		if(!Language) return;
+		if(!Language) {
+			return;
+		}
+
 		Language.get = this._Language_get;
 		Language.getArray = this._Language_getArray;
 		Language.getFormatted = this._Language_getFormatted;

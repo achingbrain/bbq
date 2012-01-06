@@ -1,5 +1,6 @@
 /**
- * Provides some utility methods for Javascript vagaries
+ * Provides some utility methods for JavaScript vagaries
+ *
  * @class BBQUtil
  */
 BBQUtil = {

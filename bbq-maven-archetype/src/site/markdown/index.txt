@@ -1,0 +1,18 @@
+# Maven Quickstart Archetype
+
+To use the Maven Archetype, execute the following on the command line:
+
+	mvn archetype:generate -DarchetypeGroupId=org.bbqjs -DarchetypeArtifactId=bbq-maven-archetype -DarchetypeVersion=1.1.4-SNAPSHOT -DarchetypeRepository=http://achingbrain.github.com/maven-repo/snapshots
+
+Enter a suitable groupId (e.g. com.yourwebsite) and artifactId (e.g. my-super-fun-project) when prompted.  Once complete, cd into the newly created directory and start jetty:
+
+	cd my-super-fun-project
+	mvn jetty:run
+
+Finally point a web browser at the address http://localhost:8080
+
+You will be greeted with a rather unexciting page with a button.  Clicking the button will cause a JSON request to round-trip to the server and print a message on the page.
+
+## Uhuh, what next?
+
+Check out the [bbq-js documentation](../bbq-js/index.html).

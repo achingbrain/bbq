@@ -1,6 +1,12 @@
 include(bbq.gui.form.FormField);
 include(bbq.web.Browser);
 
+/**
+ * Provides an HTML5 range field with fallback for older browsers.
+ *
+ * @class bbq.gui.form.RangeField
+ * @extends bbq.gui.form.FormField
+ */
 bbq.gui.form.RangeField = new Class.create(bbq.gui.form.FormField, {
 	_native: null,
 	_bar: null,

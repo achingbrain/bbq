@@ -1,3 +1,6 @@
+/**
+ * @class Cookie
+ */
 Cookie = {
 	_keys: [
 		"expires",
@@ -5,7 +8,17 @@ Cookie = {
 		"path",
 		"secure"
 	],
-	
+
+	/**
+	 * Set a cookie
+	 *
+	 * @param key
+	 * @param value
+	 * @param expires
+	 * @param domain
+	 * @param path
+	 * @param secure
+	 */
 	set: function(key, value, expires, domain, path, secure) {
 		if(!value) {
 			// remove old cookie
@@ -39,7 +52,13 @@ Cookie = {
 			cookie[key] = value;
 		}
 	},
-	
+
+	/**
+	 * Get a cookie previously set with Cookie#set
+	 *
+	 * @param cookieName
+	 * @see Cookie#set
+	 */
 	get: function(cookieName) {
 		var cookie = Cookie._getAll()[cookieName];
 		

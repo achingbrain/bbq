@@ -1,5 +1,8 @@
 include(bbq.util.Log);
 
+/**
+ * @class bbq.gui.DragAndDrop
+ */
 bbq.gui.DragAndDrop = new Class.create({
 	_droppable: null,
 

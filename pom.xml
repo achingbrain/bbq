@@ -6,12 +6,38 @@
 	<artifactId>bbq</artifactId>
 	<version>1.1.4-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<url>http://www.bbqjs.org</url>
+	<url>http://achingbrain.github.com/maven-repo/documentation/bbq</url>
 	<name>bbq</name>
+	<description>JavaScript Ninjery</description>
 
 	<prerequisites>
 		<maven>3.0.0</maven>
 	</prerequisites>
+
+	<scm>
+		<connection>scm:git://github.com/achingbrain/bbq.git</connection>
+		<url>https://github.com/achingbrain/bbq</url>
+	</scm>
+
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/achingbrain/bbq/issues</url>
+	</issueManagement>
+
+	<developers>
+		<developer>
+			<!--<id>achingbrain</id>-->
+			<name>Alex Potsides</name>
+			<url>http://www.achingbrain.net</url>
+		</developer>
+	</developers>
+
+	<contributors>
+		<contributor>
+			<name>Alan Shaw</name>
+			<url>http://www.freestyle-developments.co.uk</url>
+		</contributor>
+	</contributors>
 
 	<modules>
 		<module>bbq-js</module>
@@ -48,6 +74,10 @@
 		<maven.plugin.resources.version>2.4.3</maven.plugin.resources.version>
 		<maven.plugin.jetty.version>6.1.26</maven.plugin.jetty.version>
 		<maven.plugin.plexus.version>1.3.8</maven.plugin.plexus.version>
+		<maven.plugin.jsdoc.version>2.3.2</maven.plugin.jsdoc.version>
+		<maven.plugin.site.version>3.0</maven.plugin.site.version>
+		<maven.plugin.project.info.reports.version>2.4</maven.plugin.project.info.reports.version>
+		<maven.plugin.jstools.version>0.7</maven.plugin.jstools.version>
 
 		<!-- Dependency versions -->
 		<maven.version>3.0.3</maven.version>
@@ -63,6 +93,7 @@
 		<spring.version>3.0.6.RELEASE</spring.version>
 		<spring.security.version>3.1.0.RC3</spring.security.version>
 		<json.lib.version>2.4</json.lib.version>
+		<doxia.module.markdown.version>1.1.4</doxia.module.markdown.version>
 	</properties>
 
 	<build>
@@ -98,18 +129,26 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>findbugs-maven-plugin</artifactId>
-				<version>${maven.plugin.findbugs.version}</version>
-				<executions>
-					<execution>
-						<id>site</id>
-						<phase>site</phase>
-						<goals>
-							<goal>findbugs</goal>
-						</goals>
-					</execution>
-				</executions>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>${maven.plugin.site.version}</version>
+
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.doxia</groupId>
+						<artifactId>doxia-module-markdown</artifactId>
+						<version>${doxia.module.markdown.version}</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<inputEncoding>UTF-8</inputEncoding>
+					<outputEncoding>UTF-8</outputEncoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>${maven.plugin.project.info.reports.version}</version>
 			</plugin>
 		</plugins>
 
@@ -119,6 +158,16 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>${maven.plugin.surefire.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>${maven.plugin.site.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-project-info-reports-plugin</artifactId>
+					<version>${maven.plugin.project.info.reports.version}</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -165,6 +214,10 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
+		<repository>
+			<id>jsdoctk1</id>
+			<url>http://jsdoctk-plugin.googlecode.com/svn/repo</url>
+		</repository>
 	</repositories>
 
 	<pluginRepositories>
@@ -184,18 +237,30 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</pluginRepository>
+		<pluginRepository>
+			<id>jsdoctk2</id>
+			<url>http://jsdoctk-plugin.googlecode.com/svn/repo</url>
+		</pluginRepository>
 	</pluginRepositories>
 
 	<distributionManagement>
+
 		<repository>
 			<id>bbq-releases</id>
 			<url>file:///Users/alex/Sites/maven-repo/releases</url>
 		</repository>
+
 		<snapshotRepository>
 			<uniqueVersion>false</uniqueVersion>
 			<id>bbq-snapshots</id>
 			<url>file:///Users/alex/Sites/maven-repo/snapshots</url>
 		</snapshotRepository>
+
+		<site>
+			<id>website</id>
+			<url>file:///Users/alex/Sites/maven-repo/documentation/bbq</url>
+		</site>
+
 	</distributionManagement>
 
 </project>

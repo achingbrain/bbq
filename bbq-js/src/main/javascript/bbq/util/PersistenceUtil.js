@@ -1,5 +1,8 @@
 include(bbq.lang.TreeWalker);
 
+/**
+ * @class PersistenceUtil
+ */
 PersistenceUtil = {
 	serialize: function(object) {
 		new bbq.lang.TreeWalker({

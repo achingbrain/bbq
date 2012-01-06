@@ -1,4 +1,7 @@
-
+/**
+ * @class bbq.gui.layout.Layout
+ * @deprecated Use the <a href="http://www.html5rocks.com/en/tutorials/flexbox/quick/">flexible box model</a> instead.
+ */
 bbq.gui.layout.Layout = new Class.create({
 	_options: null,
 	

@@ -1,0 +1,148 @@
+/* default.css */
+body {
+	font: 14px "Lucida Grande", Tahoma, Arial, Helvetica, sans-serif;
+	line-height: 1.2;
+}
+
+.header {
+	clear: both;
+	background-color: #ccc;
+	padding: 8px;
+	margin: 10px 0;
+}
+
+h1 {
+	font-size: 150%;
+	font-weight: bold;
+	padding: 0;
+	margin: 0;
+}
+
+hr {
+	border: none 0;
+	border-top: 1px solid #7F8FB1;
+	height: 1px;
+}
+
+#index {
+	float: left;
+	background-color: #F3F3F3;
+	padding: 10px;
+	margin: 0;
+	width: 250px;
+}
+
+#content {
+	margin-left: 280px;
+}
+
+.classList {
+	list-style-type: none;
+	padding: 0;
+	margin: 0 0 0 8px;
+	font-family: arial, sans-serif;
+	font-size: 1em;
+	overflow: auto;
+}
+
+.classList li {
+	padding: 0;
+	margin: 0 0 8px 0;
+}
+
+.summaryTable {
+	width: 100%;
+}
+
+h1.classTitle {
+	font-size:170%;
+}
+
+h2 {
+	font-size: 110%;
+}
+caption, div.sectionTitle {
+	background-color: #7F8FB1;
+	color: #fff;
+	font-size:130%;
+	text-align: left;
+	padding: 2px 6px 2px 6px;
+	border: 1px #7F8FB1 solid;
+}
+div.sectionTitle {
+	margin-bottom: 8px;
+}
+.summaryTable thead {
+	display: none;
+}
+
+.summaryTable td {
+	vertical-align: top;
+	padding: 4px;
+	border-bottom: 1px #7F8FB1 solid;
+	border-right: 1px #7F8FB1 solid;
+}
+
+/*col#summaryAttributes {}*/
+.summaryTable td.attributes {
+	border-left: 1px #7F8FB1 solid;
+	width: 140px;
+	text-align: right;
+}
+
+td.attributes, .fixedFont {
+	color: #002EBE;
+	font-family: "Courier New",Courier,monospace;
+	font-size: 13px;
+}
+
+.summaryTable td.nameDescription {
+	text-align: left;
+	font-size: 13px;
+}
+
+.summaryTable td.nameDescription, .description {
+	padding: 4px;
+	padding-left: 4px;
+}
+
+.summaryTable {
+	margin-bottom: 8px;
+}
+
+ul.inheritsList {
+	list-style: square;
+	margin-left: 20px;
+	padding-left: 0;
+}
+
+.detailList {
+	margin-left: 20px;
+}
+.detailList dt {
+	margin-left: 20px;
+}
+
+.detailList .heading {
+	font-weight: bold;
+	padding-bottom: 6px;
+	margin-left: 0;
+}
+
+.light, td.attributes, .light a:link, .light a:visited {
+	color: #777;
+	font-style: italic;
+}
+
+.fineprint {
+	font-size: 10px;
+	color: #CCC;
+	padding: 10px 0;
+}
+.fineprint a {
+	color: #666;
+}
+
+.dp-highlighter {
+	margin: 18px 0;
+}

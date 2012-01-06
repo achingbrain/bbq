@@ -2,6 +2,7 @@ include(bbq.util.BBQUtil);
 
 /**
  * Simple object to keep track of entities that have not had their changes saved.
+ *
  * @class EditWatcher
  */
 EditWatcher = {
@@ -77,7 +78,7 @@ EditWatcher = {
 		
 		if(!func) {
 			//Log.warn("EditWatcher callback function not found");
-			return;
+			return false;
 		}
 		
 		// test to see if changes have occured

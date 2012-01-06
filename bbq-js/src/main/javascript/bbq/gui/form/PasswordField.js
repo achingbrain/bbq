@@ -1,5 +1,9 @@
 include(bbq.gui.form.TextField);
 
+/**
+ * @class bbq.gui.form.PasswordField
+ * @extends bbq.gui.form.TextField
+ */
 bbq.gui.form.PasswordField = new Class.create(bbq.gui.form.TextField, {
 	initialize: function($super, args) {
 		try {
