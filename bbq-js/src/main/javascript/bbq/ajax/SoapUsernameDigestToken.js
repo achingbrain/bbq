@@ -1,7 +1,20 @@
 
 /**
+ * Allows for sending a UsernameDigest authentication token with a SOAP request.
+ *
+ * <pre><code class="language-javascript">
+ *     var token = new bbq.ajax.SoapUsernameDigestToken({
+ *         username: "foo",
+ *         password: "bar"
+ *     });
+ * </code></pre>
+ *
+ * Instances of this class are intended to be passed as the "authentcation" property
+ * of the options object for instances of bbq.ajax.SoapRequest.
+ *
  * @class winkball.gui.messages.MessageFolderList
  * @extends bbq.gui.GUIWidget
+ * @see bbq.ajax.SoapRequest
  */
 bbq.ajax.SoapUsernameDigestToken = Class.create({
 	_options: null,

@@ -14,6 +14,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+/**
+ * Dynamically creates the JavaScript file with every request - meant for development and not recommended for production.
+ *
+ * Spring configuration example:
+ *
+ * <pre><code class="language-xml">
+ * &lt;bean id="jsController" class="org.bbqjs.spring.debug.JavaScriptCompilerServlet"&gt;
+ *     &lt;property name="pagePackage" value="${js.page.package}"/&gt;
+ *     &lt;property name="path" value="/js/generated"/&gt;
+ *     &lt;property name="sourceRoots"&gt;
+ *         &lt;list&gt;
+ *             &lt;value&gt;src/main/javascript&lt;/value&gt;
+ *         &lt;/list&gt;
+ *     &lt;/property&gt;
+ * &lt;/bean&gt;
+ * </code></pre>
+ */
 @Controller
 public class JavaScriptCompilerServlet {
 	private static final Logger LOG = LoggerFactory.getLogger(JavaScriptCompilerServlet.class);

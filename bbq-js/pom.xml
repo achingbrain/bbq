@@ -30,7 +30,7 @@
 				<artifactId>maven-jstools-plugin</artifactId>
 				<version>${maven.plugin.jstools.version}</version>
 				<configuration>
-					<jsDir>${basedir}/src/main/javascript</jsDir>
+					<jsDir>${project.basedir}/src/main/javascript/</jsDir>
 				</configuration>
 				<reportSets>
 					<reportSet>

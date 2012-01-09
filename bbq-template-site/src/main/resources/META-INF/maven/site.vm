@@ -730,9 +730,15 @@
         #end
       </div>
     </footer>
-    
-    <script language="javascript">
-		dp.SyntaxHighlighter.HighlightAll('code');
-    </script>
+
+	<script type="text/javascript">
+
+$("pre").addClass("prettyprint linenums");
+$("code").each(function(index, node) {
+node.innerHTML = node.innerHTML.trim();
+});
+prettyPrint();
+
+	</script>
   </body>
 </html>

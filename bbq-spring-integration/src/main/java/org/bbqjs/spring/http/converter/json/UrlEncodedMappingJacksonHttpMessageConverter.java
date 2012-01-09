@@ -1,5 +1,11 @@
 package org.bbqjs.spring.http.converter.json;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpInputMessage;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
@@ -7,27 +13,21 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpInputMessage;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
-
 /**
  * Extends the MappingJacksonHttpMessageConverter to de-encode all Strings passed to the server
  * as JSON objects.
  * 
  * For example, the string " must be encoded to be part of a JSON object:
  * 
- * <code>
+ * <pre><code class="language-javascript">
  * { foo: """ }
- * </code>
+ * </code></pre>
  * 
  * Would become:
  * 
- * <code>
+ * <pre><code class="language-javascript">
  * { foo: "%22" }
- * </code>
+ * </code></pre>
  * 
  * This class automatically runs every String through URLDecoder#decode as part of mapping from JSON
  * to a POJO.
@@ -35,19 +35,21 @@ import org.springframework.http.converter.json.MappingJacksonHttpMessageConverte
  * For this to work every string field must have a POJO style getter and setter method 
  * associated with it.  So, for example:
  * 
- * <code>
+ * <pre><code class="language-java">
  * public class Foo {
- * 		private String bar;
+ *     private String bar;
  * 
- * 		public void setBar(String bar) {
- *			this.bar = bar; 
- * 		}
+ *     public void setBar(String bar) {
+ *         this.bar = bar;
+ *     }
  * 
- * 		public String getBar() {
- * 			return bar;
- * 		}
+ *     public String getBar() {
+ *         return bar;
+ *     }
  * }
- * </code>
+ * </code></pre>
+ *
+ * N.B. unless you manually URLEncode your strings on the client side, using this class should not be necessary.
  * 
  * @author alex
  */

@@ -104,6 +104,7 @@ td.attributes, .fixedFont {
 .summaryTable td.nameDescription, .description {
 	padding: 4px;
 	padding-left: 4px;
+	margin-top: 1em;
 }
 
 .summaryTable {

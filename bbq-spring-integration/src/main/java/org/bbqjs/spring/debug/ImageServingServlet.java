@@ -1,7 +1,6 @@
 package org.bbqjs.spring.debug;
 
 import org.apache.commons.io.IOUtils;
-import org.bbqjs.compiler.javascript.JavaScriptCompiler;
 import org.bbqjs.compiler.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,11 +18,25 @@ import java.io.File;
 import java.net.URL;
 
 /**
- * Created by IntelliJ IDEA.
- * User: alex
- * Date: 15/08/2011
- * Time: 14:13
- * To change this template use File | Settings | File Templates.
+ * Serves images out of one or more directories on the classpath.  The intention is you set sourceRoots to
+ * include the src/main/css directory as well as src/main/webapps/images in order to serve resources
+ * while in development which would normally be copied into the target folder by the bbq-resources-maven-plugin.
+ *
+ * Not meant to be used in production.
+ *
+ * Example Spring configuration:
+ *
+ * <pre><code class="language-xml">
+ * &lt;bean id="imageController" class="org.bbqjs.spring.debug.ImageServingServlet"&gt;
+ *     &lt;property name="path" value="/images" /&gt;
+ *     &lt;property name="sourceRoots"&gt;
+ *         &lt;list&gt;
+ *             &lt;value&gt;src/main/css&lt;/value&gt;
+ *             &lt;value&gt;src/main/webapp/images&lt;/value&gt;
+ *         &lt;/list&gt;
+ *     &lt;/property&gt;
+ * &lt;/bean&gt;
+ * </code></pre>
  */
 @Controller
 public class ImageServingServlet implements ServletContextAware {
@@ -34,6 +47,15 @@ public class ImageServingServlet implements ServletContextAware {
 	private String[] sourceRoots;
 	private ServletContext servletContext;
 
+	/**
+	 * The controller method.  Receives urls such as http://www.example.org/images/foo/bar.gif,
+	 * turns it into /foo/bar.gif and searches the sourceRoots for the requested image, serving it
+	 * if found.
+	 *
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
 	@RequestMapping(method = {RequestMethod.POST, RequestMethod.GET})
 	public void serveImage(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String requestURI = request.getRequestURI();
@@ -73,10 +95,18 @@ public class ImageServingServlet implements ServletContextAware {
 		this.servletContext = servletContext;
 	}
 
+	/**
+	 * If this controller listens on http://www.example.org/images, this should be set to "/images"
+	 * @param path
+	 */
 	public void setPath(String path) {
 		this.path = path;
 	}
 
+	/**
+	 * Where to load images from.  Suggested values are <code>src/main/css</code> and <code>src/main/webapp/images</code>
+	 * @param sourceRoots
+	 */
 	public void setSourceRoots(String[] sourceRoots) {
 		this.sourceRoots = sourceRoots;
 	}

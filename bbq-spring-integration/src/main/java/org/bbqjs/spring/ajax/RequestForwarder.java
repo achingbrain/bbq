@@ -28,6 +28,19 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * Forwards requests on to remote servers.  This controller is intended to work around the Single Origin Policy
+ * enforced by most web browsers.  The Single Origin Policy dictates that an AJAX request can only be sent
+ * to the domain from which the JavaScript sending the request was loaded.  This is to prevent cross site
+ * scripting attacks.  Sometimes though that functionality is useful though (when writing a client for a remote API
+ * based service, for example).
+ *
+ * By default this class forwards to whatever the client requests.  To limit the destination servers, use
+ * SingleServerRequestForwarder or ServerWhitelistRequestForwarder
+ *
+ * @see ServerWhitelistRequestForwarder
+ * @see SingleServerRequestForwarder
+ */
 @Controller
 public class RequestForwarder implements InitializingBean {
 	private static final Logger LOG = LoggerFactory.getLogger(RequestForwarder.class);
@@ -35,7 +48,7 @@ public class RequestForwarder implements InitializingBean {
 	private static final String X_BBQ_REMOTE_RESPONSE_CODE = "X-BBQ-Remote-ResponseCode";
 	private static final String X_BBQ_REMOTE_RESPONSE_MESSAGE = "X-BBQ-Remote-ResponseMessage";
 
-	private String headerName;
+	protected String headerName;
 
 	private boolean forwardToSelfSignedCertificateServers;
 

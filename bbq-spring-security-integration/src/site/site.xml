@@ -13,6 +13,7 @@
 		<menu ref="parent" />
 
 		<menu name="Code">
+			<item name="JavaDocs" href="apidocs/index.html"/>
 			<item name="Code coverage" href="cobertura/index.html"/>
 			<item name="FindBugs" href="findbugs.html"/>
 		</menu>

@@ -7,22 +7,32 @@ include(bbq.lang.TreeWalker);
  * JSON string and the response is also expected to be a JSON string.  The request goes out
  * as a POST request and the JSON string is sent as the request body.
  *
- *<code class="javascript">
+ *<pre>
+ *<code class="language-javascript">
  * new bbq.ajax.JSONRequest({
- *     url: "/some/path"            // The URL to send the request to - can be relative
- *     args: {                            // The arguments to send - N.B. will be JSON serialized
+ *     // The URL to send the request to - can be relative
+ *     url: "/some/path",
+ *
+ *     // The arguments to send - N.B. will be JSON serialized
+ *     args: {
  *          foo: "bar"
  *     }
+ *
+ *     // Invoked on success.
+ *      // The first argument is the XMLHTTPRequest object,
+ *      // the second is the deserialized server response
  *     onSuccess: function(serverResponse, json) {
- *                                          // Invoked on success.
- *                                          // The first argument is the XMLHTTPRequest object,
- *                                          // the second is the deserialized server response
+ *
  *     },
+ *
+ *     // Invoked when the request fails - eg. a X-BBQ-ResponseCode
+ *     // header is sent with a negative value
  *     onFailure: function() {
- *                                          // Invoked on failure.
+ *
  *     }
  * });
  * </code>
+ * </pre>
  *
  * @class bbq.ajax.JSONRequest is a subclass of bbq.ajax.AJAXRequest
  * @extends bbq.ajax.AJAXRequest
@@ -42,8 +52,8 @@ bbq.ajax.JSONRequest = Class.create(bbq.ajax.AJAXRequest, {
 	},
 
 	/**
-	 * @param	{String}		handlerName
-	 * @param	{Object}		args
+	 * @param {String} handlerName
+	 * @param {Object} args
 	 */
 	_callHandler: function($super, handlerName, args) {
 		var serverResponse = args[0];

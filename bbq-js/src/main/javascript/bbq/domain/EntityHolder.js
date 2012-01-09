@@ -1,7 +1,7 @@
 include(bbq.util.BBQUtil);
 
 /**
- * Holds domain objects
+ * Holds domain objects.
  *
  * @class bbq.domain.EntityHolder
  */
@@ -32,22 +32,22 @@ bbq.domain.EntityHolder = new Class.create({
 	},
 
 	/**
-	 * @return {integer} number of elements in object array
+	 * @return {Number} number of elements in object array
 	 */
 	size: function() {
 		return this._entities.length;
 	},
 
 	/**
-	 * @param {integer} index
+	 * @param {Number} index
 	 */
 	get: function(index) {
 		return this._entities[index];
 	},
 
 	/**
-	 * @param {mixed} object	An object or a GUID
-	 * @return {integer}
+	 * @param * object An object or a GUID
+	 * @return {Number}
 	 */
 	indexOf: function(object) {
 		var index = -1;
@@ -92,7 +92,7 @@ bbq.domain.EntityHolder = new Class.create({
 
 	/**
 	 * @param {Object} element
-	 * @param {integer} index
+	 * @param {Number} index
 	 */
 	put: function(element, index) {
 		if(!element instanceof this.options.type) {
@@ -108,7 +108,7 @@ bbq.domain.EntityHolder = new Class.create({
 	/**
 	 * Removes the passed entity
 	 *
-	 * @param {mixed} An element of the same type contained in this list or a GUID
+	 * @param * An element of the same type contained in this list or a GUID
 	 */
 	remove: function(object) {
 		var entityKey = BBQUtil.getKey(object, this.options.entityKey);

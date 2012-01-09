@@ -78,6 +78,7 @@
 		<maven.plugin.site.version>3.0</maven.plugin.site.version>
 		<maven.plugin.project.info.reports.version>2.4</maven.plugin.project.info.reports.version>
 		<maven.plugin.jstools.version>0.7</maven.plugin.jstools.version>
+		<maven.plugin.javadoc.version>2.8</maven.plugin.javadoc.version>
 
 		<!-- Dependency versions -->
 		<maven.version>3.0.3</maven.version>

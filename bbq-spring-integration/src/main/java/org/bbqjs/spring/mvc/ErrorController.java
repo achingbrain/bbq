@@ -136,10 +136,20 @@ public class ErrorController implements HandlerExceptionResolver {
 		this.errorCodes = errorCodes;
 	}
 
+	/**
+	 * A list of view template names keyed by exception class.  The list will be consulted and the
+	 * exception-specific view name returned if available.
+	 * @param errorViews
+	 */
 	public void setErrorViews(Map<Class<?>, String> errorViews) {
 		this.errorViews = errorViews;
 	}
 
+	/**
+	 * The name of the default view which is returned if ErrorController#errorViews doesn't contain a specific
+	 * view for the thrown exception.
+	 * @param defaultErrorView
+	 */
 	public void setDefaultErrorView(String defaultErrorView) {
 		this.defaultErrorView = defaultErrorView;
 	}

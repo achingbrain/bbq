@@ -17,8 +17,6 @@ Declare this module as a test dependency in your pom.xml:
 
 To mock an AJAX request, first register a listener function with the [bbq.ajax.MockAJAXRequest](jsdoc/symbols/bbq.ajax.MockAJAXRequest.html) object.  Note that the listener functions are keyed by URL.
 
-<p>
-<code class="javascript">
 	bbq.ajax.MockAJAXRequest["/foo/bar"] = function(args) {
 		return new bbq.ajax.MockJSONResponse({
 			response: {
@@ -26,15 +24,11 @@ To mock an AJAX request, first register a listener function with the [bbq.ajax.M
 			}
 		});
 	}
-</code>
-</p>
 
 This listener function should take the arguments passed to the [bbq.ajax.AJAXRequest](../bbq-js/jsdoc/symbols/bbq.ajax.AJAXRequest.html) subclass as an argument and return an instance of [bbq.ajax.MockJSONResponse](jsdoc/symbols/bbq.ajax.MockJSONResponse.html).  The MockJSONResponse should have an options object passed to it which contains one value - response - which is the object which will be passed to the onSuccess handler.
 
 Then dispatch an AJAX request:
 
-<p>
-<code class="javascript">
 	new bbq.ajax.JSONRequest({
 		url: "/foo/bar",
 		args: {
@@ -47,8 +41,6 @@ Then dispatch an AJAX request:
 			alert("AJAX request failed!");
 		}
 	});
-</code>
-</p>
 
 This will cause your handler to be looked up by the URL passed to the JSONRequest and if found  the onSuccess handler will be immediately invoked.
 
@@ -56,8 +48,6 @@ This will cause your handler to be looked up by the URL passed to the JSONReques
 
 To mock an AJAX request failure, override the X-BBQ-ResponseType header in your [bbq.ajax.MockJSONResponse](jsdoc/symbols/bbq.ajax.MockJSONResponse.html) to return a negative number:
 
-<p>
-<code class="javascript">
 	bbq.ajax.MockAJAXRequest["/foo/bar"] = function(args) {
 		return new bbq.ajax.MockJSONResponse({
 			response: {
@@ -68,7 +58,5 @@ To mock an AJAX request failure, override the X-BBQ-ResponseType header in your 
 			}
 		});
 	}
-</code>
-</p>
 
 This will cause the onFailure callback to be invoked.

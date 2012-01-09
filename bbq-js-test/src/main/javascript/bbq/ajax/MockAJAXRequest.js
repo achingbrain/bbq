@@ -3,7 +3,8 @@
  *
  * For example, if you are testing a bit of code that includes the following:
  *
- * <code class="javascript">
+ * <pre>
+ * <code class="language-javascript">
  * new bbq.ajax.JSONRequest({
  *     url: "/foo/bar",
  *     args: {
@@ -14,17 +15,20 @@
  *     }
  * });
  * </code>
+ * </pre>
  *
  * To handle this sort of request, you'd do the following before the AJAX
  * call is invoked:
  *
- * <code class="javascript">
+ * <pre>
+ * <code class="language-javascript">
  * bbq.ajax.MockAJAXRequest["/foo/bar"] = function(args) {
  *      return new bbq.ajax.MockJSONResponse({response: {
  *          baz: "qux"
  *      }});
  * }
  * </code>
+ * </pre>
  *
  * This will result in the onSuccess handler being called immediately.
  *

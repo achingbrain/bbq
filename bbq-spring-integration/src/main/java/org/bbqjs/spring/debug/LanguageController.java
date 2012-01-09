@@ -16,6 +16,26 @@ import java.util.*;
 /**
  * A version of the LanguageController meant for development.  Attempts to dynamically
  * create the language file for every request - not recommended for production.
+ *
+ * Sample Spring configuration:
+ *
+ * <pre><code class="language-xml">
+ * &lt;bean id="languageController" class="org.bbqjs.spring.debug.LanguageController"&gt;
+ *     &lt;property name="defaultLocale" value="en_GB"/&gt;
+ *     &lt;property name="supportedLocales"&gt;
+ *         &lt;list&gt;
+ *             &lt;value&gt;en_GB&lt;/value&gt;
+ *             &lt;value&gt;en_US&lt;/value&gt;
+ *         &lt;/list&gt;
+ *     &lt;/property&gt;
+ *     &lt;property name="pagePackage" value="${js.page.package}"/&gt;
+ *     &lt;property name="sourceRoots"&gt;
+ *         &lt;list&gt;
+ *             &lt;value&gt;src/main/javascript&lt;/value&gt;
+ *         &lt;/list&gt;
+ *     &lt;/property&gt;
+ * &lt;/bean&gt;
+ * </pre></code>
  */
 @Controller
 public class LanguageController {
@@ -24,6 +44,13 @@ public class LanguageController {
 	private String[] sourceRoots;
 	private String pagePackage;
 
+	/**
+	 * The controller method.
+	 * @param request
+	 * @param locale
+	 * @return
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/language/get", method = RequestMethod.POST)
 	public @ResponseBody Map<Object, Object> getLanguage(@RequestBody LanguageRequest request, Locale locale) throws IOException {
 		if (!supportedLocales.contains(locale)) {
@@ -33,6 +60,13 @@ public class LanguageController {
 		return getLanguageFile(request.getSection(), locale);
 	}
 
+	/**
+	 * Compiles and returns a language translation section.
+	 * @param byName
+	 * @param forLocale
+	 * @return
+	 * @throws IOException
+	 */
 	protected Map<Object, Object> getLanguageFile(Object byName, Locale forLocale) throws IOException {
 		String resource = pagePackage.replaceAll("\\.", File.separator) + File.separator + byName + ".js";
 		URL source = getClass().getClassLoader().getResource(resource);
@@ -47,10 +81,17 @@ public class LanguageController {
 		return properties;
 	}
 
+	/**
+	 * This class is used to request a given language translation file
+	 */
 	public static class LanguageRequest implements Serializable {
 		private static final long serialVersionUID = 2889445903996689890L;
 		private String section;
 
+		/**
+		 * The section is the name of the JavaScript class for the current page - ie. Home or Contact, etc
+		 * @return
+		 */
 		public String getSection() {
 			return section;
 		}
@@ -60,18 +101,34 @@ public class LanguageController {
 		}
 	}
 
+	/**
+	 * A list of locales that your application supports.
+	 * @param supportedLocales
+	 */
 	public void setSupportedLocales(List<Locale> supportedLocales) {
 		this.supportedLocales = supportedLocales;
 	}
 
+	/**
+	 * When no language translation exists for a given term, fall back to this locale.
+	 * @param defaultLocale
+	 */
 	public void setDefaultLocale(Locale defaultLocale) {
 		this.defaultLocale = defaultLocale;
 	}
 
+	/**
+	 * Where to look for language files - a suggested value is "src/main/javascript".
+	 * @param sourceRoots
+	 */
 	public void setSourceRoots(String[] sourceRoots) {
 		this.sourceRoots = sourceRoots;
 	}
 
+	/**
+	 * The ${js.page.package} from your pom.  Maven should replace this at run/compile time.
+	 * @param pagePackage
+	 */
 	public void setPagePackage(String pagePackage) {
 		this.pagePackage = pagePackage;
 	}

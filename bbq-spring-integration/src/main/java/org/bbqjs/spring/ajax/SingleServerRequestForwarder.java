@@ -4,6 +4,9 @@ import java.net.URL;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * A RequestForwarder which sends all requests to one server
+ */
 public class SingleServerRequestForwarder extends RequestForwarder {
 	private String destinationServer;
 	

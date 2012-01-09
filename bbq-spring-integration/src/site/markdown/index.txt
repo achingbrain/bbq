@@ -1,0 +1,15 @@
+## bbq-spring-integration
+
+This module contains helper classes to assist in integrating your bbq project with Spring.
+
+### AJAX
+
+There are classes in the [org.bbqjs.spring.ajax package](apidocs/org/bbqjs/spring/ajax/package-summary.html) to allow making AJAX requests to non-origin web servers - e.g. working around the [Same Origin Policy](http://en.wikipedia.org/wiki/Same_origin_policy).
+
+### Development
+
+[org.bbqjs.spring.debug](apidocs/org/bbqjs/spring/debug/package-summary.html) contains [Controller](http://static.springsource.org/spring/docs/3.1.x/javadoc-api/org/springframework/stereotype/Controller.html) classes to make developing bbq apps less painful.  They let you update JavaScript, CSS and language files without having to restart your web container to see the changes.
+
+### MVC
+
+[org.bbqjs.spring.ajax package](apidocs/org/bbqjs/spring/mvc/package-summary.html) holds production [Controllers](http://static.springsource.org/spring/docs/3.1.x/javadoc-api/org/springframework/stereotype/Controller.html) for resolving exceptions, serving language files and doing away with boiler plate controllers.

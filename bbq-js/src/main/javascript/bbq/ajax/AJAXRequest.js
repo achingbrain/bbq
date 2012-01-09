@@ -5,9 +5,11 @@ include(bbq.util.BBQUtil);
 /**
  * Wrapper for Prototype Ajax class.
  * 
- * Adds extras such as an independent server timeout and error handling
+ * Adds extras such as an independent server timeout and error handling.
+ * Typically you would use a subclass such as <code class="language-javascript">bbq.ajax.JSONRequest</code>.
+ *
  * @class bbq.ajax.AJAXRequest
- * 
+ * @see bbq.ajax.JSONRequest
  */
 bbq.ajax.AJAXRequest = Class.create({
 	options: null,
@@ -15,17 +17,12 @@ bbq.ajax.AJAXRequest = Class.create({
 	_interval: null,
 
 	/**
-	 * Constructor
-	 *
-	 * @constructor
-	 * @param	{Object} options	The URL to send the request to
-	 * 
-	 * @example
 	 * Supports the following options:
 	 *
-	 * <code>
+	 * <pre>
+	 * <code class="language-javascript">
 	 * options {
-	 * 		url:	String						// where to send the request to
+	 * 		url: String								// where to send the request to
 	 * 		method: String					// post or get
 	 * 		args: Object						// key->value pairs to convert to query string
 	 * 		onSuccess: Function			// Everything went as expected - eg. received HTTP 200
@@ -34,29 +31,33 @@ bbq.ajax.AJAXRequest = Class.create({
 	 * 		onAnything: Function			// invoked when there's no other callback to invoke
 	 * }
 	 * </code>
+	 * </pre>
+	 *
+	 * @constructor
+	 * @param	 {Object} options
 	 */
 	initialize: function(options) {
 		this.options = options;
-		
+
 		if(!this.options.method) {
 			this.options.method = "post";
 		}
-		
+
 		if(!this.options.args) {
 			this.options.args = {};
 		}
-		
+
 		if(!this.options.headers) {
 			this.options.headers = {};
 		}
-		
+
 		this._sendRequest();
 	},
-	
+
 	_getPostBody: function() {
 		return this.options.postBody;
 	},
-	
+
 	/**
 	 * Sends the request via the specified method
 	 * 
@@ -65,11 +66,11 @@ bbq.ajax.AJAXRequest = Class.create({
 	_sendRequest: function() {
 		try {
 			var requestHeaders = this._createRequestHeaders();
-			
+
 			for(var key in requestHeaders) {
 				this.options.headers[key] = requestHeaders[key];
 			}
-			
+
 			var request = new Ajax.Request(this.options.url, {
 				method: this.options.method, 
 				postBody: this._getPostBody(),
@@ -79,23 +80,23 @@ bbq.ajax.AJAXRequest = Class.create({
 				requestHeaders: this.options.headers,
 				contentType: this.options.contentType
 			});
-			
+
 			if(typeof(firebug) != "undefined" && firebug.watchXHR instanceof Function) {
 				// enable firebug lite to watch the ajax call status
 				request.transport._name = this.options.method.toUpperCase() + ' ' + this.options.url;
 				firebug.watchXHR(request.transport);
 			}
-			
+
 			// get time out data from server configuration
 			if(typeof(ServerConfig) != "undefined" && ServerConfig["timeout"]) {
 				this._timeOut = ServerConfig["timeout"];
 			} else {
 				this._timeOut = 30;
 			}
-			
+
 			// check timeout every second
 			this._interval = setInterval(this._checkTimeOut.bind(this), 1000);
-			
+
 			if(typeof(NotificationArea) != "undefined") {
 				NotificationArea.startLoad();
 			}
@@ -103,13 +104,13 @@ bbq.ajax.AJAXRequest = Class.create({
 			Log.error("Could not send request", e);
 		}
 	},
-	
+
 	_createRequestHeaders: function() {
 		return {
-			
+
 		};
 	},
-	
+
 	/**
 	 * @access	protected
 	 * @param {String} handlerName
@@ -120,9 +121,9 @@ bbq.ajax.AJAXRequest = Class.create({
 			if(typeof(NotificationArea) != "undefined") {
 				NotificationArea.stopLoad();
 			}
-			
+
 			clearInterval(this._interval);
-			
+
 			if(this.options[handlerName] && this.options[handlerName] instanceof Function) {
 				this.options[handlerName].apply(this, args);
 			} else if(this.options["onAnything"] && this.options["onAnything"] instanceof Function) {
@@ -132,7 +133,7 @@ bbq.ajax.AJAXRequest = Class.create({
 			Log.error("Error encountered while invoking handler " + handlerName, e);
 		}
 	},
-	
+
 	/**
 	 * @param {Object} serverResponse
 	 */
@@ -165,7 +166,7 @@ bbq.ajax.AJAXRequest = Class.create({
 			Log.error("Could not invoke onSuccess handler", e);
 		}
 	},
-	
+
 	_onFailure: function() {
 		try {
 			Log.error('Request to ' + this.options.method.toUpperCase() + ' ' + this.options.url + " failed");
@@ -174,7 +175,7 @@ bbq.ajax.AJAXRequest = Class.create({
 			Log.error("Could not invoke onFaliure handler", e);
 		}
 	},
-	
+
 	_onException: function() {
 		try {
 			Log.error('Request to ' + this.options.method.toUpperCase() + ' ' + this.options.url + " threw exception");
@@ -183,7 +184,7 @@ bbq.ajax.AJAXRequest = Class.create({
 			Log.error("Could not invoke onException handler", e);
 		}
 	},
-	
+
 	/**
 	 * Checks to see if the timer has reached 0.  If so the server request has timed out.
 	 * 
@@ -197,7 +198,7 @@ bbq.ajax.AJAXRequest = Class.create({
 			this._timeOut--;
 		}
 	},
-	
+
 	/**
 	 * Shows the user a warning
 	 * 
@@ -205,7 +206,7 @@ bbq.ajax.AJAXRequest = Class.create({
 	 */
 	_timedOut: function() {
 		Log.warn("Ajax call to " + this.options.url + " timed out");
-		
+
 		if(typeof(NotificationArea) != "undefined" && typeof(Language) != "undefined" && Language.get instanceof Function) {
 			NotificationArea.stopLoad();
 			NotificationArea.setMessage(
@@ -226,9 +227,13 @@ bbq.ajax.AJAXRequest = Class.create({
  * Add custom error handlers to this map.  Error handlers should
  * be a function with the following signature:
  * 
- * <code>
- * function(bbq.ajax.AJAXRequest, serverResponse);
+ * <pre>
+ * <code class="language-javascript">
+ * function(bbq.ajax.AJAXRequest, XMLHttpRequest);
  * </code>
+ * </pre>
+ *
+ * @see bbq.ajax.AJAXRequest
  */
 bbq.ajax.AJAXRequest.errorHandlers = {};
 bbq.ajax.AJAXRequest.errorHandlers["error-100"] = function(request, response) {

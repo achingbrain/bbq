@@ -8,6 +8,8 @@ include(bbq.ajax.AJAXRequest);
  * 
  * @class bbq.ajax.ForwardingAjaxRequest is a subclass of bbq.ajax.AJAXRequest
  * @extends bbq.ajax.AJAXRequest
+ * @see bbq.ajax.ForwardingJSONRequest
+ * @see bbq.ajax.ForwardingSoapRequest
  */
 bbq.ajax.ForwardingAjaxRequest = Class.create(bbq.ajax.AJAXRequest, {
 	initialize: function($super, options) {

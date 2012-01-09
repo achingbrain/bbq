@@ -14,6 +14,23 @@
  * The date defaults to the current date/time.
  * The mask defaults to dateFormat.masks.default.
  *
+ * <pre><code class="language-javascript">
+ * var date = new Date();
+ *
+ * // default
+ * // Mon Jan 9 2012 11:38:00
+ * DateFormatter.format(date);
+ *
+ * // just the year in long form
+ * // 2012
+ * DateFormatter.format(date, "yyyy");
+ *
+ * // Use built in ISO date mask
+ * // 2012-01-09
+ * DateFormatter.format(date, DateFormatter.masks.isoDate);
+ * </code></pre>
+ *
+ *
  * @class DateFormatter
  */
 DateFormatter = {
@@ -21,6 +38,12 @@ DateFormatter = {
 	_timezone: /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g,
 	_timezoneClip: /[^-+\dA-Z]/g,
 
+	/**
+	 * Various built in date format masks.  Pass one of these as the
+	 * second argument to DateFormatter#format
+	 *
+	 * @type {object}
+	 */
 	masks: {
 		"default":				"ddd mmm dd yyyy HH:MM:ss",
 		shortDate:			"m/d/yy",
@@ -35,7 +58,22 @@ DateFormatter = {
 		isoDateTime:		"yyyy-mm-dd'T'HH:MM:ss",
 		isoUtcDateTime:	"UTC:yyyy-mm-dd'T'HH:MM:ss'Z'"
 	},
-	
+
+	/**
+	 * Formats a given date using the passed mask and formatter.
+	 *
+	 * If you do not specify a formatter, this function will return the date formatted
+	 * as a string using the passed mask.
+	 *
+	 * If you do not pass a mask it uses DateFormatter.masks.default.
+	 *
+	 * If you do not pass a date it uses the current date.
+	 *
+	 * @param date
+	 * @param mask
+	 * @param formatter
+	 * @param formatter.format(date, mask, utc, regex)
+	 */
 	format: function(date, mask, formatter) {
 		// Passing date through Date applies Date.parse, if necessary
 		date = date ? new Date(date) : new Date();
@@ -197,7 +235,21 @@ DateFormatter._stringFormatter = {
 	}.bind(DateFormatter._stringFormatter)
 };
 
-// For convenience...
+/**
+ * Lets you call Date#format for convenience.
+ *
+ * <pre><code class="language-javascript">
+ * var date = new Date();
+ *
+ * // default
+ * // Mon Jan 9 2012 11:38:00
+ * date.format();
+ *
+ * // just the year in long form
+ * // 2012
+ * date.format("yyyy");
+ * </code></pre>
+ */
 Date.prototype.format = function(mask, formatter) {
 	return DateFormatter.format(this, mask, formatter);
 };
