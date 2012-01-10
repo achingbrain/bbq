@@ -14,11 +14,23 @@ import java.io.IOException;
 public class StatusCodeBasedAccessDeniedHandler implements AccessDeniedHandler {
 	private int status = HttpServletResponse.SC_UNAUTHORIZED;
 
+	/**
+	 * @inheritdoc
+	 * @param request
+	 * @param response
+	 * @param accessDeniedException
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	@Override
 	public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
 		response.setStatus(status);
 	}
 
+	/**
+	 * Override the HTTP status code that is sent access to a resource is denied.  Defaults to 401.
+	 * @param status
+	 */
 	public void setStatus(int status) {
 		this.status = status;
 	}

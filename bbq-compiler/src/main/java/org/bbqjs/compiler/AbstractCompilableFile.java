@@ -18,17 +18,15 @@ import org.slf4j.LoggerFactory;
  * Interrogates passed JavaScript files for their include statements.  It's recommended that include statements
  * are at the top of the file but it's not essential.  Whitespace between include lines is ignored.
  * 
- * <code>
- * 
+ * <pre><code class="language-javascript">
  * include(org.my.project.JSClass);
  * include(org.my.project.AnotherJSClass);
  * include(org.some.other.project.YetAnotherJSClass);
  * 
  * org.my.namespace.MyClass = Class.create({
- * 		...
+ *     ...
  * });
- * 
- * </code>
+ * </code></pre>
  * 
  * @author alex
  *
@@ -61,7 +59,7 @@ public abstract class AbstractCompilableFile implements CompilableFile {
 	 * folder and the like.
 	 */
 	protected String[] sourceRoots;
-	
+
 	public AbstractCompilableFile(URL filePath, String[] sourceRoots) {
 		this.contents = new ByteArrayOutputStream();
 		this.filePath = filePath;
@@ -72,27 +70,27 @@ public abstract class AbstractCompilableFile implements CompilableFile {
 			this.sourceRoots = new String[0];
 		}
 	}
-	
+
 	protected void findIncludes(URL file) throws IOException {
 		try {
 			InputStream inputStream = file.openStream();
 			InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
 			BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 			String line;
-			
+
 			while((line = bufferedReader.readLine()) != null){
 				String trimmed = line.trim();
-				
+
 				if(trimmed.startsWith("include(")) {
 					String className = trimmed.replaceAll("include\\(", "").replaceAll("\\);", "");
-					
+
 					// notify any subclasses
 					encounteredInclude(className);
 				} else {
 					contents.write((line + "\r\n").getBytes());
 				}
 			}
-			
+
 			bufferedReader.close();
 			inputStreamReader.close();
 			inputStream.close();
@@ -100,12 +98,12 @@ public abstract class AbstractCompilableFile implements CompilableFile {
 			throw new CompilationFailureException(e);
 		}
 	}
-	
+
 	protected void encounteredInclude(String className) throws IOException {
 		String path = className.replaceAll("\\.", "/") + ".js";
 
 		URL url = Utils.findFile(path, sourceRoots);
-		
+
 		if(url == null) {
 			LOG.error("Could not find JavaScript file for class " + className + " with path " + path + " on classpath");
 			LOG.error("Executing in directory " + new File(".").getAbsolutePath());
@@ -129,22 +127,40 @@ public abstract class AbstractCompilableFile implements CompilableFile {
 	protected void encounteredInclude(String className, URL javaScriptFile) throws IOException {
 		
 	}
-	
+
+	/**
+	 * @inheritdoc
+	 * @param outputStream
+	 * @throws IOException
+	 */
 	@Override
 	public void writeTo(OutputStream outputStream) throws IOException {
 		contents.writeTo(outputStream);
 	}
-	
+
+	/**
+	 * @inheritdoc
+	 * @return
+	 */
 	@Override
 	public URL getFilePath() {
 		return filePath;
 	}
-	
+
+	/**
+	 * @inheritdoc
+	 * @return
+	 */
 	@Override
 	public List<CompilableFile> getIncludedFiles() {
 		return includedFiles;
 	}
-	
+
+	/**
+	 * @inheritdoc
+	 * @param file
+	 * @return
+	 */
 	@Override
 	public boolean equals(Object file) {
 		if(file instanceof AbstractCompilableFile) {
@@ -155,7 +171,11 @@ public abstract class AbstractCompilableFile implements CompilableFile {
 		
 		return false;
 	}
-	
+
+	/**
+	 * @inheritdoc
+	 * @return
+	 */
 	@Override
 	public String toString() {
 		return filePath.toString();

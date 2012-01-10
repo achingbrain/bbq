@@ -1,0 +1,63 @@
+## Drag and drop
+
+Drag and drop on the web even with HTML5 is [a bit of a mess](http://www.quirksmode.org/blog/archives/2009/09/the_html5_drag.html).  To make your GUIWidget draggable, include the DragAndDropManager
+
+	include(bbq.gui.DragAndDrop);
+
+Then, in your GUIWidget's constructor, register your widget with the manager:
+
+	DragAndDropManager.makeDraggable(this);
+
+You'll need something to drop it on, we refer to this as a drop target.  In another GUIWidget, make it a drop target:
+
+	DragAndDropManager.makeDroppable(this);
+
+A drop target should implement a method:
+
+	dropTargetWillAccept(draggable);
+
+This method returns a boolean true if this target is interested in receiving drag and drop events about the passed draggable.
+
+Finally, the drop target defines one more method:
+
+	draggableDropped(draggable);
+
+This gets called when a draggable of the appropriate type is dropped onto the drop target.
+
+So:
+
+	com.foo.MyDraggable = new Class.create(bbq.gui.GUIWidget, {
+		initialize: function() {
+			DragAndDropManager.makeDraggable(this);
+		},
+		
+		draggableStarted: function() {
+			// dragging this widget started
+		},
+		
+		draggableStoped: function() {
+			// dragging this widget stopped
+		},
+	}
+	
+	com.foo.MyDropTarget = new Class.create(bbq.gui.GUIWidget, {
+		initialize: function() {
+			DragAndDropManager.makeDropTarget(this);
+		},
+		
+		dropTargetWillAccept: function(draggable) {
+			return draggable instanceof com.foo.MyDraggable;
+		},
+		
+		dropTargetEnter: function(draggable) {
+			// the passed object was dragged into this one
+		},
+		
+		dropTargetLeave: function(draggable) {
+			// the passed object was dragged out of this one
+		},
+		
+		dropTargetDropped: function(draggable) {
+			// the passed object was dropped on this one
+		}
+	}

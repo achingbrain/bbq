@@ -1,0 +1,26 @@
+## Unit Test Maven Plugin
+
+This Maven plugin runs unit tests as part of the build process.
+
+### Sample configuration
+
+	<plugin>
+	    <groupId>org.bbqjs</groupId>
+	    <artifactId>bbq-test-maven-plugin</artifactId>
+	    <version>${maven.plugin.bbq.version}</version>
+	    <executions>
+	        <execution>
+	            <goals>
+	                <goal>test</goal>
+	            </goals>
+	        </execution>
+	    </executions>
+	    <configuration>
+	        <testDirectory>${project.basedir}/src/test/javascript</testDirectory>
+	        <includes>
+	            <include>javascript/libs/unittest-1.8.0.js</include>
+	            <include>javascript/libs/jshamcrest-0.6.7.js</include>
+	            <include>javascript/libs/jsmockito-1.0.4.js</include>
+	        </includes>
+	    </configuration>
+	</plugin>

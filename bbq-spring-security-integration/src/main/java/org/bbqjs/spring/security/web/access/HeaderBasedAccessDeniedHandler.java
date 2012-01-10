@@ -1,5 +1,6 @@
 package org.bbqjs.spring.security.web.access;
 
+import org.bbqjs.spring.mvc.ErrorController;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
@@ -9,13 +10,26 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 
+/**
+ * Sends a X-BBQ-ResponseType header with the value 0 which you should extract from the XMLHttpRequest object.
+ *
+ * The header names and values are overridable.
+ */
 public class HeaderBasedAccessDeniedHandler implements AccessDeniedHandler {
 	private String loginFormUrl;
-	private String responseTypeHeader = "X-BBQ-ResponseType";
+	private String responseTypeHeader = ErrorController.X_BBQ_RESPONSE_TYPE;
 	private int responseCode = 0;
-	private String responseMessageHeader = "X-BBQ-ResponseMessage";
+	private String responseMessageHeader = ErrorController.X_BBQ_RESPONSE_MESSAGE;
 	private String responseMessage = "Not authenticated";
 
+	/**
+	 * @inheritdoc
+	 * @param request
+	 * @param response
+	 * @param accessDeniedException
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	@Override
 	public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
 		response.addIntHeader(responseTypeHeader, responseCode);
@@ -28,10 +42,14 @@ public class HeaderBasedAccessDeniedHandler implements AccessDeniedHandler {
 		}
 
 		OutputStream out = response.getOutputStream();
-		out.write("Not authenticated".getBytes());
+		out.write(responseMessage.getBytes());
 		out.close();
 	}
 
+	/**
+	 * If set, a 307 redirect will be issued to bounce the user to the log in form.
+	 * @param loginFormUrl
+	 */
 	public void setLoginFormUrl(String loginFormUrl) {
 		this.loginFormUrl = loginFormUrl;
 	}

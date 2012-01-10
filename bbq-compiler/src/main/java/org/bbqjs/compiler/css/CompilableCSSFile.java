@@ -23,7 +23,7 @@ public class CompilableCSSFile extends AbstractCompilableFile {
 	
 	public CompilableCSSFile(URL javaScriptInputFile, URL cssFile, String theme, String[] sourceRoots) throws IOException {
 		super(javaScriptInputFile, sourceRoots);
-		
+
 		this.cssFile = cssFile;
 		this.theme = theme;
 

@@ -5,10 +5,7 @@
 
 	<body>
 
-		<menu ref="parent" />
-
-		<menu name="Documentation">
-			<item name="Guide" href="index.html"/>
+		<menu name="Code">
 			<item name="JSDoc" href="jsdoc/index.html"/>
 			<item name="JSLint" href="jslint/index.html"/>
 		</menu>

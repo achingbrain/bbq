@@ -5,19 +5,9 @@
 
 	<body>
 
-		<menu name="Overview">
-			<item name="Introduction" href="introduction.html"/>
-			<item name="Guide" href="guide.html"/>
-		</menu>
-
 		<menu ref="parent" />
 
 		<menu ref="modules" />
-
-		<menu name="Code">
-			<item name="Code coverage" href="cobertura/index.html"/>
-			<item name="FindBugs" href="findbugs.html"/>
-		</menu>
 
 	</body>
 </project>

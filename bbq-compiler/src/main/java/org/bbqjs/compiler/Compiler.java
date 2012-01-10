@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
 
+/**
+ * I am a compiler.  I compile stuff.
+ */
 public interface Compiler {
 	/**
 	 * Returns a string of the compiled source of the given input file.  Not terribly 

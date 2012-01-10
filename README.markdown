@@ -4,6 +4,10 @@
 
 bbq is an application framework for developing responsive, dynamic data-centric applications to be run in a web browser.  It is made of several modules:
 
+## Can has documentation?
+
+See the [bbq documentation site](http://achingbrain.github.com/maven-repo/documentation/bbq/)
+
 ### [bbq-js](https://github.com/achingbrain/bbq/tree/master/bbq-js)
 
 The JavaScript UI library.

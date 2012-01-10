@@ -13,11 +13,27 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * Wraps a HttpServletRequest that has had it's request body turned into a JSON object
+ * Wraps a HttpServletRequest that has had it's request body turned into a JSON object.
+ *
+ * N.B. this only really works well with simple JSON objects - ie ones where the properties are only one level deep:
+ *
+ * <pre><code class="language-javascript">
+ * { foo: "bar" }
+ * </code></pre>
+ *
+ * and not
+ *
+ * <pre><code class="language-javascript">
+ * { foo: { bar : "baz" } }
+ * </code></pre>
  */
 public class JsonHttpServletRequest extends HttpServletRequestWrapper {
 	private JSONObject jsonObject;
 
+	/**
+	 * @param request
+	 * @throws IOException
+	 */
 	public JsonHttpServletRequest(HttpServletRequest request) throws IOException {
 		super(request);
 
@@ -30,6 +46,11 @@ public class JsonHttpServletRequest extends HttpServletRequestWrapper {
 		}
 	}
 
+	/**
+	 * @inheritdoc
+	 * @param name
+	 * @return
+	 */
 	@Override
 	public String getParameter(String name) {
 		if(jsonObject == null) {
@@ -43,9 +64,13 @@ public class JsonHttpServletRequest extends HttpServletRequestWrapper {
 		return jsonObject.getString(name);
 	}
 
+	/**
+	 * @inheritdoc
+	 * @return
+	 */
 	@Override
 	public Enumeration getParameterNames() {
-		if (jsonObject == null) {
+		if(jsonObject == null) {
 			return super.getParameterNames();
 		}
 
@@ -64,9 +89,14 @@ public class JsonHttpServletRequest extends HttpServletRequestWrapper {
 		};
 	}
 
+	/**
+	 * @inheritdoc
+	 * @param name
+	 * @return
+	 */
 	@Override
 	public String[] getParameterValues(String name) {
-		if (jsonObject == null) {
+		if(jsonObject == null) {
 			return super.getParameterValues(name);
 		}
 
@@ -77,9 +107,13 @@ public class JsonHttpServletRequest extends HttpServletRequestWrapper {
 		return new String[] {jsonObject.getString(name)};
 	}
 
+	/**
+	 * @inheritdoc
+	 * @return
+	 */
 	@Override
 	public Map getParameterMap() {
-		if (jsonObject == null) {
+		if(jsonObject == null) {
 			return super.getParameterMap();
 		}
 

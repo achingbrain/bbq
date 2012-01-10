@@ -1,0 +1,5 @@
+## Maven plugins
+
+ * [Compiler plugin](bbq-compiler-maven-plugin/index.html)
+ * [Unit test plugin](bbq-test-maven-plugin/index.html)
+ * [Resources plugin](bbq-resources-maven-plugin/index.html)

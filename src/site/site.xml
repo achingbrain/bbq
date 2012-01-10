@@ -4,9 +4,6 @@
          xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
 
 	<skin>
-		<!--<groupId>org.apache.maven.skins</groupId>
-		<artifactId>maven-fluido-skin</artifactId>
-		<version>1.0</version>-->
 		<groupId>org.bbqjs</groupId>
 		<artifactId>bbq-template-site</artifactId>
 		<version>1.1.4-SNAPSHOT</version>
@@ -19,7 +16,7 @@
 				<name>BBQjs</name>
 				<alt>BBQjs</alt>
 				<src>/images/topbar-logo.png</src>
-				<href>/index.html</href>
+				<href>http://achingbrain.github.com/maven-repo/documentation/bbq</href>
 			</topBarIcon>
 			<sideBarEnabled>false</sideBarEnabled>
 			<searchEnabled>true</searchEnabled>
@@ -28,19 +25,37 @@
 	</custom>
 
 	<body>
-		<menu name="Overview">
+
+		<menu name="Overview" inherit="top">
 			<item name="Introduction" href="index.html"/>
 			<item name="License" href="license.html"/>
 		</menu>
 
-		<menu name="Documentation">
+		<menu name="Documentation" inherit="top">
 			<item name="Project structure" href="project-structure.html"/>
 			<item name="Design goals" href="design-goals.html"/>
+
+			<item name="Guide" href="guide.html" collapse="false">
+				<item name="Date handling" href="guide-date-handling.html" />
+				<item name="Drag and drop" href="guide-drag-and-drop.html" />
+				<item name="Internationalisation" href="guide-i18n.html" />
+			</item>
 		</menu>
 
-		<menu ref="modules" />
+		<menu name="Modules" inherit="top">
+			<item name="bbq-js" href="bbq-js/index.html"/>
+			<item name="bbq-js-test" href="bbq-js-test/index.html"/>
+			<item name="bbq-compiler" href="bbq-compiler/index.html"/>
+			<item name="bbq-spring-integration" href="bbq-spring-integration/index.html"/>
+			<item name="bbq-spring-security-intergration" href="bbq-spring-security-intergration/index.html"/>
+			<item name="bbq-test" href="bbq-test/index.html"/>
+			<item name="bbq-compiler-maven-plugin" href="bbq-maven-plugins/bbq-compiler-maven-plugin/index.html"/>
+			<item name="bbq-test-maven-plugin" href="bbq-maven-plugins/bbq-test-maven-plugin/index.html"/>
+			<item name="bbq-resources-maven-plugin" href="bbq-maven-plugins/bbq-resources-maven-plugin/index.html"/>
+			<item name="bbq-maven-archetype" href="bbq-maven-archetype/index.html"/>
+		</menu>
 
-		<menu name="Infrastructure">
+		<menu name="Infrastructure" inherit="top">
 			<item name="Issue tracking" href="issue-tracking.html"/>
 			<item name="Source control" href="source-repository.html"/>
 			<item name="Team" href="team-list.html"/>

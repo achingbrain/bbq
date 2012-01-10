@@ -13,20 +13,39 @@ import java.io.IOException;
  * and/or TokenBasedRememberMeServices
  */
 public class JsonHttpRequestFilter implements Filter {
+	private static final String JSON_CONTENT_TYPE = "application/json";
+
+	/**
+	 * @inheritdoc
+	 * @param filterConfig
+	 * @throws ServletException
+	 */
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 
 	}
 
+	/**
+	 * @inheritdoc
+	 * @param request
+	 * @param response
+	 * @param filterChain
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-		if(request.getContentType().indexOf("application/json") !=  -1 && request instanceof HttpServletRequest) {
+		if(request.getContentType().indexOf(JSON_CONTENT_TYPE) !=  -1 && request instanceof HttpServletRequest) {
+			// the content type of the request was JSON - wrap the request in our JSON friendly request wrapper
 			request = new JsonHttpServletRequest((HttpServletRequest)request);
 		}
 
 		filterChain.doFilter(request, response);
 	}
 
+	/**
+	 * @inheritdoc
+	 */
 	@Override
 	public void destroy() {
 

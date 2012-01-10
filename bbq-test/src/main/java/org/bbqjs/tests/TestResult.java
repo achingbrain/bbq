@@ -1,5 +1,8 @@
 package org.bbqjs.tests;
 
+/**
+ * This class represents the output of a JavaScript unit test
+ */
 public class TestResult {
 	public enum TYPE {
 		SUCCESS,

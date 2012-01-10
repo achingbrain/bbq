@@ -7,7 +7,11 @@ import java.util.regex.Pattern;
 
 import org.bbqjs.compiler.util.Utils;
 
-
+/**
+ * This class represents a compiled JavaScript file - we use it to ensure that it contains the use of
+ * a given language translation.  This lets us warn the user when redundant language
+ * translations are found.
+ */
 public class CompiledJavaScriptFile {
 	private String name;
 	private String contents;

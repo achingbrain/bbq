@@ -1,0 +1,3 @@
+## Maven Plugin Core
+
+This module contains code shared between the different bbq Maven plugins and is not meant to be used directly.

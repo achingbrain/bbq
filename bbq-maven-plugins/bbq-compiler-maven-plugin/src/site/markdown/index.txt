@@ -1,0 +1,175 @@
+## Maven Compiler Plugin
+
+### Page package
+
+A bbq application has one main class per page.  There should be a package that contains these classes (sub packages are ok).  The name of this package should be specified as the
+
+	${js.page.package}
+
+maven property.  e.g.:
+
+	<properties>
+		<js.page.package>com.myapp.pages</js.page.package>
+	</properties>
+
+This package should exist in the JavaScript directory.  By default this would be at:
+
+	src/main/javascript
+
+So, from the above example the plugin expects to see something like this:
+
+	src/main/javascript/com/myapp/pages/HomePage.js
+
+### Sample configuration
+
+	<plugin>
+	    <groupId>org.bbqjs</groupId>
+	    <artifactId>bbq-compiler-maven-plugin</artifactId>
+	    <version>${maven.plugin.bbq.version}</version>
+	    
+	    <executions>
+	
+	        <!-- Compile JavaScript -->
+	        <execution>
+	            <id>compileJavaScript</id>
+	            <goals>
+	                <goal>compileJavaScript</goal>
+	            </goals>
+	            <configuration>
+	                <outputDirectory>${project.build.directory}/${project.build.finalName}/js</outputDirectory>
+	            </configuration>
+	        </execution>
+	
+	        <!-- Compile CSS -->
+	        <execution>
+	            <id>compileCSS</id>
+	            <goals>
+	                <goal>compileCSS</goal>
+	            </goals>
+	            <configuration>
+	                <outputDirectory>${project.build.directory}/${project.build.finalName}/css</outputDirectory>
+	                <includes>
+	                    <include>reset.css</include>
+	                </includes>
+	            </configuration>
+	        </execution>
+	
+	        <!-- Compile Language -->
+	        <execution>
+	            <id>compileLanguage</id>
+	            <goals>
+	                <goal>compileLanguage</goal>
+	            </goals>
+	            <configuration>
+	                <defaultLanguage>en_GB</defaultLanguage>
+	                <supportedLanguages>
+	                    <supportedLanguage>en_GB</supportedLanguage>
+	                    <supportedLanguage>en_US</supportedLanguage>
+	                </supportedLanguages>
+	                <outputDirectory>${project.basedir}/src/main/webapp/WEB-INF/language</outputDirectory>
+	            </configuration>
+	        </execution>
+	    </executions>
+	</plugin>
+
+Woah.  Let's break that down a little.
+
+The bbq Maven plugin does three things:
+
+1. Compiles JavaScript
+2. Compiles CSS
+3. Compiles Language files
+
+When we say "compile" we really mean "gloms a bunch of files together".  See the [bbq-compiler](../../bbq-compiler/index.html) for more information on this.
+
+Each task is done via an execution.
+
+### JavaScript compilation
+
+	<!-- Compile JavaScript -->
+	<execution>
+	    <id>compileJavaScript</id>
+	    <goals>
+	        <goal>compileJavaScript</goal>
+	    </goals>
+	    <configuration>
+	        <outputDirectory>${project.build.directory}/${project.build.finalName}/js</outputDirectory>
+	    </configuration>
+	</execution>
+
+This execution looks for page classes to compile.  By default, the package it examines is found at:
+
+	src/main/javascript/${js.page.package}
+
+If yours lives somewhere else, specify an
+
+	<inputDirectory>${project.basedir}/path/to/directory</inputDirectory>
+
+element in the configuration section
+
+Each compiled JavaScript file (one per page) is outputted into the directory specified by the
+
+	<outputDirectory>path/to/directory</outputDirectory>
+
+element.
+
+### CSS compilation
+
+	<execution>
+		<id>Compile CSS</id>
+		<goals>
+			<goal>compileCSS</goal>
+		</goals>
+		<configuration>
+			<outputDirectory>${project.build.directory}/${project.build.finalName}/css</outputDirectory>
+			<libraries>
+				<library>reset.css</library>
+			</libraries>
+		</configuration>
+	</execution>
+
+This works in a similar fashion to the JavaScript compilation execution, except instead of JavaScript files, it compiles CSS files.
+
+### Language compilation
+
+	<execution>
+		<id>Compile Language</id>
+		<goals>
+			<goal>compileLanguage</goal>
+		</goals>
+		<configuration>
+			<defaultLanguage>en_GB</defaultLanguage>
+			<supportedLanguages>
+				<supportedLanguage>en_GB</supportedLanguage>
+				<supportedLanguage>en_US</supportedLanguage>
+			</supportedLanguages>
+	                <outputDirectory>${project.basedir}/src/main/webapp/WEB-INF/language</outputDirectory>
+		</configuration>
+	</execution>
+
+Also similar to the JavaScript compiler execution, this execution compiles language translation files.  Each JavaScript class should have one or more language translation files next to it in the source directory structure.  So, for example:
+
+	src/main/javascript/com/myapp/MyClass.js
+	src/main/javascript/com/myapp/MyClass.en_GB.lang.xml
+	src/main/javascript/com/myapp/MyClass.en_US.lang.xml
+
+The
+
+	<defaultLanguage>locale_code</defaultLanguage>
+
+element defines which language is used when translations do not exist in the specified language.  So, for example, with the configuration above you could put all of your translations in the en_GB files, then override alternative spellings such as "color" in the en_US files.
+
+Only languages defined in
+
+	<supportedLanguage>locale_code</supportedLanguage
+
+elements will be compiled.
+
+Language files are simple Java properties files.  This ensures the translations support multibyte character sets.  e.g:
+
+	<?xml version="1.0" encoding="utf-8"?>
+	<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+	<properties>
+		<entry key="com.myapp.hello">Hello</entry>
+		<entry key="com.myapp.world">World</entry>
+	</properties>

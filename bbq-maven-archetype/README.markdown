@@ -12,3 +12,5 @@ Enter a suitable groupId (e.g. com.yourwebsite) and artifactId (e.g. my-super-fu
 Finally point a web browser at the address http://localhost:8080
 
 You will be greeted with a rather unexciting page with a button.  Clicking the button will cause a JSON request to round-trip to the server and print a message on the page.
+
+See the [documentation page](http://achingbrain.github.com/maven-repo/documentation/bbq/bbq-maven-archetype) for more information.

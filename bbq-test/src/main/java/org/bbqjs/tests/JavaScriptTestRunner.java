@@ -13,6 +13,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * This class runs JavaScript unit tests and interprets the results.
+ *
+ * It uses the Rhino JavaScript engine.
+ */
 public class JavaScriptTestRunner {
 	private static Logger LOG = LoggerFactory.getLogger(JavaScriptTestRunner.class);
 
@@ -29,6 +34,11 @@ public class JavaScriptTestRunner {
 	private Date startDate;
 	private String[] sourceRoots;
 
+	/**
+	 * Factory method to build the Rhino context.
+	 * @return
+	 * @throws Exception
+	 */
 	protected Context getContext() throws Exception {
 		if(context == null) {
 			context = ContextFactory.getGlobal().enterContext();
@@ -43,7 +53,13 @@ public class JavaScriptTestRunner {
 
 		return context;
 	}
-	
+
+	/**
+	 * Runs the test and returns the result.
+	 *
+	 * @return
+	 * @throws Exception
+	 */
 	public TestResult runTest() throws Exception {
 		startDate = new Date();
 
@@ -91,7 +107,13 @@ public class JavaScriptTestRunner {
 		return parseResult(summary);
 	}
 
-	public TestResult parseResult(NativeObject result) {
+	/**
+	 * Parses the result of the test
+	 *
+	 * @param result
+	 * @return
+	 */
+	private TestResult parseResult(NativeObject result) {
 		int failures = getInteger("failed", result);
 		int errors = getInteger("errors", result);
 		int tests = getInteger("tests", result);
@@ -122,6 +144,14 @@ public class JavaScriptTestRunner {
 		return new TestResult(TYPE.SUCCESS, testName);
 	}
 
+	/**
+	 * Tries to resolve the key as a property with an Integer value
+	 * of the passed NativeObject
+	 *
+	 * @param key
+	 * @param fromObject
+	 * @return
+	 */
 	private int getInteger(String key, NativeObject fromObject) {
 		Object result = fromObject.get(key, null);
 
@@ -132,6 +162,14 @@ public class JavaScriptTestRunner {
 		return ((Double)result).intValue();
 	}
 
+	/**
+	 * Tries to resolve the key as a property with an String array value
+	 * of the passed NativeObject
+	 *
+	 * @param key
+	 * @param fromObject
+	 * @return
+	 */
 	private String[] getStringArray(String key, NativeObject fromObject) {
 		Object result = fromObject.get(key, null);
 
@@ -150,6 +188,11 @@ public class JavaScriptTestRunner {
 		return output;
 	}
 
+	/**
+	 * Adds the passed JavaScript files to the Rhino context
+	 *
+	 * @param includes
+	 */
 	public void setIncludes(String[] includes) {
 		List<String> list = new ArrayList<String>();
 		list.add("javascript/env/env.js");
@@ -164,6 +207,11 @@ public class JavaScriptTestRunner {
 		this.includes = list.toArray(new String[]{});
 	}
 
+	/**
+	 * Tells the test runner which file contains the unit test to run
+	 *
+	 * @param testFile
+	 */
 	public void setTestFile(URL testFile) {
 		if(testFile == null) {
 			throw new RuntimeException("Unit test file was null.");
@@ -171,11 +219,24 @@ public class JavaScriptTestRunner {
 
 		this.testFile = testFile;
 	}
-	
+
+	/**
+	 * This is the fully qualified name of the package (e.g. com.myapp) that
+	 * holds the unit test and will be passed to the JavaScript compiler
+	 *
+	 * @param testPackage
+	 * @see org.bbqjs.compiler.javascript.JavaScriptCompiler
+	 */
 	public void setTestPackage(String testPackage) {
 		this.testPackage = testPackage;
 	}
 
+	/**
+	 * The test runner will pass these source roots to the JavaScript compiler
+	 *
+	 * @param sourceRoots
+	 * @see org.bbqjs.compiler.javascript.JavaScriptCompiler
+	 */
 	public void setSourceRoots(String[] sourceRoots) {
 		this.sourceRoots = sourceRoots;
 	}

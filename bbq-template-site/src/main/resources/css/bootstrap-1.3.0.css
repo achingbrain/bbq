@@ -1480,8 +1480,8 @@ a.menu:after, .dropdown-toggle:after {
   top: 40px;
   z-index: 900;
   min-width: 160px;
-  max-width: 220px;
-  _width: 160px;
+  max-width: 250px;
+  width: 250px;
   margin-left: 0;
   margin-right: 0;
   padding: 6px 0;
