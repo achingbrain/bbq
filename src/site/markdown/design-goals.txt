@@ -24,4 +24,4 @@ bbq contains a full suite of JavaScript unit tests to ensure code quality is kep
 
 ## Prototype
 
-bbq is based on [Prototype.js](http://www.prototypejs.org).  The reason is largely historical - at the time the project began, the alternative libraries available today simply didn't exist or weren't mature enough.  Since then no competing library has provided a compelling enough reason to switch.
+bbq is based on [Prototype.js](http://www.prototypejs.org).  The reason is largely historical - at the time the project began, the alternative libraries available today simply didn't exist or weren't mature enough.  Since then no competing library has provided a compelling enough reason to switch.  jQuery appears to have stolen a lot of Prototype's thunder over the years and it provides very powerful ways of manipulating the DOM, however at some point you are going to want to divorce your data model from it's visual representation and jQuery doesn't give you much help in that department.

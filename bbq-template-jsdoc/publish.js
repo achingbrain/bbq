@@ -20,33 +20,54 @@ function publish(symbolSet) {
 		
 	// used to allow Link to check the details of things being linked to
 	Link.symbolSet = symbolSet;
-
-	// create the required templates
-	try {
-		var classTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"class.tmpl");
-		var classesTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"allclasses.tmpl");
-	}
-	catch(e) {
-		print("Couldn't create the required templates: "+e);
-		quit();
-	}
-	
-	// some ustility filters
-	function hasNoParent($) {return ($.memberOf == "")}
-	function isaFile($) {return ($.is("FILE"))}
-	function isaClass($) {return ($.is("CONSTRUCTOR") || $.isNamespace)}
 	
 	// get an array version of the symbolset, useful for filtering
 	var symbols = symbolSet.toArray();
 	
+	// create individual class file documentation
+	createClasses(symbols);
+	
+	// create individual source files
+	createSourceFiles();
+	
+	createClassIndex("overview-summary", symbols);
+	
+	// create the class list
+	createClassList("allclasses-frame", symbols);
+	createClassList("allclasses-noframe", symbols);
+	
+	// create the file index page
+	makeFileIndex("allfiles-frame", symbols);
+	makeFileIndex("allfiles-noframe", symbols);
+	
+	// create index file
+	IO.copyFile(publish.conf.templatesDir + "/static/index.html", publish.conf.outDir);
+}
+
+function getTemplate(fileName) {
+	// create the file index page
+	try {
+		return new JSDOC.JsPlate(publish.conf.templatesDir + fileName);
+	}	catch(e) {
+		print(e.message); quit();
+	}
+}
+
+function createSourceFiles() {
 	// create the hilited source code files
 	var files = JSDOC.opt.srcFiles;
+ 	
  	for (var i = 0, l = files.length; i < l; i++) {
  		var file = files[i];
  		var srcDir = publish.conf.outDir + "symbols/src/";
 		makeSrcFile(file, srcDir);
  	}
- 	
+}
+
+function createClasses(symbols) {
+	// class template
+	var classTemplate = getTemplate("class.tmpl");
+	
  	// get a list of all the classes in the symbolset
  	var classes = symbols.filter(isaClass).sort(makeSortby("alias"));
 	
@@ -68,7 +89,7 @@ function publish(symbolSet) {
 	
 	// create a class index, displayed in the left-hand column of every class page
 	Link.base = "../";
- 	publish.classesIndex = classesTemplate.process(classes); // kept in memory
+ 	//publish.classesIndex = classesTemplate.process(classes); // kept in memory
 	
 	// create each of the class pages
 	for (var i = 0, l = classes.length; i < l; i++) {
@@ -77,35 +98,49 @@ function publish(symbolSet) {
 		symbol.events = symbol.getEvents();   // 1 order matters
 		symbol.methods = symbol.getMethods(); // 2
 		
-		Link.currentSymbol= symbol;
-		var output = "";
-		output = classTemplate.process(symbol);
+		symbol.srcFile = symbol.srcFile.replace("/Users/alex/Sites/bbq/bbq-js-test/src/main/javascript/", "");
+		symbol.srcFile = symbol.srcFile.replace("/Users/alex/Sites/bbq/bbq-js/src/main/javascript/", "");
+		symbol.srcFile = symbol.srcFile.replace(/_/g, ".");
 		
-		IO.saveFile(publish.conf.outDir+"symbols/", ((JSDOC.opt.u)? Link.filemap[symbol.alias] : symbol.alias) + publish.conf.ext, output);
+		Link.currentSymbol= symbol;
+		
+		// write out template
+		var output = classTemplate.process(symbol);
+		IO.saveFile(publish.conf.outDir + "symbols/", ((JSDOC.opt.u)? Link.filemap[symbol.alias] : symbol.alias) + publish.conf.ext, output);
 	}
+	
+	return classes;
+}
+
+function createClassList(templateName, symbols) {
+	// get a list of all the classes in the symbolset
+ 	var classes = symbols.filter(isaClass).sort(makeSortby("alias"));
+ 	
+	var template = getTemplate(templateName + ".tmpl");
 	
 	// regenerate the index with different relative links, used in the index pages
 	Link.base = "";
-	publish.classesIndex = classesTemplate.process(classes);
+	publish.classesIndex = template.process(classes);
+	
+	// create the all-classes pages
+	var output = template.process(classes);
+	IO.saveFile(publish.conf.outDir, templateName + publish.conf.ext, output);
+}
+
+function createClassIndex(templateName, symbols) {
+	var classes = symbols.filter(isaClass).sort(makeSortby("alias"));
 	
 	// create the class index page
-	try {
-		var classesindexTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"index.tmpl");
-	}
-	catch(e) { print(e.message); quit(); }
-	
-	var classesIndex = classesindexTemplate.process(classes);
-	IO.saveFile(publish.conf.outDir, "index"+publish.conf.ext, classesIndex);
-	classesindexTemplate = classesIndex = classes = null;
-	
-	// create the file index page
-	try {
-		var fileindexTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"allfiles.tmpl");
-	}
-	catch(e) { print(e.message); quit(); }
-	
+	var template = getTemplate(templateName + ".tmpl");
+	var output = template.process(classes);
+	IO.saveFile(publish.conf.outDir, templateName + publish.conf.ext, output);
+}
+
+function makeFileIndex(templateName, symbols) {
+	var template = getTemplate(templateName + ".tmpl");
 	var documentedFiles = symbols.filter(isaFile); // files that have file-level docs
 	var allFiles = []; // not all files have file-level docs, but we need to list every one
+	var files = JSDOC.opt.srcFiles;
 	
 	for (var i = 0; i < files.length; i++) {
 		allFiles.push(new JSDOC.Symbol(files[i], [], "FILE", new JSDOC.DocComment("/** */")));
@@ -119,11 +154,26 @@ function publish(symbolSet) {
 	allFiles = allFiles.sort(makeSortby("name"));
 
 	// output the file index page
-	var filesIndex = fileindexTemplate.process(allFiles);
-	IO.saveFile(publish.conf.outDir, "files"+publish.conf.ext, filesIndex);
-	fileindexTemplate = filesIndex = files = null;
+	var filesIndex = template.process(allFiles);
+	IO.saveFile(publish.conf.outDir, templateName + publish.conf.ext, filesIndex);
 }
 
+// some utility filters
+function hasNoParent($) {
+	return ($.memberOf == "")
+}
+
+function isaFile($) {
+	return ($.is("FILE"))
+}
+
+function isaClass($) {
+	return ($.is("CONSTRUCTOR") || $.isNamespace)
+}
+
+function isaNamespace($) {
+	return $.isNamespace
+}
 
 /** Just the first sentence (up to a full stop). Should not break on dotted variable names. */
 function summarize(desc) {
@@ -159,7 +209,15 @@ function makeSrcFile(path, srcDir, name) {
 		name = name.replace(/\:/g, "_");
 	}
 	
-	var src = {path: path, name:name, charset: IO.encoding, hilited: ""};
+	name = name.replace("_Users_alex_Sites_bbq_bbq-js-test_src_main_javascript_", "");
+	name = name.replace("_Users_alex_Sites_bbq_bbq-js_src_main_javascript_", "");
+	
+	var src = {
+		path: path, 
+		name: name, 
+		charset: IO.encoding, 
+		hilited: ""
+	};
 	
 	if (defined(JSDOC.PluginManager)) {
 		JSDOC.PluginManager.run("onPublishSrc", src);

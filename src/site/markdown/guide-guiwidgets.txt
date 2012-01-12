@@ -1,0 +1,66 @@
+## GUIWidgets
+
+[GUIWidget](bbq-js/jsdoc/symbols/bbq.gui.GUIWidget.html) is the base class for everything in bbq that has a visual representation and as such is a class that you will become well acquainted with.
+
+A simple class that extends GUIWidget is shown below:
+
+<pre><code class="language-javascript">
+include(bbq.gui.GUIWidget);
+
+com.myapp.gui.MyWidget = new Class.create(bbq.gui.GUIWidget, {
+    initialize: function($super) {
+        $super();
+        
+        this.setRootNode("p");
+        this.addClass("MyWidget");
+    },
+    
+    render: function($super) {
+        this.empty();
+        
+        this.appendChild("hello world");
+    }
+});
+</code></pre>
+
+To add an instance of the class to a page, you'd do the following:
+
+<pre><code class="language-javascript">
+include(bbq.page.Page);
+include(com.myapp.gui.MyWidget);
+
+com.myapp.page.Home = new Class.create(bbq.page.Page, {
+    initialize: function($super) {
+        $super();
+        
+        var widget = new com.myapp.gui.MyWidget();
+	widget.appendTo(document.body);
+    }
+});
+</code></pre>
+
+This results in the following being added to the body tag of the document:
+
+	<p class="MyWidget">hello world</p>
+
+### Root node
+
+Each GUIWidget has a root node.  By default it's a div tag, but this behaviour can be overridden by calling the GUIWidget#setRootNode method and passing in the name of the tag you'd like to have set:
+
+<pre><code class="language-javascript">
+include(bbq.gui.GUIWidget);
+
+com.myapp.gui.MyWidget = new Class.create(bbq.gui.GUIWidget, {
+    initialize: function($super) {
+        $super();
+        
+        // sets the root node to a paragraph tag
+        this.setRootNode("p");
+        
+        // sets the root node to an article
+        this.setRootNode("article");
+    }
+});
+</pre></code>
+
+Several methods operate on the root node.

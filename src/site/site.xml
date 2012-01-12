@@ -32,10 +32,10 @@
 		</menu>
 
 		<menu name="Documentation" inherit="top">
-			<item name="Project structure" href="project-structure.html"/>
 			<item name="Design goals" href="design-goals.html"/>
 
 			<item name="Guide" href="guide.html" collapse="false">
+				<item name="Project structure" href="guide-project-structure.html"/>
 				<item name="Date handling" href="guide-date-handling.html" />
 				<item name="Drag and drop" href="guide-drag-and-drop.html" />
 				<item name="Internationalisation" href="guide-i18n.html" />

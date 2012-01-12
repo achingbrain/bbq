@@ -1,0 +1,24 @@
+## Guide
+
+Being a collection of documents which define how to create a bbq application.
+
+### Getting started
+
+ 1. [Project structure](guide-project-structure.html)
+ 2. [Bootstrapping your application](guide-bootstrapping.html)
+
+### UI Elements
+
+ 1. [GUIWidgets](guide-guiwidgets.html)
+ 2. [Drag and drop](guide-drag-and-drop.html)
+ 3. [Form elements](guide-form-elements.html)
+ 4. [Buttons](guide-buttons.html)
+
+### Network
+
+ 1. [AJAX requests](guide-ajax.html)
+
+### Text handling
+
+ 1. [Date handling](guide-date-handling.html)
+ 2. [Internationalisation](guide-i18n.html)

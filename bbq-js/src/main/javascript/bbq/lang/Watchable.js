@@ -1,17 +1,14 @@
 include(bbq.util.BBQUtil);
 include(bbq.util.Log);
 
-/**
- * @class bbq.lang.Watchable 
- */
-bbq.lang.Watchable = new Class.create({
+bbq.lang.Watchable = new Class.create(/** @lendsbbq.lang.Watchable.prototype */ {
 	/**
 	 * Storage for callbacks registered on this object
 	 */
 	_callbacks: null,
-	
+
 	/**
-	 * Constructor
+	 * @constructs
 	 */
 	initialize: function() {
 		this._callbacks = {};
@@ -19,8 +16,6 @@ bbq.lang.Watchable = new Class.create({
 	
 	/**
 	 * Returns a callback array, initialising it where necessary
-	 * 
-	 * @private
 	 */
 	_getCallbacks: function(type) {
 		if(Object.isUndefined(this._callbacks[type])) {

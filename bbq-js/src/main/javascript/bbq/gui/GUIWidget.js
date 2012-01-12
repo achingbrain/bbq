@@ -1,29 +1,42 @@
 include(bbq.lang.Delegator);
 include(bbq.web.DOMUtil);
 
-/**
- * This class is used as a base for all objects that have GUI representations.
- * 
- * The rootNode property is a DOM node that is attached to the DOM tree after the object is 
- * created via the appendTo method.
- *
- * @class bbq.gui.GUIWidget
- * @extends bbq.lang.Watchable
- */
-bbq.gui.GUIWidget = new Class.create(bbq.lang.Delegator, {
-	_rootNode: null,
-	
+bbq.gui.GUIWidget = new Class.create(bbq.lang.Delegator, /** @lends bbq.gui.GUIWidget.prototype */ {
 	/**
-	 * This method should always be called explicitly by child classes.
-	 * 
-	 * Child classes should use the constructor to populate the rootNode variable and then call this.registerObject()
-	 * @param	Object	An options object
-	 * @example
-	 * Supports the following options:
-	 * 
-	 * options {
-	 * 		attributes: Object				// associative array of attributes to apply to the root node when it is set via setRootNode
-	 * }
+	 * This property holds the point at which this widget is attached to the DOM.
+	 *
+	 * @type {Node}
+	 */
+	_rootNode: null,
+
+	/**
+	 * <p>This class is used as a base for all objects that have GUI representations.</p>
+	 *
+	 * <p>The constructor method of this class should always be called explicitly by child classes.</p>
+	 *
+	 * <p>The rootNode property is a DOM node that is attached to the DOM tree after the object is
+	 * created via the appendTo method.</p>
+	 *
+	 * <pre><code class="language-javascript">
+	 * com.myapp.MyWidget = new Class.create(bbq.gui.GUIWidget, {
+	 *      initialize: function($super, options) {
+	 *          $super(options);
+	 *
+	 *          this.appendChild(DOMUtil.createElement("p", "Hello world!"));
+	 *      }
+	 * });
+	 *
+	 * ...
+	 *
+	 * var widget = new com.myapp.MyWidget({attributes: { className: "Foo" }});
+	 * widget.appendTo(document.body);
+	 * </code></pre>
+	 *
+	 * @memberOf bbq.gui
+	 * @constructs
+	 * @param {Object} options
+	 * @param {Object} [options.attributes] A key/value object of attributes to be applied to the root node
+	 * @extends bbq.lang.Delegator
 	 */
 	initialize: function($super, options) {
 		$super(options);
@@ -174,6 +187,10 @@ bbq.gui.GUIWidget = new Class.create(bbq.lang.Delegator, {
 		}
 	},
 
+	/**
+	 * Adds this GUIWidget to the DOM in front of the passed node
+	 * @param Node node
+	 */
 	appendBefore: function(node) {
 		try {
 			node = this._getNode(node);

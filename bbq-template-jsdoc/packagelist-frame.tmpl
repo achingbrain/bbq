@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset={+IO.encoding+}" />
+		
+		<title>JsDoc Reference - Index</title>
+		<meta name="generator" content="JsDoc Toolkit" />
+		
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" />
+		<script src="http://twitter.github.com/bootstrap/1.4.0/bootstrap-dropdown.min.js"></script>
+		
+		<!-- Le html5 shim, for IE6-8 support of html elements -->
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		
+		<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
+		
+		<style type="text/css">
+			{+include("static/default.css")+}
+		</style>
+	</head>
+	
+	<body>
+		<h1>bbq</h1>
+		<nav>{+new Link().toFile("allclasses-frame.html").withText("All Classes").target("packageFrame")+}</nav>
+		<article>
+			<ul class="classList">
+				<for each="thisClass" in="data">
+				<li>{!
+					if(thisClass.alias == "_global_") {
+						output += "<em>"+new Link().toClass(thisClass.alias)+"</em>";
+					}
+					else {
+						output += "<a href=\"symbols/" + thisClass.alias + ".html\" target=\"classFrame\">" + thisClass.alias + "</a>";
+					}
+				!}</li>
+				</for>
+			</ul>
+		</article>
+	</body>
+</html>

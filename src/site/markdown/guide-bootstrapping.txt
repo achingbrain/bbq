@@ -1,0 +1,148 @@
+## Bootstrapping your application
+
+### Pages
+
+Each page that your application has (e.g. home, contact, about, etc) should have a corresponding JavaScript class.  These will live in a package in your src/main/javascript folder:
+
+	+- src/
+	   +- main/
+	      +- javascript/
+	         +- com/
+	            +- myapp/
+	               +- page/
+	                  |
+	                  +- Home.js
+	                  +- Contact.js
+	                  +- About.js
+
+Each page class should extend [bbq.page.Page](bbq-js/jsdoc/symbols/bbq.page.Page.html) and should call the super constructor:
+
+<pre><code class="language-javascript">
+include(bbq.page.Page);
+
+com.myapp.page.Home = new Class.create(bbq.page.Page, {
+    initialize: function($super) {
+        $super();
+        
+        // Now do any setup you need
+        ...
+    }
+    
+    ...
+});
+</code></pre>
+
+### ${js.page.package}
+
+The name of the page package should be stored in the Maven ${js.page.package} variable.  So for the above project, in your pom.xml you would declare:
+
+	<project>
+	    ….
+	
+	    <properties>
+	        <js.page.package>com.myapp.page</js.page.package>
+	    </properties>
+	    
+	    ...
+	</project>
+
+This variable is used by the [compiler](bbq-compiler/index.html) to generate the JavaScript, CSS and language files.
+
+### Instantiating your page class
+
+bbq provides the [init](bbq-js/jsdoc/symbols/_global_.html#init) method which takes the name of the class to instantiate as a string and then an array of arguments to pass to the page's constructor:
+
+<pre><code class="language-javascript">
+init('com.myapp.page.Home', ["one", "two"]);
+</code></pre>
+
+<pre><code class="language-javascript">
+include(bbq.page.Page);
+
+com.myapp.page.Home = new Class.create(bbq.page.Page, {
+    
+    initialize: function($super, foo, bar) {
+        $super();
+        
+        // alerts "one & two"
+        alert(foo + " & " + bar);
+    },
+    
+    ...
+});
+</code></pre>
+
+To instantiate your page class, you have several options.  The method you choose is up to you.
+
+#### Old school onload event
+
+Declare the init call as an onload event listener on the body tag:
+
+	<html>
+	    <head>
+	        ...
+	    </head>
+	    <body onload="init('com.myapp.page.Home')">
+	        ...
+	    </body>
+	</html>
+
+#### Inline script
+
+Place the script tag at the end of the document:
+
+	<html>
+	    <head>
+	        ...
+	    </head>
+	    <body>
+	        ...
+	        
+	        <script type="text/javascript">
+	            init('com.myapp.page.Home');
+	        </script>
+	    </body>
+	</html>
+
+#### PageController
+
+If your page is entirely built by bbq and the JavaScript page class doesn't expect any dynamic arguments, you can use the [PageController](bbq-spring-integration/apidocs/org/bbqjs/spring/mvc/PageController.html) class provided by the [bbq-spring-intergration](bbq-spring-integration/index.html) module.  To do so, configure the bean as follows:
+
+	<bean id="homePageController" class="org.bbqjs.spring.mvc.PageContoller">
+	    <property name="view" value="page">
+	    <property name="model">
+	        <map>
+	            <entry key="javascriptClass" value="com.myapp.page.Home" />
+	        </map>
+	    </property>
+	</bean>
+
+Declare your view using your technology of choice and wire it in to your view resolver as normal.  The example view below uses [JSP](http://en.wikipedia.org/wiki/JavaServer_Pages):
+
+	<%@ page contentType="text/html" %>
+	<html>
+	    <head>
+	        ...
+	    </head>
+	    <body onload="init('${javascriptClass}')">
+	        ...
+	    </body>
+	</html>
+
+## Displaying some content
+
+<pre><code class="language-javascript">
+include(bbq.page.Page);
+include(bbq.web.DOMUtil);
+
+com.myapp.page.Home = new Class.create(bbq.page.Page, {
+    
+    initialize: function($super, foo, bar) {
+        $super();
+        
+        document.body.appendChild(DOMUtil.createElement("p", "Hello world!"));
+    },
+    
+    ...
+});
+</code></pre>

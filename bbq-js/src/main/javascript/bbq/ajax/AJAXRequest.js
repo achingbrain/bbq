@@ -2,39 +2,33 @@ include(bbq.gui.error.NotLoggedIn);
 include(bbq.gui.error.ServerError);
 include(bbq.util.BBQUtil);
 
-/**
- * Wrapper for Prototype Ajax class.
- * 
- * Adds extras such as an independent server timeout and error handling.
- * Typically you would use a subclass such as <code class="language-javascript">bbq.ajax.JSONRequest</code>.
- *
- * @class bbq.ajax.AJAXRequest
- * @see bbq.ajax.JSONRequest
- */
-bbq.ajax.AJAXRequest = Class.create({
+bbq.ajax.AJAXRequest = Class.create(/** @lends bbq.ajax.AJAXRequest.prototype */ {
+	/**
+	 * Holds the options for this object.
+	 *
+	 * @type {Object}
+	 */
 	options: null,
 	_timeOut: null,
 	_interval: null,
 
 	/**
-	 * Supports the following options:
+	 * <p>Wrapper for Prototype Ajax class which dds extras such as an independent server timeout and error handling.</p>
 	 *
-	 * <pre>
-	 * <code class="language-javascript">
-	 * options {
-	 * 		url: String								// where to send the request to
-	 * 		method: String					// post or get
-	 * 		args: Object						// key->value pairs to convert to query string
-	 * 		onSuccess: Function			// Everything went as expected - eg. received HTTP 200
-	 * 		onFailure: Function				// The call failed - eg. did not receive HTTP 200
-	 * 		onException: Function			// An exception was thrown while attemping to make the call
-	 * 		onAnything: Function			// invoked when there's no other callback to invoke
-	 * }
-	 * </code>
-	 * </pre>
+	 * <p>Typically you would use a subclass such as <code class="language-javascript">bbq.ajax.JSONRequest</code>.</p>
 	 *
-	 * @constructor
+	 * @constructs
 	 * @param	 {Object} options
+	 * @param {String} options.url Where to send the request to.
+	 * @param {String} [options.method="post"] "post" or "get".
+	 * @param {Object} [options.args] key/value pairs.
+	 * @param {Function} [options.onSuccess] Everything went as expected - eg. received HTTP 200.
+	 * @param {Function} [options.onFailure] The call failed - eg. did not receive HTTP 200.
+	 * @param {Function} [options.onException] An exception was thrown while attempting to make the call.
+	 * @param {String} [options.postBody] A string to send as the body of the request.  Subclasses will tend to use options.args over this value.
+	 * @param {Object} [options.headers] A list of key/value pairs to send as request headers.
+	 * @param {String} [options.contentType] The request content-type.
+	 * @see bbq.ajax.JSONRequest
 	 */
 	initialize: function(options) {
 		this.options = options;
@@ -126,8 +120,6 @@ bbq.ajax.AJAXRequest = Class.create({
 
 			if(this.options[handlerName] && this.options[handlerName] instanceof Function) {
 				this.options[handlerName].apply(this, args);
-			} else if(this.options["onAnything"] && this.options["onAnything"] instanceof Function) {
-				this.options["onAnything"].apply(this, args);
 			}
 		} catch(e) {
 			Log.error("Error encountered while invoking handler " + handlerName, e);
@@ -227,11 +219,9 @@ bbq.ajax.AJAXRequest = Class.create({
  * Add custom error handlers to this map.  Error handlers should
  * be a function with the following signature:
  * 
- * <pre>
- * <code class="language-javascript">
+ * <pre><code class="language-javascript">
  * function(bbq.ajax.AJAXRequest, XMLHttpRequest);
- * </code>
- * </pre>
+ * </code></pre>
  *
  * @see bbq.ajax.AJAXRequest
  */

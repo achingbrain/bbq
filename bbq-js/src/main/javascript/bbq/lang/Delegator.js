@@ -1,20 +1,19 @@
 include(bbq.lang.Watchable);
 
-/**
- * @class bbq.lang.Delegator 
- */
-bbq.lang.Delegator = new Class.create(bbq.lang.Watchable, {
+bbq.lang.Delegator = new Class.create(bbq.lang.Watchable, /** @lends bbq.lang.Delegator.prototype */ {
 	options: null,
-	
+
 	/**
-	 * Constructor
+	 * @constructs
+	 * @extends bbq.lang.Watchable
+	 * @param {Object} options
 	 */
 	initialize: function($super, options) {
 		$super();
-		
+
 		this.options = options ? options : {};
 	},
-	
+
 	/**
 	 * Example:
 	 * 
@@ -33,13 +32,13 @@ bbq.lang.Delegator = new Class.create(bbq.lang.Watchable, {
 			if(typeof(args) == "undefined") {
 				args = [];
 			}
-			
+
 			args.unshift(this);
 			
 			return this.options.delegate[methodName].apply(this, args);
 		}
 	},
-	
+
 	willDelegateMethod: function(methodName) {
 		return this.options.delegate && this.options.delegate[methodName] instanceof Function;
 	}
