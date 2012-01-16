@@ -34,7 +34,7 @@ com.myapp.page.Home = new Class.create(bbq.page.Page, {
         $super();
         
         var widget = new com.myapp.gui.MyWidget();
-	widget.appendTo(document.body);
+        widget.appendTo(document.body);
     }
 });
 </code></pre>

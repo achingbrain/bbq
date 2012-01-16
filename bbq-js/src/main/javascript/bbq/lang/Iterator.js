@@ -1,11 +1,9 @@
-/**
- * @class bbq.lang.Iterator 
- */
-bbq.lang.Iterator = new Class.create({
+bbq.lang.Iterator = new Class.create(/** @lends bbq.lang.Iterator.prototype */ {
 	theObject: null,
 	i: null,
 	
 	/**
+	 * @constructs
 	 * @param {Object} theObject
 	 */
 	initialize: function(theObject) {

@@ -65,57 +65,52 @@ bbq.gui.GUIWidget = new Class.create(bbq.lang.Delegator, /** @lends bbq.gui.GUIW
 	 * 
 	 * This object can then be retrieved by calling owner() on the dom node passed as the argument to this method.
 	 * 
-	 * @param	{Node}	rootNode
+	 * @param {Node or String} rootNode Either a DOM Node (from document.createElement) or the String name of a node - e.g. "div"
 	 * @example
-	 * So, for example:
-	 * 
-	 * <code>
-	 * proxim.gui.TextField = new Class.create();
-	 * 
-	 * Object.extend(proxim.gui.TextField.prototype, bbq.gui.GUIWidget.prototype);
-	 * 
-	 * proxim.gui.TextField.prototype.initialize: function(controller, htmlID)
-	 *   {
-	 *   var parentMethod = initialize;
-	 *   parentMethod.apply(this, arguments);
-	 *   this.setRootNode(document.createElement("input"));
-	 *   this.setID(htmlID);
+	 * <pre><code class="language-javascript">
+	 * bbq.gui.form.TextField = new Class.create(bbq.gui.GUIWidget, {
+	 *     initialize: function($super, options) {
+	 *       $super(options);
+	 *
+	 *       this.setRootNode(document.createElement("input"));
+	 *       this.addClass("TextField");
+	 *       this.setAttribute("value", this.options.value);
 	 *   }
+	 * });
 	 * 
 	 * ...
 	 * 
-	 * var foo = proxim.gui.TextField(this.controller, "exampleObject");
-	 * foo.appendTo(document.getElementsByTagName("body")[0]);
+	 * var foo = new bbq.gui.form.TextField({value: "a value"});
+	 * foo.appendTo(document.body);
 	 * 
 	 * ...
 	 * 
 	 * var bar = document.getElementById("exampleObject");
 	 * var foo = bar.owner();
-	 * </code>
-	 * 
+	 * </code></pre>
 	 */
 	setRootNode: function(rootNode) {
 		if(this._rootNode) {
 			var oldNode = this._rootNode;
 		}
-		
+
 		if(Object.isString(rootNode)) {
 			this._rootNode = document.createElement(rootNode);
 		} else {
 			this._rootNode = rootNode;
 		}
-		
+
 		if(oldNode && oldNode.className) {
 			this.addClass(oldNode.className.split(" "));
 		}
-		
+
 		if(this.options && this.options.attributes) {
 			var attr = this.options.attributes;
 			for(var key in attr) {
 				this.setAttribute(key, attr[key]);
 			}
 		}
-		
+
 		this._rootNode = $(this._rootNode);
 		this.registerObject();
 	},
@@ -123,12 +118,12 @@ bbq.gui.GUIWidget = new Class.create(bbq.lang.Delegator, /** @lends bbq.gui.GUIW
 	getRootNode: function() {
 		return this._rootNode;
 	},
-	
+
 	/**
 	 * Sets a reference to this object on the rootNode DOM node.  This allows us to take a DOM node from the document tree and 
 	 * get the GUIWidget object of which it is the root node.
 	 * 
-	 * See setRootNode() for more information
+	 * @see bbq.gui.GUIWidget#setRootNode
 	 */
 	registerObject: function() {
 		if(this._rootNode) {

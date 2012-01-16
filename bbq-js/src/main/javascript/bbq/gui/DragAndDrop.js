@@ -1,11 +1,11 @@
 include(bbq.util.Log);
 
-/**
- * @class bbq.gui.DragAndDrop
- */
-bbq.gui.DragAndDrop = new Class.create({
+bbq.gui.DragAndDrop = new Class.create(/** @lends bbq.gui.DragAndDrop.prototype */ {
 	_droppable: null,
 
+	/**
+	 * @constructs
+	 */
 	initialize: function() {
 		try {
 

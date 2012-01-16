@@ -2,7 +2,6 @@ include(bbq.web.DOMUtil);
 
 /**
  * @class Browser
- * @constructor
  */
 Browser = {
 	InternetExplorer: false,
@@ -16,7 +15,9 @@ Browser = {
 	version: 0,
 	forms: {},
 
-	/** find out which broswer we are running */
+	/**
+	 * Find out which browser we are being run in and what capabilities it has.
+	 */
 	detect: function() {
 
 		if(window.opera) {
@@ -129,7 +130,10 @@ Browser = {
 			Browser.forms.types[type] = (input.type == type);
 		});
 	},
-	/** get the browser name */
+
+	/**
+	 * @returns {String} Returns the name of the current browser.
+	 */
 	getBrowserName: function() {
 		if(Browser.InternetExplorer) {
 			return "InternetExplorer";
@@ -142,7 +146,7 @@ Browser = {
 		} else if(Browser.Chrome) {
 			return "Chrome";
 		}
-		
+
 		return "No idea";
 	}
 }

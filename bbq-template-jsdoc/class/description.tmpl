@@ -1,0 +1,11 @@
+<div class="description">
+	{+resolveLinks(data.desc)+}
+	<if test="data.srcFile != data.srcFile">
+		<br />
+		<em>Defined in: </em> {+new Link().toSrc(data.srcFile)+}.
+	</if>
+	<if test="data.author">
+		<br />
+		<em>Author: </em>{+data.author+}.
+	</if>
+</div>

@@ -2,8 +2,4 @@
 
 This module contains the JavaScript library and is most probably what you came here for.
 
-Documentation will appear on this page in dribs and drabs.  Eventually it'll probably get moved to a wiki somewhere...
-
- * [Date handling](dates.html)
- * [Drag and drop](draganddrop.html)
- * [Internationalisation](i18n.html)
+See the [guide](../guide.html) and/or [JSDocs](jsdoc/index.html) for more information.

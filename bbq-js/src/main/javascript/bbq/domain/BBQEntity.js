@@ -2,23 +2,7 @@ include(bbq.lang.Watchable);
 include(bbq.util.BBQUtil);
 include(bbq.ajax.JSONRequest);
 
-/**
- * Base class for domain objects.  Supports being partially loaded - that is, properties can be asked for from
- * this object in advance of them being loaded.  If an unloaded property is requested, a full object load
- * will be trigged.
- *
- * Extending classes should implement:
- *
- * 1.  The _retrieveURL property.  This should be a URL that will answer to a JSON request of the
- *      form {id: value} where value is returned from getId() being called on this object
- *
- * 2.  The _getDefaultObject method.  This should return an object with keys for every property this
- *      object expects to have filled after a call to _retrieveURL.
- *
- * @class bbq.domain.BBQEntity
- * @extends bbq.lang.Watchable
- */
-bbq.domain.BBQEntity = new Class.create(bbq.lang.Watchable, {
+bbq.domain.BBQEntity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domain.BBQEntity.prototype */ {
 	options: null,
 	_data: null,
 	_dataLoaded: null,
@@ -28,12 +12,24 @@ bbq.domain.BBQEntity = new Class.create(bbq.lang.Watchable, {
 	_propertyDisplays: null,
 	_propertyDisplayCleanupInterval: null,
 	_loadingData: null,
-	
+
 	/**
-	 * Constructor
+	 * <p>Base class for domain objects.  Supports being partially loaded - that is, properties can be asked for from
+	 * this object in advance of them being loaded.  If an unloaded property is requested, a full object load
+	 * will be trigged.</p>
+	 *
+	 * <p>Extending classes should implement:</p>
+	 *
+	 * <ol>
+	 *   <li>The _retrieveURL property.  This should be a URL that will answer to a JSON request of the
+	 *    form {id: value} where value is returned from getId() being called on this object</li>
+	 *   <li>The _getDefaultObject method.  This should return an object with keys for every property this
+	 *      object expects to have filled after a call to _retrieveURL.</li>
+	 *  </ol>
+	 *
+	 * @constructs
+	 * @extends bbq.lang.Watchable
 	 * @param {Object} options
-	 * @example
-	 * Todo an example
 	 */
 	initialize: function($super, options) {
 		$super(options);

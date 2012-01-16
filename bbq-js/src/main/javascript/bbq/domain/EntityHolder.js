@@ -1,24 +1,16 @@
 include(bbq.util.BBQUtil);
 
-/**
- * Holds domain objects.
- *
- * @class bbq.domain.EntityHolder
- */
-bbq.domain.EntityHolder = new Class.create({
-
+bbq.domain.EntityHolder = new Class.create(/** @lends bbq.domain.EntityHolder */ {
 	_entities: null,
 	options: null,
 
 	/**
+	 * Holds domain objects.
+	 *
+	 * @constructs
 	 * @param {Object} options
-	 *
-	 * Supports the following options:
-	 *
-	 * options: {
-	 * 		entities: Array		Entities to pre-populate with
-	 * 		type: Object  The type of object - should be a child class of bbq.domain.BBQEntity
-	 * }
+	 * @param {Object} type The type of object - should be a child class of bbq.domain.BBQEntity
+	 * @param {Array} [options.entities] Entities to pre-populate with
 	 */
 	initialize: function(options) {
 		this.options = options ? options : {};

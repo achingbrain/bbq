@@ -19,13 +19,18 @@ code {
 	background-color: transparent;
 }
 
-caption, div.sectionTitle {
+caption, h2 {
 	background-color: #7F8FB1;
 	color: #fff;
 	font-size: 130%;
 	text-align: left;
 	padding: 5px 10px;
 	border: 1px #7F8FB1 solid;
+	font-weight: normal;
+	line-height: 1em;
+}
+h2 a {
+	color: #FFF;
 }
 pre {
 	margin: 10px 0;

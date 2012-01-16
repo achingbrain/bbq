@@ -10,12 +10,9 @@ Language = {
 	_languageLoaded: false,
 	
 	/**
-	 * @param {mixed} options
-	 * @example
-	 * options {
-	 * 		section: string
-	 * 		postLoad: function
-	 * }
+	 * @param {Object} options
+	 * @param {String} [options.section] This corresponds to the name of a language file defined in /WEB-INF/language
+	 * @param {Function} [options.postLoad] A callback function invoked once the language file has been loaded
 	 */
 	load: function(options) {
 		Language.options = options ? options : {};
@@ -40,9 +37,14 @@ Language = {
 
 	/**
 	 * Get a translated language string for a key
+	 *
+	 * @example
+	 * <pre><code class="language-javascript">
+	 * Language.get("foo.bar");
+	 * </code></pre>
 	 * 
 	 * @param key
-	 * @return {String}
+	 * @returns {String}
 	 */
 	get: function(key) {
 		if(Language._language && Language._language[key]) {
@@ -83,21 +85,25 @@ Language = {
 	 * 
 	 * In the language file, declare this sort of thing:
 	 *
-	 * <code>
+	 * <pre><code class="language-xml">
 	 * <?xml version="1.0" encoding="utf-8"?>
 	 * <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 	 * <properties>
 	 *      <entry key="generic.mystring">This string has {marker} marker</entry>
 	 * </properties>
-	 * </code>
+	 * </code></pre>
 	 * 
 	 * Then in the javascript, call:
-	 * 
+	 *
+	 * <pre><code class="language-javascript">
 	 * Language.getFormatted("generic.mystring", {marker: "a nice little"});
+	 * </code></pre>
 	 * 
 	 * And the following will be output:
-	 * 
+	 *
+	 * <pre><code>
 	 * "This string has a nice little marker"
+	 * </code></pre>
 	 * 
 	 * @param {String} language
 	 * @param {Object} keys
@@ -162,6 +168,9 @@ Language = {
 		return output;
 	},
 
+	/**
+	 * @returns {boolean} True if the language file has been loaded
+	 */
 	isLoaded: function() {
 		return Language._languageLoaded ? true : false;
 	}

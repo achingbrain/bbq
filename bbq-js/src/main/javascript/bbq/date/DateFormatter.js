@@ -30,7 +30,6 @@
  * DateFormatter.format(date, DateFormatter.masks.isoDate);
  * </code></pre>
  *
- *
  * @class DateFormatter
  */
 DateFormatter = {

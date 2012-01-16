@@ -1,0 +1,8 @@
+<if test="data.length">
+	<dl class="detailList">
+		<dt class="heading">See:</dt>
+		<for each="item" in="data">
+			<dd>{+ new Link().toSymbol(item) +}</dd>
+		</for>
+	</dl>
+</if>

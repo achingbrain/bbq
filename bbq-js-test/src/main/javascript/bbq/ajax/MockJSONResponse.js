@@ -49,7 +49,7 @@ bbq.ajax.MockJSONResponse = Class.create(/** @lends bbq.ajax.MockJSONResponse.pr
 
 	/**
 	 * Also returns the response header for the passed key
-	 * 
+	 *
 	 * @param {String} key
 	 * @return {String}
 	 */

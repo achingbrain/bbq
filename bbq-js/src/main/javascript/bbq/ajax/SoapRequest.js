@@ -1,25 +1,26 @@
 include(bbq.ajax.AJAXRequest);
 include(bbq.gui.error.ServerError);
 
-/**
- * Sends an asyncronous SOAP request much the same as an AJAX request.
- *
- * <pre><code class="language-javascript">
- * var request = new bbq.ajax.SoapRequest({
- *     url: "/path/to/somewhere",
- *     args: {
- *          foo: "bar"
- *     },
- *     onSuccess: function(serverResponse, soapResponse) {
- *
- *    }
- * });
- * </pre></code>
- *
- * @class bbq.ajax.SoapRequest
- * @extends bbq.ajax.AJAXRequest
- */
-bbq.ajax.SoapRequest = Class.create(bbq.ajax.AJAXRequest, {
+bbq.ajax.SoapRequest = Class.create(bbq.ajax.AJAXRequest, /** @lends bbq.ajax.SoapRequest.prototype **/ {
+	/**
+	 * Sends an asyncronous SOAP request much the same as an AJAX request.
+	 *
+	 * @example
+	 * <pre><code class="language-javascript">
+	 * var request = new bbq.ajax.SoapRequest({
+	 *     url: "/path/to/somewhere",
+	 *     args: {
+	 *          foo: "bar"
+	 *     },
+	 *     onSuccess: function(serverResponse, soapResponse) {
+	 *
+	 *    }
+	 * });
+	 * </pre></code>
+	 * @constructs
+	 * @param {Object} options
+	 * @extends bbq.ajax.AJAXRequest
+	 */
 	initialize: function($super, options) {
 		options.method = "POST";
 		options.contentType = "application/soap+xml";

@@ -28,15 +28,15 @@ DOMUtil = {
 					if(childNode.owner) {
 						var foo = childNode.owner();
 						
-						if(foo.triggerEvent) {
-							foo.triggerEvent("onBeforeRemoveFromDOM");
+						if(foo.notifyListeners) {
+							foo.notifyListeners("onBeforeRemoveFromDOM");
 						}
 					}
 					
 					node.removeChild(node.childNodes[node.childNodes.length-1]);
 					
-					if(foo && foo.triggerEvent) {
-						foo.triggerEvent("onAfterRemoveFromDOM");
+					if(foo && foo.notifyListeners) {
+						foo.notifyListeners("onAfterRemoveFromDOM");
 					}
 				}
 			}

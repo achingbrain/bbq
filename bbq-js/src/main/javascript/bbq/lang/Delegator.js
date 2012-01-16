@@ -1,6 +1,9 @@
 include(bbq.lang.Watchable);
 
 bbq.lang.Delegator = new Class.create(bbq.lang.Watchable, /** @lends bbq.lang.Delegator.prototype */ {
+	/**
+	 * @type {Object} Holds the options for this object
+	 */
 	options: null,
 
 	/**

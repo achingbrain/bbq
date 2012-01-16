@@ -6,7 +6,7 @@ include(bbq.util.PersistenceUtil);
  * Uses HTML5 localStorage where available otherwise
  * falls back to cookies.
  * 
- * <code>
+ * <pre><code class="language-javascript">
  * var foo = {bar: "baz"};
  * 
  * Preferences.set("wibble", foo);
@@ -17,24 +17,29 @@ include(bbq.util.PersistenceUtil);
  * 
  * alert(foo.bar);
  * 
- * </code>
+ * </code></pre>
  *
  * @class Preferences
  */
 Preferences = {
 	/**
 	 * Holds a Preferences implementation.  Should support three methods:
-	 * 
+	 *
+	 * <pre><code class="language-javascript">
 	 * set(key:String, value:String):Void
 	 * get(key:String):String
 	 * del(key:String)
+	 * </code></pre>
 	 * 
 	 * Value will be JSON encoded prior to being set and decocde after get.
 	 */
 	implementation: null,
-	
+
 	/**
 	 * Pass in a value to persist under the passed key
+	 *
+	 * @param {String} key
+	 * @param {Object} value
 	 */
 	set: function(key, value) {
 		if(value) {
@@ -43,10 +48,14 @@ Preferences = {
 			this.implementation.del(key);
 		}
 	},
-	
+
 	/**
 	 * Pass in a key to retrieve the stored value with an option value to set as the default
 	 * in case the value stored is undefined.
+	 *
+	 * @param {String} key
+	 * @param {Object} defaultValue Returned when no entry is present for key
+	 * @returns {Object}
 	 */
 	get: function(key, defaultValue) {
 		var value = this.implementation.get(key);
@@ -64,14 +73,16 @@ Preferences = {
 		
 		return value;
 	},
-	
+
 	/**
 	 * Deletes the value stored under the passed key
+	 *
+	 * @param {String} key
 	 */
 	del: function(key) {
 		this.implementation.del(key);
 	},
-	
+
 	/**
 	 * Preferences implementation that uses HTML5 storage.
 	 * 
@@ -90,7 +101,7 @@ Preferences = {
 			localStorage.removeItem(key);
 		}
 	},
-	
+
 	/**
 	 * Preferences implementation that uses cookie storage.
 	 * 
@@ -100,11 +111,11 @@ Preferences = {
 		set: function(key, value) {
 			Cookie.set(key, value);
 		}, 
-		
+
 		get: function(key) {
 			return Cookie.get(key);
 		}, 
-		
+
 		del: function(key) {
 			Cookie.del(key);
 		}

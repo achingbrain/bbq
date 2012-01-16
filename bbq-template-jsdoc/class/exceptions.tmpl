@@ -1,0 +1,9 @@
+<if test="data.length">
+	<dl class="detailList">
+		<dt class="heading">Throws:</dt>
+		<for each="item" in="data">
+			<dt>{+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+} <strong>{+item.name+}</strong></dt>
+			<dd>{+resolveLinks(item.desc)+}</dd>
+		</for>
+	</dl>
+</if>

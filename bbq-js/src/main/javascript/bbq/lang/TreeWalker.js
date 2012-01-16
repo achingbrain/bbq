@@ -1,18 +1,11 @@
 
-/**
- * @class bbq.lang.TreeWalker
- */
-bbq.lang.TreeWalker = new Class.create({
+bbq.lang.TreeWalker = new Class.create(/** @lends bbq.lang.TreeWalker.prototype */ {
 
 	/**
+	 * @constructs
 	 * @param {Object} options
-	 *
-	 * Supports the following options:
-	 *
-	 * options: {
-	 *		 target: Object			The object to walk
-	 *		 callback: Function		A function taking the graph member as an argument and returning the new value
-	 * }
+	 * @param {Object} options.target The object to walk
+	 * @param {Function} callback A function taking the graph member as an argument and returning the new value
 	 */
 	initialize: function(options) {
 		this._options = options;

@@ -1,12 +1,17 @@
 /**
- * @type {Object} currentPage Represents a variable holder for the current page object
+ * The current page object
+ *
+ * @type {bbq.page.Page}
  */
 var currentPage;
 
 /**
  * Creates the bbq.page.Page object for the current page.  Should be invoked in a document onLoad event.
- * @param className
- * @param args
+ *
+ * @function
+ * @param {String} className
+ * @param {Array} args
+ * @see bbq.page.Page
  */
 function init(className, args) {
 	if(className) {
@@ -41,11 +46,15 @@ function include(object) {
 BBQ = {
 	/**
 	 * The current BBQ version
+	 *
+	 * @type {Number}
 	 */
 	version: 3.0,
 
 	/**
 	 * Constants
+	 *
+	 * @type {Object}
 	 */
 	constants: {
 		PAGINATOROPTIONS_SORTDESC: 0,

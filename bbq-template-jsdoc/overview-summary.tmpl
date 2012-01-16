@@ -25,10 +25,10 @@
 		
 		<h1>Class Index</h1>
 		<for each="thisClass" in="data">
-			<div>
+			<article>
 				<h2>{+new Link().toClass(thisClass.alias).target("classFrame")+}</h2>
-				{+resolveLinks(summarize(thisClass.classDesc))+}
-			</div>
+				<p>{+resolveLinks(summarize(thisClass.classDesc))+}</p>
+			</article>
 			<hr />
 		</for>
 		
