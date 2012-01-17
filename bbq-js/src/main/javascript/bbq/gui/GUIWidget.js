@@ -11,7 +11,7 @@ bbq.gui.GUIWidget = new Class.create(bbq.lang.Delegator, /** @lends bbq.gui.GUIW
 
 	/**
 	 * <p>This class is used as a base for all objects that have GUI representations.</p>
-	 *
+
 	 * <p>The constructor method of this class should always be called explicitly by child classes.</p>
 	 *
 	 * <p>The rootNode property is a DOM node that is attached to the DOM tree after the object is
@@ -19,16 +19,31 @@ bbq.gui.GUIWidget = new Class.create(bbq.lang.Delegator, /** @lends bbq.gui.GUIW
 	 *
 	 * <pre><code class="language-javascript">
 	 * com.myapp.MyWidget = new Class.create(bbq.gui.GUIWidget, {
+	 *      _greeting: null,
+	 *
 	 *      initialize: function($super, options) {
 	 *          $super(options);
 	 *
-	 *          this.appendChild(DOMUtil.createElement("p", "Hello world!"));
+	 *          this._greeting = DOMUtil.createElement("p", "Hello world!");
+	 *      },
+	 *
+	 *      render: function() {
+	 *          this.empty();
+	 *
+	 *          this.appendChild(this._greeting);
 	 *      }
 	 * });
 	 *
 	 * ...
 	 *
-	 * var widget = new com.myapp.MyWidget({attributes: { className: "Foo" }});
+	 * var widget = new com.myapp.MyWidget({
+	 *     attributes: {
+	 *         className: "Foo",
+	 *         style: {
+	 *             backgroundColour: "red"
+	 *         }
+	 *     }
+	 * });
 	 * widget.appendTo(document.body);
 	 * </code></pre>
 	 *
@@ -45,25 +60,25 @@ bbq.gui.GUIWidget = new Class.create(bbq.lang.Delegator, /** @lends bbq.gui.GUIW
 	},
 	
 	/**
-	 * This method should be overridden by child classes and called explicitly by the overriding method if they make use of the 
-	 * childWidgets array, which they should, haha.
+	 * <p>This method should be overridden by child classes and called explicitly by the overriding method if they make use of the
+	 * childWidgets array, which they should, haha.</p>
 	 * 
-	 * The idea of the method is to create a DOM node tree representation of the widget.  The root node of the tree should be 
-	 * this._rootNode.  The presence of any other nodes in the DOM tree should not be relied upon.
+	 * <p>The idea of the method is to create a DOM node tree representation of the widget.  The root node of the tree should be
+	 * this._rootNode.  The presence of any other nodes in the DOM tree should not be relied upon.</p>
 	 * 
-	 * This method will be called before the node tree is added to the main document tree (in a similar way to off-screen buffering
+	 * <p>This method will be called before the node tree is added to the main document tree (in a similar way to off-screen buffering
 	 * in graphics programming) and may be called at seeming arbitrary times.  Consequently it should always create a 
 	 * representation of the widget/object in it's current state but at the same time, not rely on any other portion of the DOM tree 
-	 * existing.
+	 * existing.</p>
 	 */
 	render: function() {
 		
 	},
 	
 	/**
-	 * Sets the root node and registers this object for retrieval from the root node.
+	 * <p>Sets the root node and registers this object for retrieval from the root node.</p>
 	 * 
-	 * This object can then be retrieved by calling owner() on the dom node passed as the argument to this method.
+	 * <p>This object can then be retrieved by calling owner() on the dom node passed as the argument to this method.</p>
 	 * 
 	 * @param {Node or String} rootNode Either a DOM Node (from document.createElement) or the String name of a node - e.g. "div"
 	 * @example
@@ -184,6 +199,7 @@ bbq.gui.GUIWidget = new Class.create(bbq.lang.Delegator, /** @lends bbq.gui.GUIW
 
 	/**
 	 * Adds this GUIWidget to the DOM in front of the passed node
+	 *
 	 * @param Node node
 	 */
 	appendBefore: function(node) {
@@ -248,9 +264,9 @@ bbq.gui.GUIWidget = new Class.create(bbq.lang.Delegator, /** @lends bbq.gui.GUIW
 	},
 	
 	/**
-	 * Attempts to remove the passed node if it is a child of this._rootNode
+	 * <p>Attempts to remove the passed node if it is a child of this._rootNode</p>
 	 * 
-	 * The passed argument can be either a DOM Node object, or a GUIWidget object.
+	 * <p>The passed argument can be either a DOM Node object, or a GUIWidget object.</p>
 	 * 
 	 * @param	{Mixed}	A child node
 	 */
@@ -439,22 +455,42 @@ bbq.gui.GUIWidget = new Class.create(bbq.lang.Delegator, /** @lends bbq.gui.GUIW
 				return fromNode;
 			}
 		}
-		
+
 		Log.error("Invalid node!");
 	},
-	
+
+	/**
+	 * Causes this GUIWidget to gain focus
+	 *
+	 * @see bbq.gui.GUIWidget#blur
+	 */
 	focus: function() {
 		this.getRootNode().focus();
 	},
-	
+
+	/**
+	 * Causes this GUIWidget to lose focus
+	 *
+	 * @see bbq.gui.GUIWidget#focus
+	 */
 	blur: function() {
 		this.getRootNode().blur();
 	},
 
+	/**
+	 * Shows this GUIWidget if hidden
+	 *
+	 * @see bbq.gui.GUIWidget#hide
+	 */
 	show: function() {
 		this.getRootNode().show();
 	},
 
+	/**
+	 * Hides this GUIWidget
+	 *
+	 * @see bbq.gui.GUIWidget#show
+	 */
 	hide: function() {
 		this.getRootNode().hide();
 	}

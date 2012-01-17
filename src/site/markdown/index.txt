@@ -1,6 +1,14 @@
 ## What is it?
 
-bbq is an application framework for developing responsive, dynamic data-centric applications to be run in a web browser.  It is made of several modules:
+bbq is an application framework for developing responsive, dynamic data-centric applications to be run in a web browser.
+
+## Tell me more
+
+Have a look at the [guide](guide.html).
+
+## How do I get started?
+
+Check out the [quickstart archetype](bbq-maven-archetype/index.html) for a (very) simple demo app.
 
 ## How do I get it?
 
@@ -47,7 +55,3 @@ See the [bbq-maven-plugin](https://github.com/achingbrain/bbq/tree/master/bbq-ma
 ## I've fixed a bug!
 
 [Fork the repository](http://help.github.com/fork-a-repo/) on GitHub and [send a pull request](http://help.github.com/send-pull-requests/).  Please include unit tests for any changed code.
-
-## I'm completely lost!
-
-Check out the [quickstart archetype](bbq-maven-archetype/index.html) to get started.

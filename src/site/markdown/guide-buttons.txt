@@ -1,0 +1,122 @@
+## Buttons
+
+Every application needs some interaction.  On the web a user will typically click, tap or otherwise manipulate a link to another page.  We co-op this mechanism to add interaction.
+
+### bbq.gui.button.GUIButton
+
+[GUIButton](bbq-js/jsdoc/symbols/bbq.gui.button.GUIButton.html) provides a button based on an HTML anchor tag.  An example of it's use would be:
+
+<pre><code class="language-javascript">
+var button = new bbq.gui.button.GUIButton({
+    text: "Click me",
+    onClick: function() {
+        Log.info("The button was clicked!");
+    }
+});
+</code></pre>
+
+The HTML produced by the [GUIButton](bbq-js/jsdoc/symbols/bbq.gui.button.GUIButton.html) instantiated above would be:
+
+	<a href="." class="GUIButton">Click me</a>
+
+You are then free to style the button as you see fit.  See the [JSDocs](bbq-js/jsdoc/symbols/bbq.gui.button.GUIButton.html) for a full list of configuration options.
+
+### bqq.gui.button.NativeButton
+
+[NativeButton](bbq-js/jsdoc/symbols/bbq.gui.button.NativeButton.html) extends GUIButton but instead of using an anchor element it's based around a form submit button:
+
+<pre><code class="language-javascript">
+var button = new bbq.gui.button.NativeButton({
+    text: "Click me",
+    onClick: function() {
+        Log.info("The button was clicked!");
+    }
+});
+</code></pre>
+
+This will produce:
+
+	<input type="submit" class="GUIButton NativeButton" value="Click me" />
+
+### Enabled/disabled
+
+Buttons can have state.  Typically the states are up, down, enabled, disabled.
+
+### Events
+
+You can pass functions in to [GUIButton](bbq-js/jsdoc/symbols/bbq.gui.button.GUIButton.html)s and [NativeButton](bbq-js/jsdoc/symbols/bbq.gui.button.NativeButton.html)s as part of the options object.  These automatically receive the relevant event (onmouseover, onmouseout, etc).  But what if you want two or more listeners to receive these events?  In that case, use listeners:
+
+<pre><code class="language-javascript">
+var button = new bbq.gui.button.NativeButton({
+    text: "Click me"
+});
+
+// register one listener
+button.registerListener("onClick", function() {
+	Log.info("The button was clicked!");
+});
+
+// register another listener
+button.registerListener("onClick", function() {
+	Log.info("I also saw that the button was clicked!");
+});
+</code></pre>
+
+All events support this multiple listener paradigm.
+
+### Toggle
+
+[GUIButtons](bbq-js/jsdoc/symbols/bbq.gui.button.GUIButton.html) can function as toggle style buttons.  To create a toggle button, pass <code>rememberDownState: true</code> in the options object.
+
+A toggle button is initially "Up".  When you first click a toggle style button, it becomes "Down" - click it again and it returns to the "Up" state.
+
+Toggle buttons dispatch "onButtonDown" and "onButtonUp" events.
+
+### ButtonHolder
+
+[ButtonHolder](bbq-js/jsdoc/symbols/bbq.gui.button.ButtonHolder.html) can be used to hold multiple buttons.
+
+<pre><code class="language-javascript">
+var holder = new bbq.gui.button.ButtonHolder();
+holder.addButton(new bbq.gui.button.GUIButton({
+    text: "Button one",
+    onClick: function() {
+        Log.info("button one clicked");
+    }
+}));
+holder.addButton(new bbq.gui.button.GUIButton({
+    text: "Button two",
+    onClick: function() {
+        Log.info("button two clicked");
+    }
+}));
+</code></pre>
+
+The HTML that ends up in the browser is:
+
+	<ul>
+		<li><a class="GUIButton">Button one</a></li>
+		<li><a class="GUIButton">Button two</a></li>
+	</ul>
+
+Tabs can be created by subclassing ButtonHolder and styling them appropriately:
+
+<pre><code class="language-javascript">
+include(bbq.gui.button.ButtonHolder);
+
+com.myapp.gui.button.Tabs = Class.create(bbq.gui.button.ButtonHolder, {
+    initialize: function($super, options) {
+        $super(options);
+
+        this.addClass("Tabs");
+    }
+});
+</code></pre>
+
+And styles:
+
+<pre><code class="language-css">
+.Tabs .GUIButton {
+    /** tab styles here */
+}
+</code></pre>

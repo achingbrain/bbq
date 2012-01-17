@@ -1,47 +1,48 @@
 include(bbq.gui.GUIWidget);
 include(bbq.util.BBQUtil);
 
-/**
- * GUIButton
- * 
- * This class creates a link which can be used to receive on click events.
- * 
- * @class bbq.gui.button.GUIButton
- * @extends bbq.gui.GUIWidget
- * 
- */
-bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, {
+bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, /** @lends bbq.gui.button.GUIButton.prototype */ {
 	_disabled: false,
 	_down: false,
 	_mouseDownOverButton: false,
 
+	/*
+	 * event onClick
+	 * event onMouseOut
+	 * event onMouseOver
+	 * event onMouseDown
+	 * event onMouseUp
+	 * event onButtonDown
+	 * event onButtonUp
+	 */
 	/**
-	 * Constructor!
-	 * 
-	 * Supports the following options: 
-	 * options: {
-	 *		text: String,
-	 *		toolTip: String,
-	 *		anchor: String,
-	 * 		startDisabled: boolean,
-	 * 		startDown: boolean,
-	 * 		rememberDownState: boolean,
-	 *		onClick: function,
-	 *		onMouseOut: function,
-	 *		onMouseOver: function,
-	 *		onMouseDown: function,
-	 *		onMouseUp: function,
-	 *		onButtonDown: function
-	 * }
+	 * This class creates a link which can be used to receive onclick events.
 	 *
-	 * Supports observers for the following events
-	 *
-	 * onClick
-	 * onMouseOut
-	 * onMouseOver
-	 * onMouseDown
-	 * onMouseUp
-	 * onButtonDown
+	 * @constructs
+	 * @extends bbq.gui.GUIWidget
+	 * @example
+	 * <pre><code class="language-javascript">
+	 * var button = new bbq.gui.button.GUIButton({
+	 *     text: "Click me",
+	 *     onClick: function() {
+	 *         Log.info("The button was clicked!");
+	 *     }
+	 * });
+	 * </code></pre>
+	 * @param {Object} options
+	 * @param {String} options.text This text will be displayed on the button.
+	 * @param {String} [options.toolTip] Will be displayed as a tooltip when the user hovers their mouse over the button.
+	 * @param {String} [options.anchor] The anchor will be set as the href value of the root node.
+	 * @param {boolean} [options.startDisabled] If true the button will not respond to clicks.
+	 * @param {boolean} [options.startDown] If true the button will start in the down state.
+	 * @param {boolean} [options.rememberDownState] If true the button will toggle on and off.
+	 * @param {Function} [options.onClick] Will be invoked when onclick events occur.
+	 * @param {Function} [options.onMouseOut] Will be invoked when onmouseout events occur.
+	 * @param {Function} [options.onMouseOver] Will be invoked when onmouseover events occur.
+	 * @param {Function} [options.onMouseDown] Will be invoked when onmousedown events occur.
+	 * @param {Function} [options.onMouseUp] Will be invoked when onmouseup events occur.
+	 * @param {Function} [options.onButtonDown] Will be invoked when the button enters the down state.
+	 * @param {Function} [options.onButtonUp] Will be invoked when the button enters the up state.
 	 */
 	initialize: function($super, options) {
 		$super(options);
@@ -80,6 +81,10 @@ bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, {
 		if (this.options.onButtonDown) {
 			this.registerListener("onButtonDown", this.options.onButtonDown);
 		}
+
+		if (this.options.onButtonUp) {
+			this.registerListener("onButtonUp", this.options.onButtonUp);
+		}
 	},
 
 	_setUpRootNode: function() {
@@ -102,6 +107,7 @@ bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, {
 
 	/**
 	 * Button clicked handler function
+	 *
 	 * @param {Event} event
 	 */
 	buttonClicked: function(event) {
@@ -133,6 +139,7 @@ bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, {
 
 	/**
 	 * Mouse out handler function
+	 *
 	 * @param {Event} event
 	 */
 	mouseOut: function(event) {
@@ -151,6 +158,7 @@ bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, {
 
 	/**
 	 * Mouse over handler function
+	 *
 	 * @param {Event} event
 	 */
 	mouseOver: function(event) {
@@ -164,6 +172,7 @@ bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, {
 
 	/**
 	 * Mouse down handler function
+	 *
 	 * @param {Event} event
 	 */
 	mouseDown: function(event) {
@@ -182,6 +191,7 @@ bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, {
 
 	/**
 	 * Mouse up handler function
+	 *
 	 * @param {Event} event
 	 */
 	mouseUp: function(event) {
@@ -197,6 +207,7 @@ bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, {
 
 	/**
 	 * Down state setter
+	 *
 	 * @param {boolean} down
 	 */
 	setDown: function(down) {
@@ -210,7 +221,7 @@ bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, {
 	},
 
 	/**
-	 * Clears button down state
+	 * Clears button down state.
 	 */
 	clearDown: function() {
 		this._down = false;
@@ -219,6 +230,7 @@ bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, {
 
 	/**
 	 * Checks if button is down.
+	 *
 	 * @return {boolean}
 	 */
 	isDown: function() {
@@ -226,7 +238,8 @@ bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, {
 	},
 
 	/**
-	 * Button disabled status setter
+	 * Button disabled status setter.
+	 *
 	 * @param {boolean} disabled
 	 */
 	setDisabled: function(disabled) {
@@ -235,10 +248,18 @@ bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, {
 		this[(this._disabled ? "remove" : "add") + "Class"]("buttonEnabled");
 	},
 
+	/**
+	 * @returns {boolean} True if the button is in the disabled state.
+	 */
 	isDisabled: function() {
 		return this._disabled;
 	},
 
+	/**
+	 * Sets the text displayed on the button.
+	 *
+	 * @param {String} text
+	 */
 	setText: function(text) {
 		this.empty();
 		this.anchor.appendChild(document.createTextNode(text));

@@ -1,21 +1,22 @@
 include(bbq.web.Browser);
 
-/**
- * Supports the following options:
- *
- * options: {
- *      text: String                                     // the placeholder text
- * }
- *
- * @class bbq.gui.form.behaviour.PlaceholderTextBehaviour
- */
-bbq.gui.form.behaviour.PlaceholderTextBehaviour = new Class.create({
+bbq.gui.form.behaviour.PlaceholderTextBehaviour = new Class.create(/** @lends bbq.gui.form.behaviour.PlaceholderTextBehaviour.prototype */ {
 	options: null,
 
+	/**
+	 * @constructs
+	 * @param {Object} options
+	 * @param {String} options.text The placeholder text
+	 */
 	initialize: function(options) {
 		this.options = options;
 	},
 
+	/**
+	 * Sets the field on which this behaviour operates
+	 *
+	 * @param {bbq.gui.form.FormField} field
+	 */
 	setField: function(field) {
 		// respect HTML5 style placeholder
 		if(Browser.forms.placeholderText) {

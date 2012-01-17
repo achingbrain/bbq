@@ -45,7 +45,7 @@ This results in the following being added to the body tag of the document:
 
 ### Root node
 
-Each GUIWidget has a root node.  By default it's a div tag, but this behaviour can be overridden by calling the GUIWidget#setRootNode method and passing in the name of the tag you'd like to have set:
+Each GUIWidget has a root node.  By default it's a div tag, but this behaviour can be overridden by calling the [GUIWidget#setRootNode]((bbq-js/jsdoc/symbols/bbq.gui.GUIWidget.html#setRootNode)) method and passing in the name of the tag you'd like to have set:
 
 <pre><code class="language-javascript">
 include(bbq.gui.GUIWidget);
@@ -61,6 +61,160 @@ com.myapp.gui.MyWidget = new Class.create(bbq.gui.GUIWidget, {
         this.setRootNode("article");
     }
 });
-</pre></code>
+</code></pre>
 
-Several methods operate on the root node.
+### appendTo/appendChild
+
+A [GUIWidget](bbq-js/jsdoc/symbols/bbq.gui.GUIWidget.html) is a JavaScript Object, whereas the output of <code>document.createElement</code> is a [Node](http://www.w3.org/TR/REC-DOM-Level-1/level-one-core.html#ID-1950641247).  A very important distinction here is that the GUIWidget wraps a Node, so we can write code to add one GUIWidget to another, or even a Node to a GUIWidget, but we cannot add a GUIWidget to a node.
+
+So, for example:
+
+<pre><code class="language-javascript">
+var widget = new com.myapp.gui.MyWidget();
+var node = document.createElement("p");
+
+// will not work
+node.appendChild(widget);
+</code></pre>
+
+Instead, we must use [appendTo](bbq-js/jsdoc/symbols/bbq.gui.GUIWidget.html#appendTo):
+
+<pre><code class="language-javascript">
+var widget = new com.myapp.gui.MyWidget();
+var node = document.createElement("p");
+
+// will work
+widget.appendTo(node);
+</code></pre>
+
+We can freely add objects of both types to widgets, however:
+
+<pre><code class="language-javascript">
+var parentWidget = new com.myapp.gui.MyWidget();
+var childWidget = new com.myapp.gui.MyWidget();
+var node = document.createElement("p");
+
+// add a Node
+parentWidget.appendChild(node);
+
+// add a GUIWidget
+parentWidget.appendChild(childWidget);
+</code></pre>
+
+It would be nice if we could override Node#appendChild to detect GUIWidgets and act accordingly but the security model of most browsers prevents this.
+
+### Render
+
+The [render](bbq-js/jsdoc/symbols/bbq.gui.GUIWidget.html#render) method is the point at which your GUIWidget should add and child widgets to it's root node.  It's likely to get call several times during the life of the widget, so it's recommended to first call [empty](bbq-js/jsdoc/symbols/bbq.gui.GUIWidget.html#empty) to insure you don't end up with more child nodes than you expected.
+
+Render may be called before your GUIWidget has been added to the DOM so please do not assume the existence of anything else on the page, or even that your root node has a [parentNode](http://www.w3.org/TR/REC-DOM-Level-1/level-one-core.html#attribute-parentNode).
+
+<pre><code class="language-javascript">
+include(bbq.gui.GUIWidget);
+include(bbq.gui.button.Button);
+include(bbq.util.Log);
+
+com.myapp.gui.MyWidget = new Class.create(bbq.gui.GUIWidget, {
+    initialize: function($super) {
+        $super();
+    },
+
+    render: function() {
+        // removes all existing child nodes
+        this.empty();
+
+        // Adds a paragraph tag with the text "Hello world!"
+        this.appendChild(DOMUtil.createElement("p", "Hello world!"));
+
+        // Adds a clickable button
+        this.appendChild(new bbq.gui.button.Button({
+            text: "Click me",
+            onClick: this._buttonClicked.bind(this)
+        }));
+    },
+
+    _buttonClicked: function() {
+        Log.info("The button was clicked!");
+    }
+});
+</code></pre>
+
+See the [JSDocs](bbq-js/jsdoc/symbols/bbq.gui.GUIWidget.html#render) for more information.
+
+### Root node manipulation
+
+Several methods operate on the root node, some common ones are listed below, but for the full list, please see the [JSDocs](bbq-js/jsdoc/symbols/bbq.gui.GUIWidget.html).
+
+#### addClass
+
+[GUIWidget#addClass](bbq-js/jsdoc/symbols/bbq.gui.GUIWidget.html#addClass) adds a CSS class to the root node:
+
+<pre><code class="language-javascript">
+var widget = new com.myapp.gui.MyWidget();
+widget.addClass("foo");
+</code></pre>
+
+This will result in the following HTML:
+
+	<div class="foo"></div>
+
+#### removeClass
+
+[GUIWidget#removeClass](bbq-js/jsdoc/symbols/bbq.gui.GUIWidget.html#removeClass) removes a CSS class to the root node:
+
+<pre><code class="language-javascript">
+var widget = new com.myapp.gui.MyWidget();
+widget.addClass("foo");
+widget.addClass("bar");
+
+widget.removeClass("foo");
+</code></pre>
+
+This will result in the following HTML:
+
+	<div class="bar"></div>
+
+#### hasClass
+
+[GUIWidget#hasClass](bbq-js/jsdoc/symbols/bbq.gui.GUIWidget.html#hasClass) returns true if the root node has the passed CSS class:
+
+<pre><code class="language-javascript">
+var widget = new com.myapp.gui.MyWidget();
+widget.addClass("foo");
+
+// false
+widget.hasClass("bar");
+
+// true
+widget.hasClass("foo");
+</code></pre>
+
+This will result in the following HTML:
+
+	<div class="bar"></div>
+
+#### setStyle/getStyle
+
+[GUIWidget#setStyle](bbq-js/jsdoc/symbols/bbq.gui.GUIWidget.html#setStyle) sets a CSS style on the root node and [GUIWidget#getStyle]((bbq-js/jsdoc/symbols/bbq.gui.GUIWidget.html#getStyle)) returns it:
+
+<pre><code class="language-javascript">
+var widget = new com.myapp.gui.MyWidget();
+widget.setStyle("position", "absolute");
+
+// returns "absolute"
+widget.getStyle("position");
+</code></pre>
+
+This will result in the following HTML:
+
+	<div style="position: absolute"></div>
+
+To remove a class, pass in null:
+
+<pre><code class="language-javascript">
+var widget = new com.myapp.gui.MyWidget();
+widget.setStyle("position", null);
+
+// returns null
+widget.getStyle("position");
+</code></pre>

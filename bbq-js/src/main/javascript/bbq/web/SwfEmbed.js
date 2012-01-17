@@ -3,25 +3,26 @@ include(bbq.gui.error.NoFlash);
 include(bbq.util.BBQUtil);
 include(bbq.web.SwfBridge);
 
-/**
- * Uses the SWFObject library to wrapper an embedded flash movie.
- *
- * @class bbq.web.SwfEmbed
- * @extends bbq.gui.GUIWidget 
- */
-bbq.web.SwfEmbed = new Class.create(bbq.gui.GUIWidget, {
+bbq.web.SwfEmbed = new Class.create(bbq.gui.GUIWidget, /** @lends bbq.web.SwfEmbed.prototype */ {
 	// unique identifier used by the movie to call methods on us
 	_id: null,
 	_hasLoaded: false,
 
 	/**
+	 * Uses the SWFObject library to wrapper an embedded flash movie.
+	 *
+	 * @constructs
+	 * @extends bbq.gui.GUIWidget
 	 * @param {Object} options
+	 * @param {String} options.swf Path to the flash movie
+	 * @param {Object} variables Variables to pass to the movie in key: value pairs
+	 * @param {boolean} nocache Whether or not to append a cache buster to the swf url
+	 * @param {String} wmode The wmode to use
 	 * @example
 	 * Supports the following options:
 	 * 
 	 * options {
 	 * 		swf: string							// Path to the flash movie
-	 * 		attributes: Object,				// Attributes to set on the Object node
 	 * 		variables: {						// Variables to pass to the movie in key: value pairs
 	 * 			key: value,
 	 * 			...

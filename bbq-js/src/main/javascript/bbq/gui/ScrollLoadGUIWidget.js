@@ -3,12 +3,7 @@ include(bbq.ajax.JSONRequest);
 include(bbq.lang.DataHolder);
 include(bbq.util.BBQUtil);
 
-/**
- * @class bbq.gui.ScrollLoadGUIWidget
- * @extends bbq.gui.GUIWidget 
- */
-bbq.gui.ScrollLoadGUIWidget = new Class.create(bbq.gui.GUIWidget, {
-	
+bbq.gui.ScrollLoadGUIWidget = new Class.create(bbq.gui.GUIWidget, /** @lends bbq.gui.ScrollLoadGUIWidget.prototype */ {
 	_scrollableHolder: null,
 	_lastRange: null,
 	_scrollingTimeout: null,
@@ -19,6 +14,8 @@ bbq.gui.ScrollLoadGUIWidget = new Class.create(bbq.gui.GUIWidget, {
 	_callbacks: null,
 	
 	/**
+	 * @constructs
+	 * @extends bbq.gui.GUIWidget
 	 * @param {mixed} options
 	 * @example
 	 * The URL passed as part of the options object should return in the following format:
@@ -45,7 +42,6 @@ bbq.gui.ScrollLoadGUIWidget = new Class.create(bbq.gui.GUIWidget, {
 	 * onEmptyList
 	 * onEntitiesLoaded
 	 * onSelectedEntityChange
-	 * 
 	 */
 	initialize: function($super, options) {
 		$super(options);
