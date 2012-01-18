@@ -30,6 +30,7 @@ bbq.domain.BBQEntity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domai
 	 * @constructs
 	 * @extends bbq.lang.Watchable
 	 * @param {Object} options
+	 * @param {Object} options.data A set of key/value pairs to pre-populate the default object with
 	 */
 	initialize: function($super, options) {
 		$super(options);
@@ -38,10 +39,12 @@ bbq.domain.BBQEntity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domai
 		this._data = {};
 		this._propertyDisplays = new Hash();
 		this._loadedFields = new Hash();
-		
-		this.processData(this.options.data);
+
+		if(!Object.isUndefined(this.options.data)) {
+			this.processData(this.options.data);
+		}
 	},
-	
+
 	/**
 	 * Should return an object similar to the data structure of this class.
 	 * 
@@ -54,7 +57,7 @@ bbq.domain.BBQEntity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domai
 			
 		}
 	},
-	
+
 	/**
 	 * Sets properties on this object and creates getters/setters for accessing them
 	 * 
@@ -64,70 +67,68 @@ bbq.domain.BBQEntity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domai
 	 * @return	void
 	 */
 	processData: function(data) {
-		if(data && data instanceof Object) {
-			var defaultObject = this._getDefaultObject();
+		var defaultObject = this._getDefaultObject();
 
-			if(Object.isUndefined(defaultObject["id"])) {
-				Log.warn("Object loading data from " + this._retrieveURL + " should declare an id property in _getDefaultObject");
+		if(Object.isUndefined(defaultObject["id"])) {
+			Log.warn("Object loading data from " + this._retrieveURL + " should declare an id property in _getDefaultObject");
+		}
+
+		for(var key in data) {
+			// skip fields not defined on this object - this way we do not end up with erroneous getters and setters
+			if(typeof(defaultObject[key]) == "undefined") {
+				Log.warn("skipping " + key + " on object loading data from " + this._retrieveURL);
+				continue;
 			}
 
-			for(var key in data) {
-				// skip fields not defined on this object - this way we do not end up with erroneous getters and setters
-				if(typeof(defaultObject[key]) == "undefined") {
-					Log.warn("skipping " + key + " on object loading data from " + this._retrieveURL);
-					continue;
-				}
+			var camel = BBQUtil.capitalize(key);
 
-				var camel = BBQUtil.capitalize(key);
+			if(this["set" + camel] instanceof Function) {
+				this["set" + camel](data[key]);
+			} else {
+				//Log.info("creating " + camel);
+				this["get" + camel] = (new Function("return this._get(\"" + key + "\");")).bind(this);
+				this["set" + camel] = (new Function("this._set(\"" + key + "\", arguments[0]);")).bind(this);
 
-				if(this["set" + camel] instanceof Function) {
-					this["set" + camel](data[key]);
-				} else {
-					//Log.info("creating " + camel);
-					this["get" + camel] = (new Function("return this._get(\"" + key + "\");")).bind(this);
-					this["set" + camel] = (new Function("this._set(\"" + key + "\", arguments[0]);")).bind(this);
-				
-					this["set" + camel](data[key]);
-				}
-
-				this._loadedFields.set(key, true);
+				this["set" + camel](data[key]);
 			}
 
-			this._partialLoad = false;
+			this._loadedFields.set(key, true);
+		}
 
-			if(Log.debugging) {
-				var missingProperties = [];
+		this._partialLoad = false;
 
-				// ensure we have loaded all of our properties
-				for(var key in defaultObject) {
-					if(typeof(data[key]) == "undefined") {
-						missingProperties.push(key);
-					}
-				}
-
-				if(missingProperties.length > 0) {
-					Log.warn(this._retrieveURL + " missing properties " + missingProperties.join(", "));
-				}
-			}
+		if(Log.debugging) {
+			var missingProperties = [];
 
 			// ensure we have loaded all of our properties
 			for(var key in defaultObject) {
-				if(Object.isUndefined(data[key])) {
-					this._dataLoaded = false;
-					this._partialLoad = true;
-
-					// missing at least one property, get out of loop
-					break;
+				if(typeof(data[key]) == "undefined") {
+					missingProperties.push(key);
 				}
 			}
 
-			var keys = Object.keys(data);
-
-			if(keys.length == 1 &&  keys[0] == "id") {
-				this.loadData();
-			} else if(!this._partialLoad) {
-				this._dataLoaded = true;
+			if(missingProperties.length > 0) {
+				Log.warn(this._retrieveURL + " missing properties " + missingProperties.join(", "));
 			}
+		}
+
+		// ensure we have loaded all of our properties
+		for(var key in defaultObject) {
+			if(Object.isUndefined(data[key])) {
+				this._dataLoaded = false;
+				this._partialLoad = true;
+
+				// missing at least one property, get out of loop
+				break;
+			}
+		}
+
+		var keys = Object.keys(data);
+
+		if(keys.length == 1 &&  keys[0] == "id") {
+			this.loadData();
+		} else if(!this._partialLoad) {
+			this._dataLoaded = true;
 		}
 	},
 

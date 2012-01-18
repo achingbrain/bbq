@@ -20,10 +20,8 @@ bbq.page.Page = new Class.create(/** @lends bbq.page.Page.prototype */ {
 		//Log.info("Page constructor");
 		currentPage = this;
 		this._options = args ? args : {};
-		
+
 		DOMUtil.checkDOM();
-		
-		Event.observe(window, "resize", this.resizePanels.bindAsEventListener(this));
 	},
 
 	/**
