@@ -1,0 +1,14 @@
+## Maven Quickstart Archetype
+
+You can use the supplied [Maven Archetype](http://maven.apache.org/guides/introduction/introduction-to-archetypes.html) to set up a quick demo application.  To do this, execute the following on the command line:
+
+	mvn archetype:generate -DarchetypeGroupId=org.bbqjs -DarchetypeArtifactId=bbq-maven-archetype -DarchetypeVersion=1.1.4-SNAPSHOT -DarchetypeRepository=http://achingbrain.github.com/maven-repo/snapshots
+
+Enter a suitable groupId (e.g. com.yourwebsite) and artifactId (e.g. my-super-fun-project) when prompted.  Once complete, cd into the newly created directory and start jetty:
+
+	cd my-super-fun-project
+	mvn jetty:run
+
+Finally point a web browser at the address http://localhost:8080
+
+You will be greeted with a rather unexciting page with a button.  Clicking the button will cause a JSON request to round-trip to the server and print a message on the page.

@@ -134,10 +134,10 @@ This results in the following request body:
 		<soapenv:Header xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
 			<wsse:Security soapenv:mustUnderstand="true">
 				<wsse:UsernameToken>
-					<wsse:Username>myusername</wsse:Username>" +
-					<wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest\">sha1hashedpassword</wsse:Password>
-					<wsse:Nonce>randomstring</wsse:Nonce>" +
-					<wsu:Created>datetime</wsu:Created>" +
+					<wsse:Username>myusername</wsse:Username>
+					<wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest">sha1hashedpassword</wsse:Password>
+					<wsse:Nonce>randomstring</wsse:Nonce>
+					<wsu:Created>datetime</wsu:Created>
 				</wsse:UsernameToken>
 			</wsse:Security>
 		</soapenv:Header>

@@ -1,0 +1,40 @@
+## JavaScript Compiler
+
+Your JavaScript source file will look something like this:
+
+	include(org.my.project.JSClass);
+	include(org.my.project.AnotherJSClass);
+	include(org.some.other.project.YetAnotherJSClass);
+
+	org.my.namespace.MyClass = Class.create({
+		...
+	});
+
+The include functions called above are parsed out by the JavaScript compiler - each included class is located in the filesystem or on the classpath and the contents of the included file compiled in the same way, then inserted into the output document.
+
+The [JavaScript compiler](bbq-compiler/apidocs/org/bbqjs/compiler/javascript/JavaScriptCompiler.html) takes a JavaScript file, resolves files included using the include statements and writes the result into an output stream.
+
+<pre><code class="language-java">
+// The input file is the page file.
+URL inputFile = new URL("file:///path/to/file.js");
+
+// This is the package that holds the page files for my application
+String pagePackage = "myapp.page";
+
+// This is where the compiled JavaScript will get written to
+OutputStream outputStream = new FileOutputStream(File.createTempFile("foo", "js"));
+
+// These are any libraries that my application needs
+String[] libraries = new String[] {
+	"src/main/javascript/jquery.js",
+	"src/main/javascript/other-library.js"
+};
+
+// This is where the compiler should search for source files in addition to the classpath
+String[] sourceRoots = new String[] {
+	"src/main/javascript"
+};
+
+Compiler compiler = new JavaScriptCompiler(libraries);
+compiler.compile(inputFile, pagePackage, outputStream, sourceRoots);
+</code></pre>

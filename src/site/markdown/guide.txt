@@ -4,8 +4,15 @@ Being a collection of documents which define how to create a bbq application.
 
 ### Getting started
 
- 1. [Project structure](guide-project-structure.html)
- 2. [Bootstrapping your application](guide-bootstrapping.html)
+ 1. [Quickstart archetype](guide-archetype.html)
+ 2. [Project structure](guide-project-structure.html)
+ 3. [Bootstrapping your application](guide-bootstrapping.html)
+
+### Maven plugins
+
+ 1. [Compiler plugin](guide-plugin-compiler.html)
+ 2. [Unit test plugin](guide-plugin-unittests.html)
+ 3. [Resources plugin](guide-plugin-resources.html)
 
 ### UI Elements
 
@@ -22,3 +29,25 @@ Being a collection of documents which define how to create a bbq application.
 
  1. [Date handling](guide-date-handling.html)
  2. [Internationalisation](guide-i18n.html)
+
+### Unit tests
+
+ 1. [Unit testing JavaScript](guide-unittests.html)
+
+### Integration
+
+ 1. [Spring integration](guide-integration-spring.html)
+ 2. [Spring Security integration](guide-integration-spring-security.html)
+
+### Reference
+
+ 1. [bbq-js JSDocs](bbq-js/jsdoc/index.html)
+ 2. [bbq-js-test JSDocs](bbq-js-test/jsdoc/index.html)
+ 3. [bbq-spring-integration JavaDocs](bbq-spring-integration/apidocs/index.html)
+ 4. [bbq-spring-security-integration JavaDocs](bbq-spring-integration/apidocs/index.html)
+
+### Other topics
+
+ 1. [Compiling JavaScript](guide-compiler-javascript.html)
+ 2. [Compiling CSS](guide-compiler-css.html)
+ 3. [Compiling language](guide-compiler-language.html)

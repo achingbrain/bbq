@@ -34,7 +34,7 @@ bbq.ajax.MockJSONResponse = Class.create(/** @lends bbq.ajax.MockJSONResponse.pr
 			}
 		}
 
-		this.responseText = options.response.toJSON();
+		this.responseText = Object.toJSON(options.response);
 	},
 
 	/**

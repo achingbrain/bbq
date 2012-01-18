@@ -33,16 +33,30 @@
 
 		<menu name="Documentation" inherit="top">
 			<item name="Design goals" href="design-goals.html"/>
+			<item name="Guide" href="guide.html" />
 
-			<item name="Guide" href="guide.html" collapse="false">
-				<item name="Project structure" href="guide-project-structure.html"/>
-				<item name="Date handling" href="guide-date-handling.html" />
-				<item name="Drag and drop" href="guide-drag-and-drop.html" />
-				<item name="Internationalisation" href="guide-i18n.html" />
-			</item>
+			<!--<item name="Guide" href="guide.html" collapse="false">
+				<item name="Getting started" href="guide.html" collapse="false">
+					<item name="Project structure" href="guide-project-structure.html"/>
+					<item name="Bootstrapping your application" href="guide-bootstrapping.html"/>
+				</item>
+				<item name="UI Elements" href="guide.html" collapse="false">
+					<item name="GUIWidgets" href="guide-guiwidgets.html" />
+					<item name="Drag and drop" href="guide-drag-and-drop.html" />
+					<item name="Form elements" href="guide-form-elements.html" />
+					<item name="Buttons" href="guide-buttons.html" />
+				</item>
+				<item name="Network" href="guide.html" collapse="false">
+					<item name="AJAX requests" href="guide-ajax.html" />
+				</item>
+				<item name="Text handling" href="guide.html" collapse="false">
+					<item name="Date handling" href="guide-date-handling.html" />
+					<item name="Internationalisation" href="guide-i18n.html" />
+				</item>
+			</item>-->
 		</menu>
 
-		<menu name="Modules" inherit="top">
+		<!--<menu name="Modules" inherit="top">
 			<item name="bbq-js" href="bbq-js/index.html"/>
 			<item name="bbq-js-test" href="bbq-js-test/index.html"/>
 			<item name="bbq-compiler" href="bbq-compiler/index.html"/>
@@ -53,7 +67,7 @@
 			<item name="bbq-test-maven-plugin" href="bbq-maven-plugins/bbq-test-maven-plugin/index.html"/>
 			<item name="bbq-resources-maven-plugin" href="bbq-maven-plugins/bbq-resources-maven-plugin/index.html"/>
 			<item name="bbq-maven-archetype" href="bbq-maven-archetype/index.html"/>
-		</menu>
+		</menu>-->
 
 		<menu name="Infrastructure" inherit="top">
 			<item name="Issue tracking" href="issue-tracking.html"/>

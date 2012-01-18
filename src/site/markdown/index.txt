@@ -8,7 +8,7 @@ Have a look at the [guide](guide.html).
 
 ## How do I get started?
 
-Check out the [quickstart archetype](bbq-maven-archetype/index.html) for a (very) simple demo app.
+Check out the [quickstart archetype](guide-archetype.html) for a (very) simple demo app.
 
 ## How do I get it?
 

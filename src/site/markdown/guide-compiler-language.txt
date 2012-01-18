@@ -1,0 +1,48 @@
+## Language Compiler
+
+Language files are stored next to the JavaScript class files in the following directory structure:
+
+	+- src/
+	   +- main/
+	      +- javascript/
+	         +- com/
+	            +- myapp/
+	               |
+	               +- MyClass.js
+	               +- MyClass.lang.en_GB.xml
+	               +- AnotherClass.js
+	               +- AnotherClass.lang.en_GB.xml
+
+The locale the file corresponds to is specified as part of the file name - in the above example there are translations for the en_GB locale.
+
+Similar to the CSS compiler, the [language compiler](bbq-compiler/apidocs/org/bbqjs/compiler/language/LanguageCompiler.html) looks for language translation files to turn into an [XML Java Properties file](http://www.ibm.com/developerworks/java/library/j-tiger02254/index.html).  The XML version of the properties format is used to ensure UTF encoding is used so non-ASCII characters are not corrupted.
+
+<pre><code class="language-java">
+// This is the compile target locale
+Locale locale = Locale.UK;
+
+// If any translations files are not available for the target locale, this is the fallback locale
+Locale defaultLocale = Locale.US;
+
+// These are any properties files that should be included in the output file
+String[] includes = new String[] {
+	"src/main/resources/constants.properties"
+};
+
+// The input file is the page file.
+URL inputFile = new URL("file:///path/to/file.js");
+
+// This is the package that holds the page files for my application
+String pagePackage = "myapp.page";
+
+// This is where the compiled JavaScript will get written to
+OutputStream outputStream = new FileOutputStream(File.createTempFile("foo", "properties"));
+
+// This is where the compiler should search for source files in addition to the classpath
+String[] sourceRoots = new String[] {
+	"src/main/javascript"
+};
+
+Compiler compiler = new LanguageCompiler(locale, defaultLocale, includes);
+compiler.compile(inputFile, pagePackage, outputStream, sourceRoots);
+</code></pre>

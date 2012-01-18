@@ -1,3 +1,5 @@
+include(bbq.ajax.AJAXRequest);
+
 /**
  * For use while testing classes that make AJAX requests to a remote server.
  *
@@ -49,6 +51,8 @@ bbq.ajax.AJAXRequest.prototype._sendRequest = function() {
 			result = handler(this.options.args);
 
 			this._onSuccess(result);
+
+			return;
 		}
 	} catch(e) {
 

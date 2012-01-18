@@ -1,0 +1,71 @@
+## Spring Security Integration
+
+### Setup
+
+Declare bbq-spring-security-integration as a dependency of your project:
+
+	<dependency>
+	    <groupId>org.bbqjs</groupId>
+	    <artifactId>bbq-spring-security-integration</artifactId>
+	    <version>${bbq.version}</version>
+	</dependency>
+
+### Authentication
+
+bbq includes support for authenticating via a JSON request instead of the normal HTTP form submission.
+
+If you use the [JsonHttpRequestFilter](bbq-spring-security-integration/apidocs/org/bbqjs/spring/servlet/JsonHttpRequestFilter.html) class to wrap incoming JSON requests in a [JsonHttpServletRequest](bbq-spring-security-integration/apidocs/org/bbqjs/spring/servlet/JsonHttpServletRequest.html), you will be able to use [ServletRequest#getParameter](http://docs.oracle.com/javaee/6/api/javax/servlet/ServletRequest.html) to extract the principal and password from the request.
+
+Assuming that your AuthenticationFilter processes the url /authenticate, in your web.xml, declare:
+
+	<!-- Filter that wraps HttpServletRequest objects so we can use ServletRequest#getParameter -->
+	<filter>
+	    <filter-name>httpServletRequestWrapper</filter-name>
+	    <filter-class>org.bbqjs.spring.servlet.JsonHttpRequestFilter</filter-class>
+	</filter>
+	
+	<!-- Only needed by Spring Security as Jackson normally handles JSON serialization/deserialization -->
+	<filter-mapping>
+	    <filter-name>httpServletRequestWrapper</filter-name>
+	    <url-pattern>/authenticate</url-pattern>
+	</filter-mapping>
+
+You can then use the Spring [UsernamePasswordAuthenticationFilter](http://static.springsource.org/spring-security/site/docs/3.0.x/apidocs/org/springframework/security/web/authentication/UsernamePasswordAuthenticationFilter.html) as per normal:
+
+	<!-- Tries to extract log in information from an incoming request -->
+	<bean id="usernamePasswordAuthenticationFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+	    <property name="filterProcessesUrl" value="/authenticate"/>
+	    <property name="usernameParameter" value="principal"/>
+	    <property name="passwordParameter" value="credential"/>
+	    ... more configuration here ...
+	</bean>
+
+Submitting an authentication request to [Spring Security](http://static.springsource.org/spring-security/site/) is then a case of:
+
+<pre><code class="language-javascript">
+new bbq.ajax.JSONRequest({
+    url: "/authenticate",
+    args: {
+        principal: "username",
+        credential: "password"
+    },
+    onSuccess: function() {
+        // log in succeeded, do something
+    },
+    onFailure: function() {
+        // log in failed, do something
+    }
+});
+</code></pre>
+
+### Handlers
+
+Two strategies for handling authentication/access events are supplied - status codes and headers.
+
+#### Headers
+
+Header based handlers will send X-BBQ-ResponseType headers with integer values corresponding to the the event in question.  All header names and values are configurable.  See [HeaderBasedAccessDeniedHandler](bbq-spring-security-integration/apidocs/org/bbqjs/spring/security/web/access/HeaderBasedAccessDeniedHandler.html), [HeaderBasedAuthenticationFailureHandler](bbq-spring-security-integration/apidocs/org/bbqjs/spring/security/web/authentication/HeaderBasedAuthenticationFailureHandler.html) and [HeaderBasedAuthenticationSuccessHandler](bbq-spring-security-integration/apidocs/org/bbqjs/spring/security/web/authentication/HeaderBasedAuthenticationSuccessHandler.html) for more information.
+
+#### Status codes
+
+Status code based handlers send an HTTP status code in response to the authentication event.  See [StatusCodeBasedAccessDeniedHandler](bbq-spring-security-integration/apidocs/org/bbqjs/spring/security/web/access/StatusCodeBasedAccessDeniedHandler.html), [StatusCodeBasedAuthenticationFailureHandler](bbq-spring-security-integration/apidocs/org/bbqjs/spring/security/web/authentication/StatusCodeBasedAuthenticationFailureHandler.html) and [StatusCodeBasedAuthenticationSuccessHandler](bbq-spring-security-integration/apidocs/org/bbqjs/spring/security/web/authentication/StatusCodeBasedAuthenticationSuccessHandler.html) for more.
