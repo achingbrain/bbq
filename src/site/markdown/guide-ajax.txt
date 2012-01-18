@@ -1,0 +1,157 @@
+## AJAX Requests
+
+AJAX requests are made using a subclass of [AJAXRequest](bbq-js/jsdoc/symbols/bbq.ajax.AJAXRequest.html).  The different subclasses send and receive data in different formats.
+
+The constructor arguments for all subclasses are similar however they differ in how they serialize/deserialize the data for transmission.
+
+The serialized form is sent as the body of a HTTP POST request, consequently HTTP GET is not supported.  The reason for this is that the POST body can be arbitrarily long, whereas some browsers place limits on how much data can be sent as a request header.
+
+### X-BBQ-ResponseType header
+
+bbq expects responses to all AJAX requests to have a header named X-BBQ-ResponseType present.  The header should have an integer value - a negative number indicates an error occurred whereas 0 or a positive number indicates the call was successful.
+
+### Handling server side errors
+
+There are two ways to handle server side errors - per request and global.
+
+#### Per request
+
+To handle errors on a per-request basis, simply pass an onFailure argument to the AJAXRequest's options object:
+
+<pre><code class="language-javascript">
+new bbq.ajax.JSONRequest({
+    url: "/path/to/handler",
+    onFailure: function(serverResponse) {
+        // the argument is the XMLHttpRequest object
+    }
+});
+</code></pre>
+
+#### Global error handlers
+
+To define global error handlers, make an entry in the <code>bbq.ajax.AJAXRequest.errorHandlers</code> object that corresponds to the X-BBQ-ResponseType error code.  Error handlers should be a function with the following signature:
+
+<pre><code class="language-javascript">
+function(bbq.ajax.AJAXRequest, XMLHttpRequest);
+</code></pre>
+
+So, for example, if a MySpuriousException thrown on the server results in a  X-BBQ-ResponseType error code of -42, you'd catch it like so:
+
+<pre><code class="language-javascript">
+bbq.ajax.AJAXRequest.errorHandlers["error-42"] = function(request, response) {
+	Log.warn("MySpuriousException was thrown!");
+};
+</code></pre>
+
+This is useful for detecting fatal errors that affect more than just the current request such as the user not being logged in.
+
+### JSONRequest
+
+[JSONRequest](bbq-js/jsdoc/symbols/bbq.ajax.JSONRequest.html) sends and receives data in the [JSON](http://www.json.org) format.
+
+<pre><code class="language-javascript">
+new bbq.ajax.JSONRequest({
+    url: "/path/to/handler",
+    args: {
+        foo: "bar"
+    },
+    onSuccess: function(serverResponse, json) {
+        // the first argument is the XMLHttpRequest object
+        // the second is the deserialized response body
+    }
+});
+</code></pre>
+
+The example above will result in the below JSON being sent to "http://example.org/path/to/handler", where example.org is the domain your app runs on.
+
+	{"foo":"bar"}
+
+See the [JSDocs](bbq-js/jsdoc/symbols/bbq.ajax.JSONRequest.html) for further discussion.
+
+#### JSON authentication
+
+All cookies from the user session are sent along with the request so you should be able to configure authentication/session management for JSONRequests as you would any web page.
+
+### SoapRequest
+
+[SoapRequest](bbq-js/jsdoc/symbols/bbq.ajax.SoapRequest.html) is similar to JSONRequest except the message body is sent as a [SOAP](http://www.w3.org/TR/soap/) envelope.
+
+SoapRequest requires two extra arguments: action and namespace.  Action defines the name of the outgoing element - MyAction would be turned into MyActionRequest and tells SoapRequest to expect a MyActionResponse element in the server response.  Namespace is the namepace to use for the elements in the request.  See the example below.
+
+<pre><code class="language-javascript">
+new bbq.ajax.SoapRequest({
+    url: "/path/to/handler",
+    action: "MyAction",
+    namespace: "http://example.org/myns"
+    args: {
+        foo: "bar"
+    },
+    onSuccess: function(serverResponse, soap) {
+        // the first argument is the XMLHttpRequest object
+        // the second is the deserialized response body
+    }
+});
+</code></pre>
+
+This will result in the following request body:
+
+	<?xml version='1.0' encoding='UTF-8'?>" + 
+	<soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope">
+		<soapenv:Body>
+			<MyActionRequest xmlns="http://example.org/myns">
+				<foo>bar</foo>
+			</MyActionRequest>
+		</soapenv:Body>
+	</soapenv:Envelope>
+
+#### Soap authentication
+
+Your SOAP requests can be authenticated by passing a [SoapUsernameDigestToken](bbq-js/jsdoc/symbols/bbq.ajax.SoapUsernameDigestToken.html) to a SoapRequest as the authentication argument to the options object.
+
+<pre><code class="language-javascript">
+new bbq.ajax.SoapRequest({
+    url: "/path/to/handler",
+    action: "MyAction",
+    namespace: "http://example.org/myns"
+    args: {
+        foo: "bar"
+    },
+    authentication: new bbq.ajax.SoapUsernameDigestToken({
+        username: "myusername",
+        password: "mypassword"
+    }),
+    onSuccess: function(serverResponse, soap) {
+        // the first argument is the XMLHttpRequest object
+        // the second is the deserialized response body
+    }
+});
+</code></pre>
+
+This results in the following request body:
+
+	<?xml version='1.0' encoding='UTF-8'?>" + 
+	<soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope">
+		<soapenv:Header xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+			<wsse:Security soapenv:mustUnderstand="true">
+				<wsse:UsernameToken>
+					<wsse:Username>myusername</wsse:Username>" +
+					<wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest\">sha1hashedpassword</wsse:Password>
+					<wsse:Nonce>randomstring</wsse:Nonce>" +
+					<wsu:Created>datetime</wsu:Created>" +
+				</wsse:UsernameToken>
+			</wsse:Security>
+		</soapenv:Header>
+		<soapenv:Body>
+			<MyActionRequest xmlns="http://example.org/myns">
+				<foo>bar</foo>
+			</MyActionRequest>
+		</soapenv:Body>
+	</soapenv:Envelope>
+
+See the [JSDocs](bbq-js/jsdoc/symbols/bbq.ajax.SoapRequest.html) for further discussion.
+
+### Forwarding requests
+
+Most web browsers use the [Same origin policy](http://en.wikipedia.org/wiki/Same_origin_policy) as a security model for JavaScript.  This means that typically interactions in JavaScript are limited to operating on the domain the script was loaded from.  From an AJAX point of view this means that if your script was loaded from http://www.example.org, you cannot make AJAX requests to http://api.nexthotwebapp.com.
+
+To work around this limitation bbq provides [ForwardingJSONRequest](bbq-js/jsdoc/symbols/bbq.ajax.ForwardingJSONRequest.html) and [ForwardingSoapRequest](bbq-js/jsdoc/symbols/bbq.ajax.ForwardingSoapRequest.html).  These clases are designed to be used with the [RequestForwarder](bbq-spring-integration/apidocs/org/bbqjs/spring/ajax/RequestForwarder.html) class in the [bbq-spring-integration](bbq-spring-integration/index.html) module.  Please see the relevant JSDoc/JavaDoc pages for further discussion.
