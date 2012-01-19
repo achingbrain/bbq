@@ -60,11 +60,9 @@ bbq.gui.GUIWidget = new Class.create(bbq.lang.Delegator, /** @lends bbq.gui.GUIW
 	},
 	
 	/**
-	 * <p>This method should be overridden by child classes and called explicitly by the overriding method if they make use of the
-	 * childWidgets array, which they should, haha.</p>
-	 * 
 	 * <p>The idea of the method is to create a DOM node tree representation of the widget.  The root node of the tree should be
-	 * this._rootNode.  The presence of any other nodes in the DOM tree should not be relied upon.</p>
+	 * this._rootNode.  The presence of any other nodes in the DOM tree which are not descendants of this._rootNode should not
+	 * be relied upon.</p>
 	 * 
 	 * <p>This method will be called before the node tree is added to the main document tree (in a similar way to off-screen buffering
 	 * in graphics programming) and may be called at seeming arbitrary times.  Consequently it should always create a 

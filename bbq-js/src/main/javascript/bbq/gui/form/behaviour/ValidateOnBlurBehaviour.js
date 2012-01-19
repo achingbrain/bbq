@@ -3,7 +3,7 @@ include(bbq.web.Browser);
 bbq.gui.form.behaviour.ValidateOnBlurBehaviour = new Class.create(/** @lends bbq.gui.form.behaviour.ValidateOnBlurBehaviour.prototype */ {
 
 	/**
-	 * Validates a field when blurred
+	 * Causes validation of the field's value to occur then it loses focus.
 	 *
 	 * @constructs
 	 */

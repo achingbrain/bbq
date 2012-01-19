@@ -229,6 +229,10 @@ bbq.domain.BBQEntity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domai
 	},
 
 	equals: function(other) {
+		if(!other) {
+			return false;
+		}
+
 		if(this == other) {
 			return true;
 		}

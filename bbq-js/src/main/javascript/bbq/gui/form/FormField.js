@@ -1,29 +1,29 @@
 include(bbq.gui.GUIWidget);
 include(bbq.util.Log);
 
-/**
- * Supports the following options:
- *
- * options: {
- *      value:  Object      // an initial value
- * }
- *
- * Dispatches the following notifications:
- *
- * onError
- *
- * @class bbq.gui.form.FormField
- * @extends bbq.gui.GUIWidget
- */
-bbq.gui.form.FormField = new Class.create(bbq.gui.GUIWidget, {
+bbq.gui.form.FormField = new Class.create(bbq.gui.GUIWidget, /** @lends bbq.gui.form.FormField.prototype */ {
 	_behaviours: null,
 	_preTransformValidators: null,
 	_postTransformValidators: null,
 	_transformer: null,
 
-	initialize: function($super, args) {
+	/**
+	 * Dispatches the following notifications:
+	 *
+	 * onError
+	 *
+	 * @constructs
+	 * @extends bbq.gui.GUIWidget
+	 * @param {Object} options
+	 * @param {Object} [options.value] An initial value
+	 * @param {Function} [options.onChange] A callback method invoked when the value of this field changes
+	 * @param {Object} [options.valueTransformer]
+	 * @param {Function} [options.valueTransformer.transform] Takes one argument and transforms it to a different value e.g. 1 to true
+	 * @param {String} [options.name] The name to be set on the input field
+	 */
+	initialize: function($super, options) {
 		try {
-			$super(args);
+			$super(options);
 
 			this._behaviours = [];
 			this._preTransformValidators = [];
@@ -56,6 +56,9 @@ bbq.gui.form.FormField = new Class.create(bbq.gui.GUIWidget, {
 		}
 	},
 
+	/**
+	 * @inheritDoc
+	 */
 	setRootNode: function($super, rootNode) {
 		$super(rootNode);
 
@@ -81,7 +84,12 @@ bbq.gui.form.FormField = new Class.create(bbq.gui.GUIWidget, {
 	},
 
 	/**
-	 * Returns the value contained within this field.
+	 * Returns the value contained within this field.  The value will be
+	 * validated - if the value is found to be invalid an exception
+	 * will be thrown.
+	 *
+	 * @throws {Error} The error has two fields {String} error for language translations and {bbq.gui.form.FormField} field which is the field which caused the error.
+	 * @returns {Object}
 	 */
 	getValue: function() {
 		var value = this._getRawValue();
@@ -89,10 +97,21 @@ bbq.gui.form.FormField = new Class.create(bbq.gui.GUIWidget, {
 		return this._validateAndTransform(value);
 	},
 
+	/**
+	 * Returns the name of this field.
+	 *
+	 * @returns {String}
+	 */
 	getName: function() {
 		return this.options.name;
 	},
 
+	/**
+	 * Returns the current value of the field without first validating it (which could
+	 * cause an exception to be thrown).
+	 *
+	 * @returns {Object}
+	 */
 	getUnvalidatedValue: function() {
 		var value = this._getRawValue();
 
@@ -154,12 +173,25 @@ bbq.gui.form.FormField = new Class.create(bbq.gui.GUIWidget, {
 		}.bind(this));
 	},
 
+	/**
+	 * Sets the value of the field
+	 * @param value
+	 */
 	setValue: function(value) {
 		this._setRawValue(value);
 
 		this._validateAndTransform(value);
 	},
 
+	/**
+	 * Adds a validator to ensure certain criteria are met.
+	 *
+	 * @param validator
+	 * @see bbq.gui.form.validator.EmailValidator
+	 * @see bbq.gui.form.validator.MustEqualFieldValidator
+	 * @see bbq.gui.form.validator.NotNullValidatorValidator
+	 * @see bbq.gui.form.validator.URLValidator
+	 */
 	addValidator: function(validator) {
 		if(!validator) {
 			Log.error("Invalid validator!");
@@ -180,6 +212,13 @@ bbq.gui.form.FormField = new Class.create(bbq.gui.GUIWidget, {
 		}
 	},
 
+	/**
+	 * Adds a behaviour modifier
+	 *
+	 * @param behaviour
+	 * @see bbq.gui.form.behaviour.PlaceholderTextBehaviour
+	 * @see bbq.gui.form.behaviour.ValidateOnBlurBehaviour
+	 */
 	addBehaviour: function(behaviour) {
 		if (!behaviour) {
 			Log.error("Invalid behaviour!");
@@ -196,6 +235,13 @@ bbq.gui.form.FormField = new Class.create(bbq.gui.GUIWidget, {
 		this._behaviours.push(behaviour);
 	},
 
+	/**
+	 * Sets the value transformer which constrains the value of the field to certain values.
+	 *
+	 * @param transformer
+	 * @see bbq.gui.form.transformer.BooleanValueTransformer
+	 * @see bbq.gui.form.transformer.StrinkTokeniserTransformer
+	 */
 	setValueTransformer: function(transformer) {
 		if (!transformer) {
 			Log.error("Invalid transformer!");
@@ -210,10 +256,16 @@ bbq.gui.form.FormField = new Class.create(bbq.gui.GUIWidget, {
 		this._transformer = transformer;
 	},
 
+	/**
+	 * Removes the CSS class denoting that this field has focus
+	 */
 	loseFocus: function() {
 		this.removeClass("FormField_focused");
 	},
 
+	/**
+	 * Adds the CSS class denoting that this field has focus
+	 */
 	acceptFocus: function() {
 		this.addClass("FormField_focused");
 	}

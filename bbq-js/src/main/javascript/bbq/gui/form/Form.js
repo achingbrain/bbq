@@ -3,17 +3,34 @@ include(bbq.gui.form.FormField);
 include(bbq.gui.button.GUIButton);
 include(bbq.gui.form.TextField);
 
-/**
- * @class bbq.gui.form.Form
- * @extends bbq.gui.GUIWidget
- */
-bbq.gui.form.Form = new Class.create(bbq.gui.GUIWidget, {
+bbq.gui.form.Form = new Class.create(bbq.gui.GUIWidget, /** @lends bbq.gui.form.Form.prototype */ {
 	_submitButton: null,
 
 	/**
-	 * @param {Object} options
+	 * This is a collection of form fields with names and values.  Calling Form#getValues returns
+	 * a key/value Object of values.
+	 *
 	 * @example
-	 * Todo an example
+	 * <pre><code class="language-javascript">
+	 * // create two fields
+	 * var field1 = new bbq.gui.form.TextField({name: "foo"});
+	 * var field2 = new bbq.gui.form.TextField({name: "bar"});
+	 *
+	 * // add them to our form
+	 * var form = new bbq.gui.form.Form();
+	 * form.appendChild(field1);
+	 * form.appendChild(field2);
+	 *
+	 * // set the values on the fields
+	 * field1.setValue("hello");
+	 * field2.setValue("world");
+	 *
+	 * // returns {foo: "hello", bar: "world"}
+	 * form.getValues();
+	 * </code></pre>
+	 * @constructs
+	 * @extends bbq.gui.GUIWidget
+	 * @param {Object} options
 	 */
 	initialize: function($super, options) {
 		$super(options);
@@ -22,6 +39,10 @@ bbq.gui.form.Form = new Class.create(bbq.gui.GUIWidget, {
 		this.addClass("Form");
 	},
 
+	/**
+	 * @throws {Error} The error has two fields {String} error for language translations and {bbq.gui.form.FormField} field which is the field which caused the error.
+	 * @returns {Object} Key/value parings of form elements previously added to this form.
+	 */
 	getValues: function() {
 		var output = {};
 
@@ -46,8 +67,10 @@ bbq.gui.form.Form = new Class.create(bbq.gui.GUIWidget, {
 		}.bind(this));
 	},
 
+	/**
+	 * @inheritDoc
+	 */
 	render: function() {
-
 		this._walkForSubmitButtons(this.getRootNode());
 		this._walkForTextFields(this.getRootNode());
 	},

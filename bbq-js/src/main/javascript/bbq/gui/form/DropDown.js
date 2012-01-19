@@ -1,22 +1,24 @@
 include(bbq.gui.form.FormField);
 
-/**
- * Supports the following options:
- *
- * options: {
- *      options: [
- *          key: String
- *          value: Object
- *      ]
- * }
- *
- * @class bbq.gui.form.DropDown
- * @extends bbq.gui.form.FormField
- */
-bbq.gui.form.DropDown = new Class.create(bbq.gui.form.FormField, {
-	initialize: function($super, args) {
+bbq.gui.form.DropDown = new Class.create(bbq.gui.form.FormField, /** @lends bbq.gui.form.DropDown.prototype */ {
+	/**
+	 * @example
+	 * <pre><code class="language-javascript">
+	 * var dropDown = new bbq.gui.form.DropDown({
+	 *     options: [
+	 *          {key: "Option 1", value: 1},
+	 *          {key: "Option 2", value: 2}
+	 *     ]
+	 * })
+	 * </code></pre>
+	 * @constructs
+	 * @extends bbq.gui.form.FormField
+	 * @param {Object} options
+	 * @param {Object[]} options.options Array members should be objects with two fields {String} key and {Object} value
+	 */
+	initialize: function($super, options) {
 		try {
-			$super(args);
+			$super(options);
 
 			this.setRootNode("select");
 			this.addClass("DropDown");

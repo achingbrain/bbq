@@ -4,6 +4,9 @@ bbq.gui.form.behaviour.PlaceholderTextBehaviour = new Class.create(/** @lends bb
 	options: null,
 
 	/**
+	 * Adds the <a href="http://dev.w3.org/html5/spec/Overview.html#the-placeholder-attribute">placeholder</a>
+	 * attribute to a form field or shims in support if placeholder is unsupported
+	 *
 	 * @constructs
 	 * @param {Object} options
 	 * @param {String} options.text The placeholder text

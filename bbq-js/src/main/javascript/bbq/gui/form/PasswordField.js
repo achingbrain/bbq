@@ -1,17 +1,20 @@
 include(bbq.gui.form.TextField);
 
-/**
- * @class bbq.gui.form.PasswordField
- * @extends bbq.gui.form.TextField
- */
-bbq.gui.form.PasswordField = new Class.create(bbq.gui.form.TextField, {
-	initialize: function($super, args) {
+bbq.gui.form.PasswordField = new Class.create(bbq.gui.form.TextField, /** @lends bbq.gui.form.PasswordField */ {
+
+	/**
+	 * @constructs
+	 * @extends bbq.gui.form.TextField
+	 * @param $super
+	 * @param options
+	 */
+	initialize: function($super, options) {
 		try {
-			$super(args);
+			$super(options);
 
 			this.setAttribute("type", "password");
 		} catch(e) {
-			Log.error("Error constructing EmailField", e);
+			Log.error("Error constructing PasswordField", e);
 		}
 	}
 });

@@ -1,22 +1,16 @@
 include(bbq.gui.form.FormField);
 
-/**
- * Supports the following options:
- *
- * options: {
- *      value: String                   // initial value
- * }
- *
- * @class bbq.gui.form.TextArea
- * @extends bbq.gui.form.FormField
- */
-bbq.gui.form.TextArea = new Class.create(bbq.gui.form.FormField, {
+bbq.gui.form.TextArea = new Class.create(bbq.gui.form.FormField, /** @lends bbq.gui.form.TextArea.prototype */ {
 	_onKeyPressValue: null,
 	_onKeyPressTimeOut: null,
 
-	initialize: function($super, args) {
+	/**
+	 * @constructs
+	 * @extends bbq.gui.form.FormField
+	 */
+	initialize: function($super, options) {
 		try {
-			$super(args);
+			$super(options);
 
 			this.addClass("TextArea");
 

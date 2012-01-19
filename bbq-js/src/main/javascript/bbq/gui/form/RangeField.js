@@ -1,33 +1,26 @@
 include(bbq.gui.form.FormField);
 include(bbq.web.Browser);
 
-/**
- * Provides an HTML5 range field with fallback for older browsers.
- *
- * @class bbq.gui.form.RangeField
- * @extends bbq.gui.form.FormField
- */
-bbq.gui.form.RangeField = new Class.create(bbq.gui.form.FormField, {
+bbq.gui.form.RangeField = new Class.create(bbq.gui.form.FormField, /** @lends bbq.gui.form.RangeField.prototype */ {
 	_native: null,
 	_bar: null,
 	_handle: null,
 	_value: null,
 
 	/**
-	 * Supports the following options:
+	 * Provides an HTML5 range field with fallback for older browsers.
 	 *
-	 * options: {
-	 *      min: Number     // the minimum value
-	 *      max: Number    // the maximum value
-	 *      step: Number    // value increment size
-	 *      forceNonNative: boolean // if true will not use native browser control even if it's supported
-	 * }
-	 * @param $super
-	 * @param args
+	 * @constructs
+	 * @extends bbq.gui.form.FormField
+	 * @param {Object} options
+	 * @param {Number} options.min The minimum value
+	 * @param {Number} options.max The maximum value
+	 * @param {Number} options.step Value increment size
+	 * @param {boolean} options.forceNonNative If true will not use native browser control even if it's supported
 	 */
-	initialize: function($super, args) {
+	initialize: function($super, options) {
 		try {
-			$super(args);
+			$super(options);
 
 			if(!this.options.step) {
 				this.options.step = 1;
@@ -79,6 +72,9 @@ bbq.gui.form.RangeField = new Class.create(bbq.gui.form.FormField, {
 		}
 	},
 
+	/**
+	 * @inheritDoc
+	 */
 	render: function($super) {
 		$super();
 

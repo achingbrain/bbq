@@ -15,12 +15,20 @@ include(bbq.date.DateFormatter);
  * @class bbq.gui.form.DateField
  * @extends bbq.gui.form.FormField
  */
-bbq.gui.form.DateField = new Class.create(bbq.gui.form.FormField, {
+bbq.gui.form.DateField = new Class.create(bbq.gui.form.FormField, /** @lends bbq.gui.form.DateField */ {
 	_date: null,
-	
-	initialize: function($super, args) {
+
+	/**
+	 * @constructs
+	 * @extends bbq.gui.form.FormField
+	 * @param {Object} options
+	 * @param {Date} [options.before]
+	 * @param {Date} [options.after]
+	 * @param {Boolean} [options.acceptNull]
+	 */
+	initialize: function($super, options) {
 		try {
-			$super(args);
+			$super(options);
 
 			this.setRootNode("fieldset");
 			this.addClass("DateField");
@@ -54,7 +62,6 @@ bbq.gui.form.DateField = new Class.create(bbq.gui.form.FormField, {
 		this._date = value;
 	}
 });
-
 
 bbq.gui.form.DateFieldFormatter = new Class.create({
 	_date: null,

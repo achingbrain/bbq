@@ -1,14 +1,15 @@
 include(bbq.gui.form.TextField);
 include(bbq.gui.form.validator.URLValidator);
 
-/**
- * @class bbq.gui.form.URLField
- * @extends bbq.gui.form.TextField
- */
-bbq.gui.form.URLField = new Class.create(bbq.gui.form.TextField, {
-	initialize: function($super, args) {
+bbq.gui.form.URLField = new Class.create(bbq.gui.form.TextField, /** @lends bbq.gui.form.URLField */ {
+
+	/**
+	 * @constructs
+	 * @extends bbq.gui.form.FormField
+	 */
+	initialize: function($super, options) {
 		try {
-			$super(args);
+			$super(options);
 
 			this.addClass("URLField");
 

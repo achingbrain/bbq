@@ -1,0 +1,133 @@
+## Form elements
+
+bbq contains a suite of form elements to capture user input, perform validation and enforce value types where necessary.  Where possible it falls back to use the new shiny in HTML5 and transparently shims in support for older browsers.
+
+### FormField
+
+[FormField](bbq-js/jsdoc/symbols/bbq.gui.form.FormField.html) is the abstract superclass of all form elements.  A form field contains a value and can have validation and transformation applied to it.
+
+See the JavaDocs for examples of [CheckBox](bbq-js/jsdoc/symbols/bbq.gui.form.CheckBox.html), [DropDown](bbq-js/jsdoc/symbols/bbq.gui.form.DropDown.html), [PasswordField](bbq-js/jsdoc/symbols/bbq.gui.form.PasswordField.html), [TextField](bbq-js/jsdoc/symbols/bbq.gui.form.TextField.html), [TextArea](bbq-js/jsdoc/symbols/bbq.gui.form.TextArea.html) and friends.
+
+#### Transformation
+
+It's possible to transform the value of a form field.  A transformer will constrain the or otherwise manipulate the values of a form field.  This will let you turn strings into arrays and prevent <code>"1"</code> being sent to a server when you really want <code>true</code> sent.
+
+Transformers are objects that support the following method signature:
+
+<pre><code class="language-javascript">
+/**
+ * @param {Object} value
+ * @returns {Object} Returns the transformed value
+ */
+transform: function(value);
+</code></pre>
+
+[BooleanValueTransformer](bbq-js/jsdoc/symbols/bbq.gui.form.transformer.BooleanValueTransformer.html) is an example of a transformer:
+
+<pre><code class="language-javascript">
+var field = new bbq.gui.form.TextField();
+field.setTransformer(new bbq.gui.form.transformer.BooleanValueTransformer());
+field.setValue("true");
+
+// returns true, not "true"
+field.getValue();
+</code></pre>
+
+See the JSDocs for further examples of [BooleanValueTransformer](bbq-js/jsdoc/symbols/bbq.gui.form.transformer.BooleanValueTransformer.html), [StringTokeniserTransformer](bbq-js/jsdoc/symbols/bbq.gui.form.transformer.StringTokeniserTransformer.html) and friends.
+
+#### Validation
+
+Validators ensure that fields have values that conform to a certain type.  They should be objects that support the following method signature:
+
+<pre><code class="language-javascript">
+/**
+ * @param {Object} value The value to validate
+ * @returns {String} An error code.  Returns null if no error occurred.
+ */
+validate: function(value);
+
+/**
+ * Optional method.
+ *
+ * @returns {boolean} If true, this validator is applied after the value has been transformed
+ */
+isPostTransformValidator: function();
+</code></pre>
+
+[EmailValidator](bbq-js/jsdoc/symbols/bbq.gui.form.validator.EmailValidator.html) is an example of a validator:
+
+<pre><code class="language-javascript">
+var field = new bbq.gui.form.TextField();
+field.addValidator(new bbq.gui.form.validator.EmailValidator());
+field.setValue("foo");
+
+// throws an exception
+field.getValue();
+
+field.setValue("foo@bar.com");
+
+// will not throw an exception
+field.getValue();
+</code></pre>
+
+When validation exceptions are thrown, the exception object has the following structure:
+
+<pre><code class="language-javascript">
+{
+    // This string is a code representing the error condition
+    error: {String}
+
+    // This is the field that caused the error
+    field: {bbq.gui.form.FormField}
+}
+</code></pre>
+
+See the JSDocs for further examples of [EmailValidator](bbq-js/jsdoc/symbols/bbq.gui.form.validator.EmailValidator.html), [MustEqualValidator](bbq-js/jsdoc/symbols/bbq.gui.form.validator.MustEqualValidator.html), [NotNullValidator](bbq-js/jsdoc/symbols/bbq.gui.form.validator.NotNullValidator.html), [URLValidator](bbq-js/jsdoc/symbols/bbq.gui.form.validator.URLValidator.html) and friends.
+
+##### Pre/Post validation
+
+Sometimes you only want your validation to occur after a value has been transformed.  For example, if you wrote a validator that said a given token field must have more than one value, it would be simpler to have a transformer transform the value into an array, then have your validator ensure that the length of the array was greater than zero.
+
+By default validators are applied before transformation.  To have your validator applied after transformation, have it implement the <code>isPostTransformValidator</code> method and return boolean true.
+
+#### Behaviours
+
+### Form
+
+[Form](bbq-js/jsdoc/symbols/bbq.gui.form.Form.html) uses an HTML form element as it's root node and contains [FormField](bbq-js/jsdoc/symbols/bbq.gui.form.FormField.html) elements.
+
+<pre><code class="language-javascript">
+// create two fields
+var field1 = new bbq.gui.form.TextField({name: "foo"});
+var field2 = new bbq.gui.form.TextField({name: "bar"});
+
+// add them to our form
+var form = new bbq.gui.form.Form();
+form.appendChild(field1);
+form.appendChild(field2);
+
+// set the values on the fields
+field1.setValue("hello");
+field2.setValue("world");
+
+// returns {foo: "hello", bar: "world"}
+form.getValues();
+</code></pre>
+
+When [Form#getValues](bbq-js/jsdoc/symbols/bbq.gui.form.Form.html#getValues) is called, the form recursively walks it's root node looking for subclasses of [FormField](bbq-js/jsdoc/symbols/bbq.gui.form.FormField.html).  Thus the following will still work:
+
+<pre><code class="language-javascript">
+// create two fields
+var field1 = new bbq.gui.form.TextField({name: "foo", value: "hello"});
+var field2 = new bbq.gui.form.TextField({name: "bar", value: "world"});
+
+// add them to our form
+var form = new bbq.gui.form.Form();
+form.appendChild(field1);
+form.appendChild(DOMUtil.createElement("label", [
+    "Field2 label: ", field2
+]);
+
+// returns {foo: "hello", bar: "world"}
+form.getValues();
+</code></pre>
