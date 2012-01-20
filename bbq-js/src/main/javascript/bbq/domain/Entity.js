@@ -2,7 +2,7 @@ include(bbq.lang.Watchable);
 include(bbq.util.BBQUtil);
 include(bbq.ajax.JSONRequest);
 
-bbq.domain.BBQEntity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domain.BBQEntity.prototype */ {
+bbq.domain.Entity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domain.Entity.prototype */ {
 	options: null,
 	_data: null,
 	_dataLoaded: null,
@@ -29,12 +29,28 @@ bbq.domain.BBQEntity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domai
 	 *
 	 * @constructs
 	 * @extends bbq.lang.Watchable
+	 * @example
+	 * <pre><code class="language-javascript">
+	 * include(bbq.domain.Entity);
+	 *
+	 * myapp.domain.Room = new Class.create(bbq.domain.Entity, {
+	 *     _retrieveURL: "/rooms/get",
+	 *
+	 *     _getDefaultObject: function() {
+	 *         return {
+	 *             id: null,
+	 *             name: null,
+	 *             bookings: null
+	 *         }
+	 *     }
+	 * });
+	 * </code></pre>
 	 * @param {Object} options
 	 * @param {Object} options.data A set of key/value pairs to pre-populate the default object with
 	 */
 	initialize: function($super, options) {
 		$super(options);
-		
+
 		this.options = options ? options : {};
 		this._data = {};
 		this._propertyDisplays = new Hash();
@@ -49,7 +65,6 @@ bbq.domain.BBQEntity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domai
 	 * Should return an object similar to the data structure of this class.
 	 * 
 	 * The object should contain properties that mirror the output of getArray() in the PHP on the server.
-	 * @private
 	 * @return {Object}
 	 */
 	_getDefaultObject: function() {
@@ -64,7 +79,6 @@ bbq.domain.BBQEntity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domai
 	 * Also used by child classes to replace IDs with references to the actual objects
 	 * 
 	 * @param	{Object}	data
-	 * @return	void
 	 */
 	processData: function(data) {
 		var defaultObject = this._getDefaultObject();
@@ -132,16 +146,21 @@ bbq.domain.BBQEntity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domai
 		}
 	},
 
+	/**
+	 * Returns true if this Entity is fully loaded.  An Entity is considered fully loaded if bbq.domain.Entity#processData has
+	 * processed every field in the object returned by bbq.domain.Entity#getDefaultObject
+	 *
+	 * @returns {boolean} True if this Entity is fully loaded.
+	 */
 	dataLoaded: function() {
 		return this._dataLoaded === true;
 	},
 
 	/**
-	 * Makes an entity load it's data.
+	 * <p>Forces an object to load it's data from the server.  If the object is not fully loaded an immediate request to _retrieveURL
+	 * will be sent.</p>
 	 * 
-	 * Register for listener "onDataLoaded" to interact with this object after data has been loaded.
-	 * 
-	 * @return void
+	 * <p>Register for listener "onDataLoaded" to interact with this object after data has been loaded.</p>
 	 */
 	loadData: function() {
 		if(this._loadingData) {
@@ -185,7 +204,7 @@ bbq.domain.BBQEntity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domai
 	},
 
 	/**
-	 * {@inheritDoc}
+	 * @private
 	 */
 	registerListener: function($super, type, callback) {
 		var callbackKey = $super(type, callback);
@@ -228,6 +247,13 @@ bbq.domain.BBQEntity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domai
 		return this._data[key];
 	},
 
+	/**
+	 * Returns true if the passed object is equal to this one.  An object is considered equal if it is either equal (==) or
+	 * implements a getId property and the output of which is equal (==) to the output of this object's getId method.
+	 *
+	 * @param {Object} other
+	 * @returns {boolean} True if the passed object is considered equal to this one
+	 */
 	equals: function(other) {
 		if(!other) {
 			return false;
@@ -245,7 +271,10 @@ bbq.domain.BBQEntity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domai
 	},
 
 	/**
-	 * @param	String		property		A property on this object
+	 * Can be used instead of a getter by passing the name of the property you want as a string.
+	 *
+	 * @param {String} property A property of this object
+	 * @returns {Object}
 	 */
 	getProperty: function(property) {
 		try {
@@ -264,35 +293,30 @@ bbq.domain.BBQEntity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domai
 	},
 
 	/**
-	 * Returns a DOM element (by default a SPAN) that contains a textual representation of the requested property of this element.
+	 * <p>Returns a DOM element (by default a SPAN) that contains a textual representation of the requested property of this element.</p>
 	 * 
-	 * Will be updated automatically to contain the current value.
+	 * <p>Will be updated automatically to contain the most recent value.</p>
 	 * 
-	 * Supports getting properties of sub objects.  For example, if we want the name of this objects's creator, we can do:
+	 * <p>Supports getting properties of sub objects.  For example, if we want the name of this objects's creator, we can do:</p>
 	 * 
-	 * <code>
+	 * <pre><code class="language-javascript">
 	 * object.getPropertyDisplay({property: "creator.fullname"});
-	 * </code>
+	 * </code></pre>
 	 * 
-	 * This will have the same effect as:
+	 * <p>This will have the same effect as:</p>
 	 * 
-	 * <code>
+	 * <pre><code class="language-javascript">
 	 * var creator = object.getCreator();
 	 * creator.getPropertyDisplay({property: "fullname"});
-	 * </code>
-	 * 
-	 * Supports the following options:
-	 * 
-	 * options: {
-	 * 		property: String				// The name of the property that is to be displayed
-	 * 		formatter: Function			// Optional.  A function that takes the property value as an argument and returns a String or a Node
-	 * 		nodeName: String			// Optional.  Will be used in place of SPAN
-	 * 		className: String			// Optional.  Will be applied to the node
-	 * 		createNode: Function		// Optional.  Should return a DOM node.  Omit this to use a SPAN.  If passed you should also pass a function for updateNode
-	 * 		updateNode: Function		// Optional.  Expect two arguments - a node and the property value.  Return nothing.  If passed you should also pass a function for createNode
-	 * }
-	 * 
-	 * @param	Object			options
+	 * </code></pre>
+	 *
+	 * @param {Object} options
+	 * @param {String} options.property The name of the property that is to be displayed
+	 * @param {Function} [options.formatter] A function that takes the property value as an argument and returns a String or a Node
+	 * @param {String} [options.nodeName] Will be used in place of SPAN
+	 * @param {String} [options.className] Will be applied to the node
+	 * @param {Function} [options.createNode] Should return a DOM node.  Omit this to use a SPAN.  If passed you should also pass a function for updateNode
+	 * @param {Function} [options.updateNode] Expect two arguments - a node and the property value.  Return nothing.  If passed you should also pass a function for createNode
 	 */
 	getPropertyDisplay: function(options) {
 		try {

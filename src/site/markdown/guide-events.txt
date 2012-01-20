@@ -1,0 +1,114 @@
+## Events
+
+bbq supports the <a href="http://en.wikipedia.org/wiki/Observer_pattern">observer</a> pattern or (<a href="http://en.wikipedia.org/wiki/Publish–subscribe_pattern">pub/sub</a> if you prefer) through the [Watchable](bbq-js/jsdoc/symbols/bbq.lang.Watchable.html) class.  [GUIWidget](bbq-js/jsdoc/symbols/bbq.gui.GUIWidget.html) extends Watchable, as does [Entity](bbq-js/jsdoc/symbols/bbq.domain.Entity.html) so you can observe most objects in bbq.
+
+### Receiving notifications
+
+[Watchable](bbq-js/jsdoc/symbols/bbq.lang.Watchable.html) defines the [registerListener](bbq-js/jsdoc/symbols/bbq.lang.Watchable.html#registerListener) method, which is used as follows:
+
+<pre><code class="language-javascript">
+var button = new bbq.gui.button.GUIButton({text: "Click me!"});
+
+// register a listener function
+button.registerListener("onClick", function() {
+    alert("button clicked!");
+});
+</code></pre>
+
+When the button is clicked, the <code>onClick</code> notification is dispatched and our listener function is invoked.
+
+### Stop listening
+
+To stop listening for notifications, call [deRegisterListener](bbq-js/jsdoc/symbols/bbq.lang.Watchable.html#deRegisterListener):
+
+<pre><code class="language-javascript">
+var button = new bbq.gui.button.GUIButton({text: "Click me!"});
+
+var listener = function(button) {
+    alert("button clicked!");
+
+    // we're done, stop listening
+    button.deRegisterListener(this);
+};
+
+// register a listener function
+button.registerListener("onClick", listener);
+</code></pre>
+
+Alternatively if you only wish to be informed once, use [registerOneTimeListener](bbq-js/jsdoc/symbols/bbq.lang.Watchable.html#registerOneTimeListener):
+
+<pre><code class="language-javascript">
+var button = new bbq.gui.button.GUIButton({text: "Click me!"});
+
+// register a listener function
+button.registerOneTimeListener("onClick", function() {
+    // i will only be invoked once
+    alert("button clicked!");
+});
+</code></pre>
+
+### Dispatching notifications
+
+To dispatch a notification, call the [notifyListeners](bbq-js/jsdoc/symbols/bbq.lang.Watchable.html#notifyListeners) from your observable:
+
+<pre><code class="language-javascript">
+myapp.foo.MyObservable = new Class.create(bbq.lang.Watchable, {
+
+    doSomething: function() {
+        ...
+
+        this.notifyListeners("onDoSomething");
+    }
+}
+</code></pre>
+
+Arguments passed to [notifyListeners](bbq-js/jsdoc/symbols/bbq.lang.Watchable.html#notifyListeners) will be passed to the observer:
+
+<pre><code class="language-javascript">
+myapp.foo.MyObservable = new Class.create(bbq.lang.Watchable, {
+
+    doSomething: function() {
+        ...
+
+        this.notifyListeners("onDoSomething", "one", "two", "three");
+    }
+}
+
+var observable = new myapp.foo.MyObservable();
+observable.registerListener("onDoSomething", function(sender, a, b, c) {
+    // logs "one two three"
+    Log.info(a + " " + b + " " + c);
+});
+</code></pre>
+
+See the [JSDocs](bbq-js/jsdoc/symbols/bbq.lang.Watchable.html#notifyListeners) for further discussion.
+
+### Global listeners
+
+To receive all events of a given type, register a global listener:
+
+<pre><code class="language-javascript">
+myapp.foo.MyObservable = new Class.create(bbq.lang.Watchable, {
+
+    doSomething: function() {
+        ...
+
+        this.notifyListeners("onDoSomething", "one", "two", "three");
+    }
+}
+
+var invocations = 0;
+
+bbq.lang.Watchable.registerGlobalListener("onDoSomething", function() {
+    invocations++;
+});
+
+var observable1 = new myapp.foo.MyObservable();
+var observable2 = new myapp.foo.MyObservable();
+
+observable1.doSomething();
+observable2.doSomething();
+
+// logs "2 invocations"
+Log.info(invocations + " invocations");
+</code></pre>

@@ -25,7 +25,7 @@ bbq.gui.form.validator.NotNullValidator = new Class.create(/** @lends bbq.gui.fo
 	/**
 	 * Validates the passed value.
 	 *
-	 * @param {Object] value The value to validate
+	 * @param {Object} value The value to validate
 	 * @returns {String} An error code.  Returns null if no error occurred.
 	 */
 	validate: function(value) {

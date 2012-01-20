@@ -1,0 +1,249 @@
+## Domain Objects
+
+Domain objects represent entities in your problem domain.  Which is a fancy way of saying that if you are implementing a system for booking a meeting room, you are going to want classes to represent a room, a booking and the users making the booking.
+
+### Entity
+
+[Entity](bbq-js/jsdoc/symbols/bbq.domain.Entity.html) is intended to be used as a base for your domain classes.  A basic domain object looks like this:
+
+<pre><code class="language-javascript">
+include(bbq.domain.Entity);
+
+myapp.domain.Room = new Class.create(bbq.domain.Entity, {
+    _retrieveURL: "/rooms/get",
+
+    _getDefaultObject: function() {
+        return {
+            id: null,
+            name: null,
+            bookings: null
+        }
+    }
+});
+</code></pre>
+
+This class defines two interesting things: <code>\_getDefaultObject</code> and <code>\_retrieveURL</code>.
+
+#### _getDefaultObject
+
+The return value of _getDefaultObject defines the fields that a domain entity has.  Every field of the default object is automatically converted into a getter/setter on the domain object.
+
+N.B. you are required to return an id value in the default object.
+
+Values for the fields are passed into the constructor for the domain object via the data key.  So, for example:
+
+<pre><code class="language-javascript">
+myapp.domain.Room = new Class.create(bbq.domain.Entity, {
+    _retrieveURL: "/rooms/get",
+
+    _getDefaultObject: function() {
+        return {
+            id: null,
+            name: null,
+            bookings: null
+        }
+    }
+});
+
+var room = new myapp.domain.Room({
+    data: {
+        id: 1,
+        name: "Room 1",
+        bookings: []
+    }
+});
+
+// getter for name field is created automatically
+Log.info("Room name: " + room.getName());
+</code></pre>
+
+#### _retrieveURL
+
+The _retrieveURL property defines where a partially loaded domain object should load it's remaining properties from (see below).  You should configure your app to receive a JSON request to the URL defined as _retrieveURL which looks like this:
+
+	{ id: idValue }
+
+Where idValue is the value you pass in to the domain object constructor as part of the data object.  So:
+
+<pre><code class="language-javascript">
+var room = new myapp.domain.Room({
+    data: {
+        id: "123"
+    }
+});
+</code></pre>
+
+would result in the JSON below being POSTed to <code>/rooms/get</code>
+
+	{id: "123"}
+
+The response should be the same as the default object:
+
+	{id: "123", name: "Room 1", bookings: []}
+
+The values returned will then be available via the domain object's getter/setter methods.
+
+#### Partially loaded objects and getPropertyDisplay
+
+It is not necessary to specify every value in the data object.  This is so you can load only the values of your domain object that are necessary for the current display thus keeping your data traffic to a minimum.  So, for example:
+
+<pre><code class="language-javascript">
+var room = new myapp.domain.Room({
+    data: {
+        id: 1,
+        name: "Room 1"
+    }
+});
+
+// will work
+Log.info("Room name: " + room.getName());
+
+// will return null
+Log.info("Bookings: " + room.getBookings());
+</code></pre>
+
+Objects created in this manner are considered to be <em>partially loaded</em>.  You can display properties of objects that have not yet been loaded by using getPropertyDisplay instead of the getters for a given property:
+
+<pre><code class="language-javascript">
+// this will be a DOM node, by default a span element
+var bookings = room.getPropertyDisplay({property: "bookings"});
+
+document.body.appendChild(bookings);
+</code></pre>
+
+At some point in the future, after a call to <code>_retrieveURL</code> the contents of the property display will be swapped out with the actual field value.
+
+Formatting can be applied to the node that is returned:
+
+<pre><code class="language-javascript">
+// this will be a DOM node, by default a span element
+var bookings = room.getPropertyDisplay({
+    property: "bookings",
+    nodeName: "p",
+    className: "room_bookings"
+});
+
+document.body.appendChild(bookings);
+</code></pre>
+
+Or for even more control:
+
+<pre><code class="language-javascript">
+// this will be a DOM node, by default a span element
+var bookings = room.getPropertyDisplay({
+    property: "bookings",
+    createNode: function() {
+        return DOMUtil.createElement("p");
+    },
+    updateNode: function(node, value) {
+        DOMUtil.emptyNode(node);
+        DOMUtil.append(value, node);
+    }
+});
+
+document.body.appendChild(bookings);
+</code></pre>
+
+#### loadData
+
+Ordinarily a call to <code>_retrieveURL</code> will not occur until you attempt to access a field which has not been loaded yet.  It is possible to cause a domain object to load it's data explicitly by calling the [loadData](bbq-js/jsdoc/symbols/bbq.domain.Entity.html#loadData) method.
+
+<pre><code class="language-javascript">
+var room = new myapp.domain.Room({
+    data: {
+        id: 1,
+        name: "Room 1"
+    }
+});
+
+// this will cause the room to load it's missing fields
+room.loadData();
+</code></pre>
+
+The response to loadData will overwrite any field values already loaded.  You can, for example, use this method to get a domain object to refresh it's state in response to some one else editing it remotely.  Any propertyDisplays on the current page will also be updated to reflect the new values, seemingly by magic.
+
+#### Entities as properties of Entities
+
+Sometimes you'll have an Entity being a property of another Entity.  For example when a User is the owner of another object:
+
+<pre><code class="language-javascript">
+// the user domain object
+myapp.domain.User = new Class.create(bbq.domain.Entity, {
+    _retrieveURL: "/users/get",
+
+    _getDefaultObject: function() {
+        return {
+            id: null,
+            name: null
+        }
+    }
+});
+
+// a booking
+myapp.domain.Booking = new Class.create(bbq.domain.Entity, {
+    _retrieveURL: "/bookings/get",
+
+    _getDefaultObject: function() {
+        return {
+            id: null,
+            owner: null,
+            start: null,
+            end: null
+        }
+    }
+});
+</code></pre>
+
+To prevent pulling down large sections of the object graph, an ID should be sent in place of the <code>User</code> object for the <code>owner</code> property of a <code>Booking</code>.
+
+So given the following code:
+
+<pre><code class="language-javascript">
+var booking = new myapp.domain.Booking({
+	id: 293
+});
+booking.loadData();
+</code></pre>
+
+a request will be sent to <code>/bookings/get</code>:
+
+	{id: 293}
+
+The response will be:
+
+	{id: 293, owner: 492, start: "2012-01-10 12:00:00", end: "2012-01-10 13:00:00"}
+
+To process the above correctly, Booking should override the [processData](bbq-js/jsdoc/symbols/bbq.domain.Entity.html#processData) method to retrieve the User object from a [Repository](bbq-js/jsdoc/symbols/bbq.domain.Repository.html).  See the <a href="guide-repositories.html">repositories guide page</a> for further discussion of this.
+
+<pre><code class="language-javascript">
+myapp.domain.Booking = new Class.create(bbq.domain.Entity, {
+    _retrieveURL: "/bookings/get",
+
+    _getDefaultObject: function() {
+        return {
+            id: null,
+            owner: null,
+            start: null,
+            end: null
+        }
+    },
+
+    processData: function($super, data) {
+        if(!Object.isUndefined(data["owner"])) {
+            // currentPage.users is a bbq.domain.Repository
+
+            data["owner"] = currentPage.users.add(data["owner"]);
+        }
+
+        $super(data);
+    }
+});
+</code></pre>
+
+Properties of child objects can be used in calls to [getPropertyDisplay](bbq-js/jsdoc/symbols/bbq.domain.Entity.html#getPropertyDisplay) using dot-notation:
+
+<pre><code class="language-javascript">
+var ownerName = booking.getPropertyDisplay({property: "owner.name"});
+
+document.body.appendChild(ownerName);
+</code></pre>

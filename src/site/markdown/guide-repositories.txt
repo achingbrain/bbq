@@ -1,0 +1,117 @@
+## Repositories
+
+[Repository](bbq-js/jsdoc/symbols/bbq.domain.Repository.html) is intended to store your <a href="guide-domain-objects.html">domain objects</a>.
+
+To create one, you'd do the following:
+
+<pre><code class="language-javascript">
+include(bbq.domain.Repository);
+include(myapp.domain.Room);
+
+var repository = new bbq.domain.Repository({
+    // This is the class that this Repository will hold
+    type: myapp.domain.Room,
+
+    // An optional argument which holds entities to pre-fill the repo with
+    entities: []
+});
+</code></pre>
+
+You can then call [get](bbq-js/jsdoc/symbols/bbq.domain.Repository.html#get) and [add](bbq-js/jsdoc/symbols/bbq.domain.Repository.html#add) (among others) to access objects stored in the repository.
+
+See the [JSDocs](bbq-js/jsdoc/symbols/bbq.domain.Repository.html) for a complete list.
+
+### Declaring your repositories
+
+There should only be one repository instance per domain class on a given page.  Global variables are bad so the recommended place to define them is in the <code>currentPage</code> variable.
+
+<pre><code class="language-javascript">
+myapp.page.Home = new Class.create(bbq.page.Page, {
+    initialize: function($super, args) {
+        try {
+            $super(args);
+
+            this.rooms = new bbq.domain.Repository({
+                type: myapp.domain.Room
+            });
+            this.bookings = new bbq.domain.Repository({
+                type: myapp.domain.Booking
+            });
+            this.users = new bbq.domain.Repository({
+                type: myapp.domain.User
+            });
+        } catch(e) {
+            Log.error("Error constructing Home", e);
+        }
+    }
+});
+</code></pre>
+
+Repositories can then be accessed like so:
+
+<pre><code class="language-javascript">
+var room = currentPage.rooms.add({id: 129});
+</code></pre>
+
+### add
+
+[add](bbq-js/jsdoc/symbols/bbq.domain.Repository.html#add) allows you to add domain objects to the repository in three ways - by passing in a fully fledged object, a data object or an identifier.
+
+<pre><code class="language-javascript">
+include(bbq.domain.Repository);
+include(myapp.domain.Room);
+
+var repository = new bbq.domain.Repository({
+    // This is the class that this Repository will hold
+    type: myapp.domain.Room
+});
+</code></pre>
+
+ 1. Adding via id
+
+<pre><code class="language-javascript">
+var room = repository.add(298);
+
+// is the same as doing
+room = repository.add(new myapp.domain.Room({id: 298}));
+</code></pre>
+
+ 2. Adding via data object
+
+<pre><code class="language-javascript">
+var room = repository.add({id: 298});
+
+// is the same as doing
+room = repository.add(new myapp.domain.Room({id: 298}));
+</code></pre>
+
+ 3. Adding via domain object
+
+<pre><code class="language-javascript">
+var room = repository.add(new myapp.domain.Room({id: 298}));
+</code></pre>
+
+Domain objects will not be duplicated so it is safe to call add several times:
+
+<pre><code class="language-javascript">
+// returns 0
+repository.size();
+
+// add an Entity
+repository.add(298);
+
+// returns 1
+repository.size();
+
+// add it again
+repository.add(298);
+
+// still returns 1
+repository.size();
+
+// add it again via different method
+repository.add(new myapp.domain.Room({id: 298}));
+
+// still 1
+repository.size();
+</code></pre>

@@ -20,6 +20,7 @@ Being a collection of documents which define how to create a bbq application.
  2. [Drag and drop](guide-drag-and-drop.html)
  3. [Form elements](guide-form-elements.html)
  4. [Buttons](guide-buttons.html)
+ 5. [Events](guide-events.html)
 
 ### Network
 
@@ -29,6 +30,11 @@ Being a collection of documents which define how to create a bbq application.
 
  1. [Date handling](guide-date-handling.html)
  2. [Internationalisation](guide-i18n.html)
+
+### Domain objects
+
+ 1. [Domain objects](guide-domain-objects.html)
+ 2. [Repositories](guide-repositories.html)
 
 ### Unit tests
 

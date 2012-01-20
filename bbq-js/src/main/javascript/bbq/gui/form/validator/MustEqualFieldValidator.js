@@ -30,7 +30,7 @@ bbq.gui.form.validator.MustEqualFieldValidator = new Class.create(/** @lends bbq
 	/**
 	 * Validates the passed value.
 	 *
-	 * @param {Object] value The value to validate
+	 * @param {Object} value The value to validate
 	 * @returns {String} An error code.  Returns null if no error occurred.
 	 */
 	validate: function(value) {

@@ -28,8 +28,10 @@ bbq.lang.Watchable = new Class.create(/** @lends bbq.lang.Watchable.prototype */
 	},
 
 	/**
-	 * Example: this._dropDown.registerListener("onchange", this._subTypeChanged.bind(this, predicateType));
-	 * 
+	 * @example
+	 * <pre><code class="language-javascript">
+	 * this._dropDown.registerListener("onchange", this._subTypeChanged.bind(this, predicateType));
+	 * </code></pre>
 	 * @param {String} type
 	 * @param {Function} callback
 	 */
@@ -58,11 +60,11 @@ bbq.lang.Watchable = new Class.create(/** @lends bbq.lang.Watchable.prototype */
 
 	/**
 	 * @param {String} type
-	 * @param {Function} callbackKey
+	 * @param {Function} callback
 	 */
-	deRegisterListener: function(type, callbackKey) {
+	deRegisterListener: function(type, callback) {
 		if(callbackKey) {
-			return this._getCallbacks(type).unset(callbackKey) ? true : false;
+			return this._getCallbacks(type).unset(callback) ? true : false;
 		}
 
 		return false;
