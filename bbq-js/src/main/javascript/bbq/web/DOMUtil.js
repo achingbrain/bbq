@@ -14,8 +14,8 @@ DOMUtil = {
 	/**
 	 * Removes all children of the passed node
 	 * 
-	 * @param	{Node}	node
-	 * @return void
+	 * @param {Node} The node whose children to remove
+	 * @return {Node}
 	 */
 	emptyNode: function(node) {
 		if(node) {
@@ -47,6 +47,11 @@ DOMUtil = {
 	
 	/**
 	 * Removes all children of the passed nodes
+	 *
+	 * @example
+	 * <pre><code class="language-javascript">
+	 * DOMUtil.emptyNodes(node1, node2…);
+	 * </code></pre>
 	 */
 	emptyNodes: function() {
 		$A(arguments).each(function(element, index) {
@@ -65,28 +70,34 @@ DOMUtil = {
 	 * @param	{string}		text
 	 * @param	{Object}		attributes
 	 * @return	{Node}
+	 * @deprecated Use DOMUtil#createElement instead
 	 */
 	createTextElement: function(tagName, text, attributes) {
 		var element = this.createElement(tagName, attributes);
 		
-		/*if(Object.isArray(text)) {
-			text.each(function(text){
-				if(text) {
-					this.append(text, element);
-				}
-			}.bind(this));
-		} else {*/
-			this.append(text ? text : "", element);
-		//}
+		this.append(text ? text : "", element);
 		
 		return element;
 	},
 	
 	/**
 	 * Shortcut for creating a DOM node
+	 *
+	 *
+	 * @example
+	 * <pre><code class="language-javascript">
+	 * // &lt;p&gt;Hello world!&lt;/p&gt;
+	 * DOMUtil.createElement("p", "Hello world!");
 	 * 
-	 * @param	{string}		tagName
-	 * @param	{Object}		attributes
+	 * // &lt;p class="foo" style="color: red" &gt;Hello world!&lt;/p&gt;
+	 * DOMUtil.createElement("p", "Hello world!", {className: "foo", style: {color: "red"}});
+	 *
+	 * // &lt;p&gt;Contents as array&lt;/p&gt;
+	 * DOMUtil.createElement("p", ["Contents", " ", "as", " ", "array"]);
+	 * </code></pre> 
+	 * @param	{string}		Tag name
+	 * @param	{Object}		The contents of the output node - a string, DOM Node or bbq.gui.GUIWidget
+	 * @param	{Object}		Attributes that will be applied to the output of this function
 	 * @return	{Node}
 	 */
 	createElement: function(arg1, arg2, arg3) {
@@ -112,9 +123,9 @@ DOMUtil = {
 	/**
 	 * Creates a table row
 	 * 
-	 * @param	{integer}	numCells
-	 * @param	{boolean}	header
-	 * @return	{void}
+	 * @param {Number} numCells
+	 * @param {boolean} header
+	 * @return {Node}
 	 */
 	createTableRow: function(numCells, header) {
 		var row = document.createElement("tr");
@@ -129,8 +140,8 @@ DOMUtil = {
 	/**
 	 * Creates a row of empty table header cells
 	 * 
-	 * @param	{integer}	numCells
-	 * @return	{Node}
+	 * @param {Number} numCells
+	 * @return {Node}
 	 */
 	createTableHeaderRow: function(numCells) {
 		return this.createTableRow(numCells, true);
@@ -139,9 +150,9 @@ DOMUtil = {
 	/**
 	 * Creates a single line HTML text input
 	 * 
-	 * @param	{string}		nodeValue
-	 * @param	{Object}		options
-	 * @return  {Node}
+	 * @param {String} 	nodeValue
+	 * @param {Object} 	options
+	 * @return {Node}
 	 */
 	createTextInputNode: function(nodeValue, options) {
 		var element = this.createElement("input", options);
@@ -154,8 +165,8 @@ DOMUtil = {
 	/**
 	 * Creates a HTML password input
 	 * 
-	 * @param	{string}		nodeValue
-	 * @param	{Object}		options
+	 * @param {String} nodeValue
+	 * @param {Object} options
 	 * @return {Node}
 	 */
 	createPasswordInputNode: function(nodeValue, options) {
@@ -168,8 +179,8 @@ DOMUtil = {
 	/**
 	 * Creates a HTML submit button
 	 * 
-	 * @param	{string}		nodeValue
-	 * @param	{Object}		options
+	 * @param {String} nodeValue
+	 * @param {Object} options
 	 * @return {Node}
 	 */
 	createSubmitInputNode: function(nodeValue, options) {
@@ -183,9 +194,9 @@ DOMUtil = {
 	/**
 	 * Creates a HTML password input
 	 * 
-	 * @param	{Node}			element		Node to apply attributes to
-	 * @param	{Object}			attributes	Associative array of attributes to apply to the passed node
-	 * @return	{void}
+	 * @param {Node} element Node to apply attributes to
+	 * @param {Object} attributes Associative array of attributes to apply to the passed node
+	 * @return {void}
 	 */
 	applyAttributesToElement: function(element, attributes) {
 		if(attributes) {
@@ -216,9 +227,9 @@ DOMUtil = {
 	/**
 	 * Adds a CSS class to the passed node
 	 * 
-	 * @param	{Node}	node
-	 * @param	{string}	newClass
-	 * @return	{void}
+	 * @param {Node} node
+	 * @param {string} newClass
+	 * @return {void}
 	 */
 	addClass: function(node, newClass) {
 		if(node && newClass) {
@@ -237,10 +248,10 @@ DOMUtil = {
 	/**
 	 * Removes a CSS class to the passed node, optionally recursing through it's child nodes
 	 * 
-	 * @param	{Node}	node
-	 * @param	{string}	oldClass
-	 * @param	{boolean}	recursive
-	 * @return	{void}
+	 * @param {Node} node
+	 * @param {String} oldClass
+	 * @param {boolean} recursive
+	 * @return {void}
 	 */
 	removeClass: function(node, oldClass, recursive) {
 		if(!node) {
@@ -279,8 +290,8 @@ DOMUtil = {
 	/**
 	 * Returns the iFrameDocument object from the passed iFrame in a browser neutral way
 	 * 
-	 * @param	{Node}	iframe
-	 * @return	{Node}
+	 * @param {Node} iframe
+	 * @return {Node}
 	 */
 	getIFrameDocument: function(iframe) {
 		var oDoc = false;
@@ -593,6 +604,9 @@ DOMUtil = {
 	
 	/**
 	 * Returns true if the passed node is in the DOM
+	 * 
+	 * @param {Node} a DOM Node
+	 * @returns {boolean}
 	 */
 	isInDOM: function(node) {
 		while(true) {

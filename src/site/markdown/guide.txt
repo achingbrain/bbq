@@ -17,10 +17,11 @@ Being a collection of documents which define how to create a bbq application.
 ### UI Elements
 
  1. [GUIWidgets](guide-guiwidgets.html)
- 2. [Drag and drop](guide-drag-and-drop.html)
- 3. [Form elements](guide-form-elements.html)
- 4. [Buttons](guide-buttons.html)
- 5. [Events](guide-events.html)
+ 2. [DOMUtil](guide-domutil.html)
+ 3. [Drag and drop](guide-drag-and-drop.html)
+ 4. [Form elements](guide-form-elements.html)
+ 5. [Buttons](guide-buttons.html)
+ 6. [Events](guide-events.html)
 
 ### Network
 

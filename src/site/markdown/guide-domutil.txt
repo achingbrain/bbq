@@ -1,0 +1,89 @@
+## DOMUtil
+
+Working with DOM nodes is a pain.  Code using [document.createElement](http://www.w3.org/TR/2004/REC-DOM-Level-3-Core-20040407/core.html#ID-2141741547) tends to be incredibly verbose and just not much fun.
+
+Prototype provides some convenient shortcuts for creating DOM nodes:
+
+<pre><code class="language-javascript">
+var a = new Element("a", { "class": "foo", href: "/foo.html" }).update("Next page");
+</code></pre>
+
+The only problem here is if you are interacting with a bbq [GUIWidget](guide-guiwidget.html).
+
+<pre><code class="language-javascript">
+var button = new bbq.gui.button.GUIButton({text: "Next page", onClick: function() {
+    // some code here
+}});
+
+var div = new Element("div", { "class": "foo" });
+
+// kaboom!
+div.update(button);
+
+// kaboom!
+div.appendChild(button);
+</code></pre>
+
+Enter [DOMUtil](bbq-js/jsdoc/symbols/DOMUtil.html).  This class has some utility methods which know the difference between [GUIWidget](guide-guiwidget.html)s DOM nodes and strings so it's safe to pass anything in.
+
+## DOMUtil#createElement
+
+The first argument to [DOMUtil#createElement](bbq-js/jsdoc/symbols/DOMUtil.html#.createElement) is the name of the element you wish to create as a string.  The last argument is a key/value object that will be applied to the returned element as attributes.  If you pass three arguments, the second argument becomes the contents of the element.  This can be a string, a GUIWidget, a node or an array containing any combination of the three.
+
+<pre><code class="language-javascript">
+var button = new bbq.gui.button.GUIButton({text: "Next page", onClick: function() {
+    // some code here
+}});
+
+// the button above is the contents of the div
+var div = DOMUtil.createElement("div", button, { className: "foo" });
+
+// This time include an instruction as well
+var div2 = DOMUtil.createElement("div", ["Click this: ", button], { className: "foo" });
+</code></pre>
+
+Alternatively, with a DOM Node and a GUIWidget passed in:
+
+<pre><code class="language-javascript">
+var button = new bbq.gui.button.GUIButton({text: "Next page", onClick: function() {
+    // some code here
+}});
+
+var div = DOMUtil.createElement("div", [
+    DOMUtil.createElement("label", "Click this:"),
+    button
+], { className: "foo", "style": {"border": "1px solid #F10"} });
+</code></pre>
+
+## DOMUtil#emptyNode
+
+[DOMUtil#emptyNode](bbq-js/jsdoc/symbols/DOMUtil.html#.emptyNode) takes a Node/GUIWidget as an argument and removes all of it's children.
+
+<pre><code class="language-javascript">
+// create node that has markup &lt;span&gt;foo&lt;/span&gt;
+var node = DOMUtil.createElement("span", "foo");
+
+DOMUtil.emptyNode(node);
+
+// node is now &lt;span&gt;&lt;/span&gt;
+</code></pre>
+
+## DOMUtil#isInDOM
+
+[DOMUtil#isInDom](bbq-js/jsdoc/symbols/DOMUtil.html#.isInDOM) returns true if the passed node is in the DOM, false otherwise.
+
+<pre><code class="language-javascript">
+// create node that has markup <span>foo</span>
+var node = DOMUtil.createElement("span", "foo");
+
+// false
+DOMUtil.isInDom(node);
+
+// add it to the DOM
+document.body.appendChild(node);
+
+// true
+DOMUtil.isInDOM(node);
+</code></pre>
+
+See the [JSDocs](bbq-js/jsdoc/symbols/DOMUtil.html) for further discussion.
