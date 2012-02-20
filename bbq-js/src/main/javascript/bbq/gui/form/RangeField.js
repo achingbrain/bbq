@@ -20,19 +20,24 @@ bbq.gui.form.RangeField = new Class.create(bbq.gui.form.FormField, /** @lends bb
 	 */
 	initialize: function($super, options) {
 		try {
+
+			if(typeof options.step != 'number' || !isFinite(options.step)) {
+				options.step = 1;
+			}
+
+			if(typeof options.min != 'number' || !isFinite(options.min)) {
+				options.min = 1;
+			}
+
+			if(typeof options.max != 'number' || !isFinite(options.max)) {
+				options.max = 100;
+			}
+
+			if(!Object.isUndefined(options.value)) {
+				options.value = options.min
+			}
+
 			$super(options);
-
-			if(!this.options.step) {
-				this.options.step = 1;
-			}
-
-			if(!this.options.min) {
-				this.options.min = 1;
-			}
-
-			if(!this.options.max) {
-				this.options.max = 100;
-			}
 
 			if(Browser.forms.types.range && !this.options.forceNonNative) {
 				// Supports HTML5 range input type
@@ -125,7 +130,7 @@ bbq.gui.form.RangeField = new Class.create(bbq.gui.form.FormField, /** @lends bb
 		this._value = value;
 	},
 
-	_startDrag: function() {
+	_startDrag: function(event) {
 		var doDrag = this._doDrag.bindAsEventListener(this);
 
 		Event.observe(document, "mousemove", doDrag);
@@ -134,6 +139,8 @@ bbq.gui.form.RangeField = new Class.create(bbq.gui.form.FormField, /** @lends bb
 			Event.stopObserving(document, "mouseup", this);
 			Event.stopObserving(document, "mousemove", doDrag);
 		});
+
+		event.preventDefault();
 	},
 
 	_doDrag: function(event) {
@@ -152,21 +159,29 @@ bbq.gui.form.RangeField = new Class.create(bbq.gui.form.FormField, /** @lends bb
 		}
 
 		this._moveHandle(x);
+
+		event.preventDefault();
 	},
 
 	_moveHandle: function(position) {
 		var width = Element.getDimensions(this._bar).width;
 
 		// e.g. between 5 and 55 with a step size of 10 there are 6 potential values - 5, 15, 25, 35, 45, 55
-		var potentialValues = Math.ceil((this.options.max - this.options.min)/this.options.step);
+		var potentialValues = Math.ceil((this.options.max - this.options.min)/this.options.step) + 1;
 
 		// multiples of this number are valid values for handle positioning
-		var segmentWidth = Math.ceil(width/potentialValues) + 1;
+		var segmentWidth = Math.ceil(width/potentialValues);
 		var newValue = 0;
 
 		//Log.info("width " + width + " step size " + this.options.step + " " + potentialValues + " steps");
 
-		for(var i = 0; i <= potentialValues; i++) {
+		var handleWidth = Element.getDimensions(this._handle).width;
+
+		if(position >= width) {
+			position = width - handleWidth;
+		}
+
+		for(var i = 0; i < potentialValues; i++) {
 			var segmentStart = i * segmentWidth;
 
 			//Log.info("segmentStart " + segmentStart + " position " + position);
@@ -177,12 +192,13 @@ bbq.gui.form.RangeField = new Class.create(bbq.gui.form.FormField, /** @lends bb
 				newValue = this.options.min + (this.options.step * i);
 
 				break;
-			}
-		}
 
-		if(position >= width) {
-			var handleWidth = Element.getDimensions(this._handle).width;
-			position -= handleWidth;
+			} else if(i == potentialValues - 1) {
+
+				position = width - handleWidth;
+
+				newValue = this.options.min + (this.options.step * i);
+			}
 		}
 
 		var percent = ((position/width) * 100);
