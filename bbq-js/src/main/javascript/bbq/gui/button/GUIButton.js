@@ -262,6 +262,6 @@ bbq.gui.button.GUIButton = Class.create(bbq.gui.GUIWidget, /** @lends bbq.gui.bu
 	 */
 	setText: function(text) {
 		this.empty();
-		this.anchor.appendChild(document.createTextNode(text));
+		this.appendChild(text);
 	}
 });
