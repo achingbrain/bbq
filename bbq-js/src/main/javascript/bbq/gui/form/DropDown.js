@@ -23,64 +23,88 @@ bbq.gui.form.DropDown = new Class.create(bbq.gui.form.FormField, /** @lends bbq.
 			this.setRootNode("select");
 			this.addClass("DropDown");
 
-			if(Object.isArray(this.options.options)) {
-				this.setOptions(this.options.options);
-			}
 		} catch(e) {
 			Log.error("Error constructing DropDown", e);
 		}
 	},
 
-	_getRawValue: function() {
-		var index = this.getRootNode().value;
+	/**
+	 * Renders the option list and selects the option that is currently selected
+	 */
+	render: function() {
 
-		return this.options.options[index].value;
+		// Get the current value before emptyng the element!
+		var value = this._getRawValue();
+
+		this.empty();
+
+		if(!Object.isArray(this.options.options)) {
+			return;
+		}
+
+		this.options.options.each(function(option, index) {
+
+			var node = DOMUtil.createElement("option", option.key, {value: index});
+
+			if(option.value == value) {
+				node.selected = true;
+			}
+
+			this.appendChild(node);
+
+		}.bind(this));
 	},
 
-	_setRawValue: function(value) {
+	_getRawValue: function() {
+
+		// If the dropdown has been rendered, get the current value via the selected <option>, otherwise return options.value
+		if(this.getRootNode().getElementsByTagName("option").length == 0) {
+			return this.options.value;
+		}
+
+		var index = this.getRootNode().value,
+			option = this.options.options[index];
+
+		// _getRawValue might be being called by render after setOptions - in which case there may no longer be an 
+		// option at the index of the currently selected <option>
+		return option ? option.value : null;
+	},
+
+	_setRawValue: function($super, value) {
+
 		if(!Object.isArray(this.options.options)) {
 			return;
 		}
 
 		var optionElements = $A(this.getRootNode().getElementsByTagName("option"));
 
-		optionElements.each(function(option) {
-			delete option.selected;
-		});
+		// If the dropdown hasn't been rendered yet, _setRawValue has the effect of updating options.value 
+		if(optionElements.length == 0) {
+			this.options.value = value;
+			return;
+		}
 
 		this.options.options.each(function(option, index) {
+
 			if(option.value == value) {
-				if(optionElements[index]) {
-					optionElements[index].selected = true;
-				}
+
+				optionElements[index].selected = true;
+				$super(index);
+
+			} else {
+
+				optionElements[index].selected = false;
 			}
-		}.bind(this));
+
+		}, this);
 	},
 
 	setOptions: function(options) {
-		// preserve currently selected index
-		var selectedIndex = 0;
 
-		$A(this.getRootNode().getElementsByTagName("option")).each(function(option, index) {
-			if (option.selected) {
-				selectedIndex = index;
-
-				throw $break;
-			}
-		});
-
-		this.empty();
-
-		options.each(function(option, index) {
-			var node = DOMUtil.createElement("option", option.key, {value: index});
-
-			if (index == selectedIndex) {
-				node.selected = true;
-			}
-
-			this.appendChild(node);
-		}.bind(this));
-
+		// Set new options
 		this.options.options = options;
+
+		// Re-render the <option>'s
+		this.render();
 	}
 });
