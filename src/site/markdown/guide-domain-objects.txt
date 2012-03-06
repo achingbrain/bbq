@@ -160,7 +160,46 @@ var room = new myapp.domain.Room({
 room.loadData();
 </code></pre>
 
-The response to loadData will overwrite any field values already loaded.  You can, for example, use this method to get a domain object to refresh it's state in response to some one else editing it remotely.  Any propertyDisplays on the current page will also be updated to reflect the new values, seemingly by magic.
+The response to <code>loadData</code> will overwrite any field values already loaded.  You can, for example, use this method to get a domain object to refresh it's state in response to some one else editing it remotely.  Any <code>propertyDisplay</code>s on the current page will also be updated to reflect the new values, seemingly by magic.
+
+##### When to call loadData
+
+It's not always necessary to call loadData explicitly.  For example, using property displays will call loadData:
+
+<pre><code class="language-javascript">
+var room = new myapp.domain.Room({
+    data: {
+        id: 1,
+	bookings: null
+    }
+});
+
+// the "bookings" property has not been loaded yet so this will trigger a call to loadData
+var node = room.getPropertyDisplay({property: "bookings"});
+
+document.body.appendChild(node);
+</code></pre>
+
+In the above example the node variable is safe to use immediately as the Room entity will swap out it's contents when it's data has been loaded.
+
+It's only necessary to call <code>loadData</code> when you either suspect that the state of the entity has changed on the server (in which case a fresh copy of the data will be obtained and all <code>propertyDisplay</code>s updated) or if you need to call a getter explicitly:
+
+<pre><code class="language-javascript">
+var room = new myapp.domain.Room({
+    data: {
+        id: 1,
+	name: null
+    }
+});
+
+// calling a getter, need to ensure that the property has been loaded already
+room.registerListener("onDataLoaded", function() {
+	Log.info("Room is called: " + room.getName());
+});
+
+// force the entity to load it's data
+room.loadData();
+</code></pre>
 
 #### Entities as properties of Entities
 

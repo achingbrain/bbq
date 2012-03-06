@@ -18,6 +18,9 @@ bbq.lang.Watchable = new Class.create(/** @lends bbq.lang.Watchable.prototype */
 
 	/**
 	 * Returns a callback array, initialising it where necessary
+	 * 
+	 * @param {String} type
+	 * @return {Array}
 	 */
 	_getCallbacks: function(type) {
 		if(Object.isUndefined(this._callbacks[type])) {
@@ -30,7 +33,7 @@ bbq.lang.Watchable = new Class.create(/** @lends bbq.lang.Watchable.prototype */
 	/**
 	 * @example
 	 * <pre><code class="language-javascript">
-	 * this._dropDown.registerListener("onchange", this._subTypeChanged.bind(this, predicateType));
+	 * this._dropDown.registerListener("onchange", this._subTypeChanged.bind(this));
 	 * </code></pre>
 	 * @param {String} type
 	 * @param {Function} callback
@@ -47,7 +50,7 @@ bbq.lang.Watchable = new Class.create(/** @lends bbq.lang.Watchable.prototype */
 	 * 
 	 * @example
 	 * <pre><code type="language-javascript">
-	 * this._dropDown.registerOneTimeListener("onchange", this._subTypeChanged.bind(this, predicateType));
+	 * this._dropDown.registerOneTimeListener("onchange", this._subTypeChanged.bind(this));
 	 * </code></pre>
 	 * @param {String} type
 	 * @param {Function} callback
@@ -125,6 +128,7 @@ bbq.lang.Watchable = new Class.create(/** @lends bbq.lang.Watchable.prototype */
 	 * 
 	 * @param {String} type The event type
 	 * @param {String} key The callback key
+	 * @param {Array} args Arguments to pass to the callback
 	 */
 	notifyListener: function(type, key, args) {
 		var callback = this._getCallbacks(type).get(key);

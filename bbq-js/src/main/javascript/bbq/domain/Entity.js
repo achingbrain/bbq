@@ -99,19 +99,20 @@ bbq.domain.Entity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domain.E
 			if(this["set" + camel] instanceof Function) {
 				this["set" + camel](data[key]);
 			} else {
-				//Log.info("creating " + camel);
 				this["get" + camel] = (new Function("return this._get(\"" + key + "\");")).bind(this);
 				this["set" + camel] = (new Function("this._set(\"" + key + "\", arguments[0]);")).bind(this);
 
 				this["set" + camel](data[key]);
 			}
 
+			// save that we have loaded this field
 			this._loadedFields.set(key, true);
 		}
 
 		this._partialLoad = false;
 
 		if(Log.debugging) {
+			// tell the developer which properties we are missing
 			var missingProperties = [];
 
 			// ensure we have loaded all of our properties
@@ -126,10 +127,9 @@ bbq.domain.Entity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domain.E
 			}
 		}
 
-		// ensure we have loaded all of our properties
+		// have we loaded all of our properties?
 		for(var key in defaultObject) {
 			if(Object.isUndefined(data[key])) {
-				this._dataLoaded = false;
 				this._partialLoad = true;
 
 				// missing at least one property, get out of loop
@@ -137,13 +137,8 @@ bbq.domain.Entity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domain.E
 			}
 		}
 
-		var keys = Object.keys(data);
-
-		if(keys.length == 1 &&  keys[0] == "id") {
-			this.loadData();
-		} else if(!this._partialLoad) {
-			this._dataLoaded = true;
-		}
+		// store if we've loaded all properties
+		this._dataLoaded = !this._partialLoad;
 	},
 
 	/**
@@ -204,7 +199,7 @@ bbq.domain.Entity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domain.E
 	},
 
 	/**
-	 * @private
+	 * @return {String}
 	 */
 	registerListener: function($super, type, callback) {
 		var callbackKey = $super(type, callback);
@@ -213,9 +208,6 @@ bbq.domain.Entity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domain.E
 			if(this.dataLoaded()) {
 				// if the callback is onDataLoaded and we've already loaded our data, call the callback immediately
 				this.notifyListener(type, callbackKey, [this]);
-			} else {
-				// otherwise trigger data load
-				this.loadData();
 			}
 		}
 
@@ -309,6 +301,8 @@ bbq.domain.Entity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domain.E
 	 * var creator = object.getCreator();
 	 * creator.getPropertyDisplay({property: "fullname"});
 	 * </code></pre>
+	 *
+	 * <p>If the property requested has not yet been loaded, a call to Entity#loadData will occur.</p>
 	 *
 	 * @param {Object} options
 	 * @param {String} options.property The name of the property that is to be displayed
