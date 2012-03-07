@@ -137,9 +137,7 @@ public class TestJavaScriptMojo extends AbstractMojo {
 				File testFile = new File(testDirectory.getAbsolutePath() + File.separator + test + ".js");
 
 				if(!testFile.exists()) {
-					getLog().warn("Could not find test at " + testFile.getAbsolutePath() + " to run");
-
-					continue;
+					throw new MojoFailureException("Could not find test at " + testFile.getAbsolutePath() + " to run");
 				}
 
 				try {
