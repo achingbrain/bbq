@@ -94,16 +94,14 @@ bbq.domain.Entity = new Class.create(bbq.lang.Watchable, /** @lends bbq.domain.E
 				continue;
 			}
 
-			var camel = BBQUtil.capitalize(key);
+			var camel = key.capitalize();
 
-			if(this["set" + camel] instanceof Function) {
-				this["set" + camel](data[key]);
-			} else {
+			if(!Object.isFunction(this["set" + camel])) {
 				this["get" + camel] = (new Function("return this._get(\"" + key + "\");")).bind(this);
 				this["set" + camel] = (new Function("this._set(\"" + key + "\", arguments[0]);")).bind(this);
-
-				this["set" + camel](data[key]);
 			}
+
+			this["set" + camel](data[key]);
 
 			// save that we have loaded this field
 			this._loadedFields.set(key, true);

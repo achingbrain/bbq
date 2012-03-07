@@ -120,5 +120,19 @@ test = new Test.Unit.Runner({
 		this.assertEqual(true, entity1.equals(entity2), ".equals(other) did not work");
 		this.assertEqual(true, entity1 == entity2, "== did not work");
 		this.assertEqual(true, entity1 === entity2, "=== did not work");
+		this.assertEqual(entity1.getFoo(), entity2.getFoo(), "getFoo was not the same");	
+	},
+	
+	testAddingTwoObjectsWithDifferentData: function() {
+		var holder = new bbq.domain.Repository({
+			type: bbq.domain.MyEntity
+		});
+
+		var entity1 = holder.add({id: "foo", foo: "baz"});
+		var entity2 = holder.add({id: "foo", foo: "baz", bar: "qux"});
+
+		// the original entity did not have bar in it's data - the data from the second should have been
+		// applied to the first so getBar() should now be present
+		this.assertEqual(entity1.getBar(), entity2.getBar(), "getBar was not the same");
 	}
 });

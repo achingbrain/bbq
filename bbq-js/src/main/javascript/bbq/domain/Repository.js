@@ -103,29 +103,37 @@ bbq.domain.Repository = new Class.create(/** @lends bbq.domain.Repository.protot
 		this._entities.splice(index, 1);
 	},
 
-	_createEntity: function(data) {
-		if(data instanceof this.options.type) {
+	_createEntity: function(arg) {
+		var entity, data;
+
+		if(arg instanceof this.options.type) {
 			// passed domain object
-		} else if(Object.isString(data) || Object.isNumber(data)) {
+			entity = arg;
+			data = entity.options.data;
+		} else if(Object.isString(arg) || Object.isNumber(arg)) {
 			// passed identifier
-			data = new this.options.type({data: {id: data}});
+			data = {id: arg};
+			entity = new this.options.type({data: data});
 		} else {
 			// passed object data
-			data = new this.options.type({data: data});
+			data = arg;
+			entity = new this.options.type({data: data});
 		}
 
 		// make sure domain object does not exist in this repository already
 		for(var i = 0; i < this._entities.length; i++) {
-			if(this._entities[i].equals(data)) {
+			if(this._entities[i].equals(entity)) {
 				// object has been stored before
-				data = this.get(i);
-				data.processData(data.options.data);
+				entity = this.get(i);
+
+				// update using passed data
+				entity.processData(data);
 
 				break;
 			}
 		}
 
-		return data;
+		return entity;
 	},
 
 	/**
