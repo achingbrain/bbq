@@ -139,20 +139,20 @@ bbq.gui.GUIWidget = new Class.create(bbq.lang.Delegator, /** @lends bbq.gui.GUIW
 	 * @see bbq.gui.GUIWidget#setRootNode
 	 */
 	registerObject: function() {
-		if(this._rootNode) {
-			this._rootNode.owner = function() {
-				return this;
-			}.bind(this);
+		if(!this._rootNode) {
+			return;
 		}
+		
+		this._rootNode.owner = function() {
+			return this;
+		}.bind(this);
 	},
 	
 	/**
 	 * Removes all nodes attached to this GUIWidgets rootNode
 	 */
 	empty: function() {
-		if(this._rootNode) {
-			DOMUtil.emptyNode(this._rootNode);
-		}
+		DOMUtil.emptyNode(this.getRootNode());
 	},
 
 	hasClass: function(className) {
@@ -320,7 +320,7 @@ bbq.gui.GUIWidget = new Class.create(bbq.lang.Delegator, /** @lends bbq.gui.GUIW
 	 * 
 	 * @param	{string}	id
 	 */
-	setID: function(id) {
+	setId: function(id) {
 		this.setAttribute("id", id);
 	},
 	
@@ -329,18 +329,31 @@ bbq.gui.GUIWidget = new Class.create(bbq.lang.Delegator, /** @lends bbq.gui.GUIW
 	 * 
 	 * @return	{string}
 	 */
-	getID: function() {
+	getId: function() {
 		this.getAttribute("id");
 	},
 	
 	/**
-	 * Sets a CSS style property to the passed value on the root node
+	 * <p>Sets one or more CSS style properties to the passed value on the root node.</p>
 	 * 
+	 * @example
+	 * <pre><code class="language-javascript">
+	 * // setting individual styles
+	 * myWidget.setStyle("width", "10em");
+	 * </code></pre>
+	 * @example
+	 * <pre><code class="language-javascript">
+	 * // setting multiple styles
+	 * myWidget.setStyle({
+	 *   width: "10em",
+	 *   height: "5em"
+	 * });
+	 * </code></pre>
 	 * @param	{string}	styleName	e.g. "border"
 	 * @param	{string}	styleValue	e.g. "1px solid #CCC"
 	 */
-	setStyle: function(styleName, styleValue) {
-		DOMUtil.setStyle(this.getRootNode(), styleName, styleValue);
+	setStyle: function() {
+		DOMUtil.setStyle.apply(this, [this].concat($A(arguments)));
 	},
 	
 	/**
@@ -359,19 +372,27 @@ bbq.gui.GUIWidget = new Class.create(bbq.lang.Delegator, /** @lends bbq.gui.GUIW
 	 * @param	{String}	attributeName	e.g. "id"
 	 * @param	{String}	attributeValue	e.g. "anElement"
 	 */
-	setAttribute: function(attributeName, attributeValue) {
-		if(this._rootNode) {
-			try {
-				if(attributeName == "style" && attributeValue instanceof Object) {
-					for(var key in attributeValue) {
-						this.setStyle(key, attributeValue[key]);
-					}
-				} else if(this._rootNode[attributeName] != attributeValue) {
-					this._rootNode[attributeName] = attributeValue;
-				}
-			} catch(e) {
-				Log.error("exeption thrown setting " + attributeName + " to " + attributeValue, e);
+	setAttribute: function() {
+		if(arguments.length == 1 && arguments[0] instanceof Object) {
+			for(var key in arguments[0]) {
+				this.setAttribute(key, arguments[0][key]);
 			}
+		}
+		
+		if(arguments.length == 2) {
+			var attributeName = arguments[0];
+			var attributeValue = arguments[1];
+			
+			if(attributeName == "style" && attributeValue instanceof Object) {
+				// special case
+				for(var key in attributeValue) {
+					this.setStyle(key, attributeValue[key]);
+				}
+				
+				return;
+			}
+			
+			this.getRootNode()[attributeName] = attributeValue;
 		}
 	},
 	

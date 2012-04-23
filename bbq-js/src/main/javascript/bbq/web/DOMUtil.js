@@ -18,31 +18,36 @@ DOMUtil = {
 	 * @return {Node}
 	 */
 	emptyNode: function(node) {
-		if(node) {
-			if(node.appendTo) {
-				node.empty();
-			} else {
-				while(node.hasChildNodes()) {
-					var childNode = node.childNodes[node.childNodes.length-1];
-					
-					if(childNode.owner) {
-						var foo = childNode.owner();
-						
-						if(foo.notifyListeners) {
-							foo.notifyListeners("onBeforeRemoveFromDOM");
-						}
-					}
-					
-					node.removeChild(node.childNodes[node.childNodes.length-1]);
-					
-					if(foo && foo.notifyListeners) {
-						foo.notifyListeners("onAfterRemoveFromDOM");
-					}
-				}
+		if(!node) {
+			return;
+		}
+		
+		if(node instanceof bbq.gui.GUIWidget) {
+			node = node.getRootNode();
+		}
+		
+		while(node.hasChildNodes()) {
+			var childNode = node.childNodes[node.childNodes.length-1];
+			
+			// if we are dealing with a GUIWidget, inform it's listeners 
+			var owner;
+			
+			if(childNode.owner) {
+				owner = childNode.owner();
+			}
+				
+			if(owner && owner.notifyListeners) {
+				owner.notifyListeners("onBeforeRemoveFromDOM");
 			}
 			
-			return node;
+			node.removeChild(node.childNodes[node.childNodes.length-1]);
+			
+			if(owner && owner.notifyListeners) {
+				owner.notifyListeners("onAfterRemoveFromDOM");
+			}
 		}
+		
+		return node;
 	},
 	
 	/**
@@ -314,21 +319,52 @@ DOMUtil = {
 	
 	/**
 	 * Sets a CSS style on the passed node to the passed value
-	 * @param {Node} element
+	 * 
+	 * @example
+	 * <pre><code class="language-javascript">
+	 * // setting individual styles
+	 * DOMUtil.setStyle(node, "width", "10em");
+	 * </code></pre>
+	 * @example
+	 * <pre><code class="language-javascript">
+	 * // setting multiple styles
+	 * DOMUtil.setStyle(node, {
+	 *   width: "10em",
+	 *   height: "5em"
+	 * });
+	 * </code></pre>
+	 * 
+	 * @param {Node or GUIWidget} element
 	 * @param {Object} styleToSet
 	 * @param {Object} value
 	 */
-	setStyle: function(element, styleToSet, value) {
+	setStyle: function() {
 		try {
-			if(element) {
-				if(element.appendChild) {
-						element.style[styleToSet] = value;
-				} else if(element.appendTo) {
-					element.setStyle(styleToSet, value);
+			if(arguments.length == 0) {
+				return;
+			}
+			
+			if(arguments.length == 2 && arguments[1] instanceof Object) {
+				for(var key in arguments[1]) {
+					DOMUtil.setStyle(arguments[0], key, arguments[1][key]);
 				}
 			}
+			
+			if(arguments.length == 3) {
+				var node = arguments[0];
+				
+				if(!node) {
+					return;
+				}
+				
+				if(node instanceof bbq.gui.GUIWidget) {
+					node = node.getRootNode();
+				}
+				
+				node.style[arguments[1]] = arguments[2];
+			}
 		} catch(e) {
-			Log.error("Error setting style " + styleToSet + " to value " + value + " on element " + element, e);
+			Log.error("Error setting style " + arguments, e);
 		}
 	},
 	
