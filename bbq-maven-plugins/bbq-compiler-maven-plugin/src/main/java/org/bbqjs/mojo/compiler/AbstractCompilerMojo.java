@@ -1,14 +1,13 @@
 package org.bbqjs.mojo.compiler;
 
+import java.io.File;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.descriptor.PluginDescriptor;
 import org.apache.maven.project.MavenProject;
 import org.bbqjs.compiler.util.Utils;
 import org.bbqjs.mojo.RuntimeClasspathAwareMojo;
-import org.sonatype.inject.Parameters;
-
-import java.io.File;
 
 /**
  * Parses include statements in JavaScript files and generates single file

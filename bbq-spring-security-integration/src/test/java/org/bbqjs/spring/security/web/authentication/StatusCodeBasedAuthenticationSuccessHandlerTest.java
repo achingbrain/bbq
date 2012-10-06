@@ -38,11 +38,11 @@ public class StatusCodeBasedAuthenticationSuccessHandlerTest {
 		Authentication authentication = mock(Authentication.class);
 		int code = 2;
 
-		handler.setStatus(2);
+		handler.setStatus(code);
 
 		// the method under test
 		handler.onAuthenticationSuccess(request, response, authentication);
 
-		verify(response).setStatus(eq(2));
+		verify(response).setStatus(eq(code));
 	}
 }

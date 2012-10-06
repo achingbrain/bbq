@@ -1,5 +1,11 @@
 package org.bbqjs.mojo;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.codehaus.classworlds.ClassRealm;
 import org.codehaus.plexus.component.configurator.AbstractComponentConfigurator;
 import org.codehaus.plexus.component.configurator.ComponentConfigurationException;
@@ -10,13 +16,8 @@ import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluatio
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
 import org.codehaus.plexus.configuration.PlexusConfiguration;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class IncludeDependenciesComponentConfigurator extends AbstractComponentConfigurator {
+	@SuppressWarnings("deprecation")
 	public void configureComponent( Object component, PlexusConfiguration configuration, ExpressionEvaluator expressionEvaluator, ClassRealm containerRealm, ConfigurationListener listener ) throws ComponentConfigurationException {
 		converterLookup.registerConverter( new ClassRealmConverter( containerRealm ) );
 
@@ -25,6 +26,7 @@ public abstract class IncludeDependenciesComponentConfigurator extends AbstractC
 		converter.processConfiguration( converterLookup, component, containerRealm.getClassLoader(), configuration, expressionEvaluator, listener );
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void addProjectDependenciesToClassRealm(String expression, ExpressionEvaluator expressionEvaluator, ClassRealm containerRealm) throws ComponentConfigurationException {
 		List<String> runtimeClasspathElements;
 

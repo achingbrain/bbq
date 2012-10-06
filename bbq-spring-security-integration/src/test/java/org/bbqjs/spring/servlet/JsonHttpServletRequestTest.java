@@ -1,25 +1,21 @@
 package org.bbqjs.spring.servlet;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import sun.net.idn.StringPrep;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.Enumeration;
+import java.util.Map;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.Enumeration;
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.byteThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 /**
  * Created by IntelliJ IDEA.
@@ -78,12 +74,12 @@ public class JsonHttpServletRequestTest {
 
 	@Test
 	public void testGetParameterNames() throws Exception {
-		Enumeration<String> enumeration = request.getParameterNames();
+		Enumeration<?> enumeration = request.getParameterNames();
 		boolean foundBoth = false;
 		int count = 0;
 		
 		while(enumeration.hasMoreElements()) {
-			String parameterName = enumeration.nextElement();
+			String parameterName = enumeration.nextElement().toString();
 
 			foundBoth = parameterName.equals("bar") || parameterName.equals("baz");
 			count++;
@@ -108,7 +104,7 @@ public class JsonHttpServletRequestTest {
 
 	@Test
 	public void testGetParameterMap() throws Exception {
-		Map map = request.getParameterMap();
+		Map<?, ?> map = request.getParameterMap();
 		
 		assertTrue(map.containsKey("foo"));
 		assertTrue(map.containsKey("baz"));

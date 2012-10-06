@@ -1,17 +1,18 @@
 package org.bbqjs.spring.ajax;
 
-import org.apache.commons.lang.StringUtils;
-
-import javax.servlet.http.HttpServletRequest;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * A RequestForwarder which only allows forwarding to pre-ordained servers
  */
 public class ServerWhitelistRequestForwarder extends RequestForwarder {
-	private List<String> whiteList = Collections.EMPTY_LIST;
+	private List<String> whiteList = Collections.emptyList();
 
 	@Override
 	protected URL getUrlToForwardTo(HttpServletRequest request) throws Exception {

@@ -6,12 +6,11 @@
 		<groupId>org.bbqjs</groupId>
 		<artifactId>bbq</artifactId>
 		<version>1.1.4-SNAPSHOT</version>
+		<relativePath>../</relativePath>
 	</parent>
 
-	<groupId>org.bbqjs</groupId>
 	<artifactId>bbq-maven-archetype</artifactId>
 	<packaging>jar</packaging>
-	<version>1.1.4-SNAPSHOT</version>
 	<name>bbq-maven-archetype</name>
 	<url>http://www.bbqjs.org</url>
 	<description>A Maven Archetype to get your project off the ground quickly.</description>

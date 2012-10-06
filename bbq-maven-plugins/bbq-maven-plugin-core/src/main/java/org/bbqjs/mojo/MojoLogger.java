@@ -329,6 +329,7 @@ public class MojoLogger implements Logger {
 		StringBuilder sb = new StringBuilder();
 		Formatter formatter = new Formatter(sb, Locale.getDefault());
 		formatter.format(format, arg);
+		formatter.close();
 		
 		return sb.toString();
 	}
@@ -337,6 +338,7 @@ public class MojoLogger implements Logger {
 		StringBuilder sb = new StringBuilder();
 		Formatter formatter = new Formatter(sb, Locale.getDefault());
 		formatter.format(format, arg1, arg2);
+		formatter.close();
 		
 		return sb.toString();
 	}
@@ -345,6 +347,7 @@ public class MojoLogger implements Logger {
 		StringBuilder sb = new StringBuilder();
 		Formatter formatter = new Formatter(sb, Locale.getDefault());
 		formatter.format(format, argArray);
+		formatter.close();
 		
 		return sb.toString();
 	}

@@ -1,16 +1,18 @@
 package org.bbqjs.spring.servlet;
 
-import net.sf.json.JSONObject;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+
+import net.sf.json.JSONObject;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Wraps a HttpServletRequest that has had it's request body turned into a JSON object.
@@ -69,14 +71,14 @@ public class JsonHttpServletRequest extends HttpServletRequestWrapper {
 	 * @return
 	 */
 	@Override
-	public Enumeration getParameterNames() {
+	public Enumeration<?> getParameterNames() {
 		if(jsonObject == null) {
 			return super.getParameterNames();
 		}
 
 		final Iterator<?> iterator = jsonObject.keySet().iterator();
 
-		return new Enumeration() {
+		return new Enumeration<Object>() {
 			@Override
 			public boolean hasMoreElements() {
 				return iterator.hasNext();
@@ -112,7 +114,7 @@ public class JsonHttpServletRequest extends HttpServletRequestWrapper {
 	 * @return
 	 */
 	@Override
-	public Map getParameterMap() {
+	public Map<?, ?> getParameterMap() {
 		if(jsonObject == null) {
 			return super.getParameterMap();
 		}

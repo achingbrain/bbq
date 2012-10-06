@@ -62,7 +62,7 @@ public class LanguageController implements ServletContextAware {
 		InputStream stream = servletContext.getResourceAsStream(languageFilesLocation + byName + "_" + forLocale.getLanguage() + "_" + forLocale.getCountry() + ".xml");
 
 		if(stream == null) {
-			return Collections.EMPTY_MAP;
+			return Collections.emptyMap();
 		}
 
 		Properties properties = new Properties();

@@ -1,10 +1,14 @@
 package org.bbqjs.compiler;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -110,13 +114,12 @@ public abstract class AbstractCompilableFile implements CompilableFile {
 			LOG.error("Resource directory " + getClass().getClassLoader().getResource("."));
 
 			ClassLoader loader = Thread.currentThread().getContextClassLoader();
-
-			Enumeration<URL> urls = loader.getSystemResources(path);
+			Enumeration<URL> urls = ClassLoader.getSystemResources(path);
 
 			LOG.error("Loader " + loader);
 			LOG.error("Resource enumeration " + urls);
 			LOG.error("Resource enumeration has more " + urls.hasMoreElements());
-			LOG.error("Resource more " + loader.getSystemResource(path));
+			LOG.error("Resource more " + ClassLoader.getSystemResource(path));
 
 			throw new ClassFileNotFoundException("Could not find JavaScript file for class " + className + " with path " + path + " on classpath");
 		}

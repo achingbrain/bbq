@@ -1,13 +1,10 @@
 package org.bbqjs.compiler.javascript;
 
-import org.junit.Test;
-
-import java.io.File;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.Assert.assertFalse;
+
+import java.net.URL;
+
+import org.junit.Test;
 
 public class JavaScriptCompilerTest {
 	

@@ -1,16 +1,16 @@
 package org.bbqjs.mojo.tests;
 
-import org.apache.maven.plugin.descriptor.PluginDescriptor;
-import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.project.MavenProject;
-import org.junit.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.net.URL;
 import java.util.Collections;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.apache.maven.plugin.descriptor.PluginDescriptor;
+import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.project.MavenProject;
+import org.junit.Test;
 
 /**
  * Created by IntelliJ IDEA.
@@ -27,7 +27,7 @@ public class TestJavaScriptMojoTest {
 		File testDirectory = new File(testDirectoryUrl.getFile());
 
 		MavenProject project = mock(MavenProject.class);
-		when(project.getRuntimeClasspathElements()).thenReturn(Collections.EMPTY_LIST);
+		when(project.getRuntimeClasspathElements()).thenReturn(Collections.<String>emptyList());
 
 		TestJavaScriptMojo mojo = new TestJavaScriptMojo();
 		mojo.setLog(mock(Log.class));

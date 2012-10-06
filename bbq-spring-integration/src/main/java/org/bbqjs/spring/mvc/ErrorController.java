@@ -1,16 +1,17 @@
 package org.bbqjs.spring.mvc;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.servlet.HandlerExceptionResolver;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Maps exceptions to error codes.
@@ -35,8 +36,8 @@ public class ErrorController implements HandlerExceptionResolver {
 	 */
 	private static final int MAX_HEADER_LENGTH = 3072;
 
-	private Map<Class<?>, Integer>errorCodes = Collections.EMPTY_MAP;
-	private Map<Class<?>, String> errorViews = Collections.EMPTY_MAP;
+	private Map<Class<?>, Integer>errorCodes = Collections.emptyMap();
+	private Map<Class<?>, String> errorViews = Collections.emptyMap();
 	private String defaultErrorView = "error";
 
 	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception exception) {
@@ -130,7 +131,7 @@ public class ErrorController implements HandlerExceptionResolver {
 
 	public void setErrorCodes(Map<Class<?>, Integer> errorCodes) {
 		if(errorCodes == null) {
-			errorCodes = Collections.EMPTY_MAP;
+			errorCodes = Collections.emptyMap();
 		}
 
 		this.errorCodes = errorCodes;

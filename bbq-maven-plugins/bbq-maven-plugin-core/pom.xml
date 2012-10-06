@@ -6,12 +6,11 @@
 		<groupId>org.bbqjs</groupId>
 		<artifactId>bbq-maven-plugins</artifactId>
 		<version>1.1.4-SNAPSHOT</version>
+		<relativePath>../</relativePath>
 	</parent>
 
-	<groupId>org.bbqjs</groupId>
 	<artifactId>bbq-maven-plugin-core</artifactId>
 	<packaging>jar</packaging>
-	<version>1.1.4-SNAPSHOT</version>
 	<name>bbq-maven-plugin-core</name>
 	<url>http://www.bbqjs.org</url>
 
@@ -79,14 +78,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven.plugin.compiler.version}</version>
-				<configuration>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-					<excludes>
-						<exclude>**/*Point*.java</exclude>
-					</excludes>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>

@@ -1,12 +1,15 @@
 package org.bbqjs.compiler.util;
 
-import org.apache.commons.io.IOUtils;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
 import java.net.URL;
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
+
+import org.apache.commons.io.IOUtils;
 
 public class Utils {
 	public static String getFileContents(String path) {

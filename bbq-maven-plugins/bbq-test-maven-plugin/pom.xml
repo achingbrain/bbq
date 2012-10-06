@@ -6,12 +6,11 @@
 		<groupId>org.bbqjs</groupId>
 		<artifactId>bbq-maven-plugins</artifactId>
 		<version>1.1.4-SNAPSHOT</version>
+		<relativePath>../</relativePath>
 	</parent>
 
-	<groupId>org.bbqjs</groupId>
 	<artifactId>bbq-test-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
-	<version>1.1.4-SNAPSHOT</version>
 	<name>bbq-test-maven-plugin</name>
 	<url>http://www.bbqjs.org</url>
 	<description>This plugin runs JavaScript unit tests during Maven's test phase.</description>
@@ -84,14 +83,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven.plugin.compiler.version}</version>
-				<configuration>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-					<excludes>
-						<exclude>**/*Point*.java</exclude>
-					</excludes>
-				</configuration>
 			</plugin>
 
 			<plugin>

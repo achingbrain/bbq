@@ -42,11 +42,11 @@ public class StatusCodeBasedAccessDeniedHandlerTest {
 		when(response.getOutputStream()).thenReturn(outputStream);
 		int code = 2;
 
-		handler.setStatus(2);
+		handler.setStatus(code);
 
 		// the method under test
 		handler.handle(request, response, exception);
 
-		verify(response).setStatus(eq(2));
+		verify(response).setStatus(eq(code));
 	}
 }
